@@ -1,0 +1,26 @@
+; Entrada larga de 64 bits: CS=18, RIP=F0400, CR0.PG=1, EFER.LMA=1.
+; Mapa hasta 2 MiB con pagina nula/guardas ausentes, datos NX y ROM RX.
+; R8 y una operacion de 64 bits se comprueban antes de imprimir el exito.
+@0400
+=0400
+66 B8 10 00                    ; 0400 MOV AX,10
+8E D8                          ; 0404 MOV DS,AX
+8E C0                          ; 0406 MOV ES,AX
+8E D0                          ; 0408 MOV SS,AX
+BC 00 00 09 00                 ; 040A MOV ESP,90000: RSP=0000000000090000
+FC                             ; 040F CLD
+49 B8 88 77 66 55 44 33 22 11  ; 0410 MOV R8,1122334455667788
+4C 89 C0                       ; 041A MOV RAX,R8
+48 C1 E8 20                    ; 041D SHR RAX,32: conservar mitad alta
+3D 44 33 22 11                 ; 0421 CMP EAX,11223344
+0F 85 54 00 00 00              ; 0426 JNE 0480: fallo del calculo
+BE 00 05 0F 00                 ; 042C MOV ESI,F0500: RSI apunta al mensaje
+66 BA E9 00                    ; 0431 MOV DX,E9: RDMSR modifico EDX antes
+=0435
+AC                             ; 0435 LODSB desde RSI
+84 C0                          ; 0436 TEST AL,AL
+74 03                          ; 0438 JZ 043D
+EE                             ; 043A OUT DX,AL
+EB F8                          ; 043B JMP 0435
+=043D
+; El constructor elige halt.hex o stress/transition.hex como continuacion.

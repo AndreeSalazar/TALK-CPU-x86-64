@@ -1,0 +1,9 @@
+; Destino del fallo de la comprobacion con R8 en entry.hex.
+@0480
+=0480
+B0 21                          ; MOV AL,'!'
+66 BA E9 00                    ; MOV DX,E9
+EE                             ; OUT DX,AL
+F4                             ; HLT
+EB FD                          ; JMP a HLT
+=048A

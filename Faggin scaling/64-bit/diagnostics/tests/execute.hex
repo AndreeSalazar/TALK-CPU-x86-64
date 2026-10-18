@@ -1,0 +1,7 @@
+@1800
+=1800
+B8 00 A0 00 00                 ; MOV EAX,A000: RAM RW/NX
+C6 00 C3                       ; escribir RET; almacenar datos esta permitido
+FF E0                          ; JMP RAX: #PF por fetch NX, RIP/CR2=A000
+F4 EB FD
+=180D

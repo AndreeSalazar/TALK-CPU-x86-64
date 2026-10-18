@@ -1,0 +1,5 @@
+; Camino normal: ir directamente a la verificacion.
+@0640
+=0640
+E9 1B 00 00 00                 ; JMP 0660
+=0645

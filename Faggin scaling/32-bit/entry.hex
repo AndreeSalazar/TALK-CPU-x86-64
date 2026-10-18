@@ -1,0 +1,22 @@
+; Entrada protegida de 32 bits: selector CS=08, direccion F0200.
+; Recibe CR0.PE=1, PG=0, GDT instalada, A20 activa, IF=0.
+; Entrega control en F0225: segmentos de datos planos, ESP=90000, DF=0.
+@0200
+=0200
+66 B8 10 00              ; 0200 MOV AX,10: selector de datos
+8E D8                    ; 0204 MOV DS,AX
+8E C0                    ; 0206 MOV ES,AX
+8E D0                    ; 0208 MOV SS,AX
+8E E0                    ; 020A MOV FS,AX
+8E E8                    ; 020C MOV GS,AX
+BC 00 00 09 00           ; 020E MOV ESP,00090000: pila de 32 bits
+FC                       ; 0213 CLD
+BE 80 03 0F 00           ; 0214 MOV ESI,000F0380: mensaje de esta etapa
+66 BA E9 00              ; 0219 MOV DX,00E9
+=021D
+AC                       ; 021D LODSB
+84 C0                    ; 021E TEST AL,AL
+74 03                    ; 0220 JZ 0225: entregar control
+EE                       ; 0222 OUT DX,AL
+EB F8                    ; 0223 JMP 021D
+=0225

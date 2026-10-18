@@ -1,0 +1,57 @@
+; Transicion 32 -> 64 con guardianes de paginas de 4 KiB.
+; RAM: PML4=1000, PDPT=2000, PD=3000, PT=4000. Identidad hasta 2 MiB.
+; Datos RW/NX, ROM RX, pagina nula y guardas de pila no presentes.
+@0225
+=0225
+31 C0                          ; XOR EAX,EAX
+BF 00 10 00 00                 ; MOV EDI,1000
+B9 00 10 00 00                 ; MOV ECX,1000 dwords: 16 KiB
+F3 AB                          ; REP STOSD: borrar cuatro tablas
+C7 05 00 10 00 00 03 20 00 00  ; PML4[0] -> PDPT
+C7 05 00 20 00 00 03 30 00 00  ; PDPT[0] -> PD
+C7 05 00 30 00 00 03 40 00 00  ; PD[0] -> PT (sin pagina grande)
+=0251
+31 DB                          ; XOR EBX,EBX: direccion fisica inicial
+BF 00 40 00 00                 ; MOV EDI,4000
+B9 00 02 00 00                 ; MOV ECX,512 entradas
+=025D
+89 D8                          ; MOV EAX,EBX
+83 C8 03                       ; OR EAX,3: presente y escribible
+AB                             ; STOSD: mitad baja del PTE
+B8 00 00 00 80                 ; MOV EAX,80000000: NX en bit 63
+AB                             ; STOSD: mitad alta
+81 C3 00 10 00 00              ; ADD EBX,1000
+E2 EC                          ; LOOP 025D
+=0271
+C7 05 00 40 00 00 00 00 00 00  ; pagina 0 no presente
+C7 05 10 44 00 00 00 00 00 00  ; guarda MC: 82000-82FFF
+C7 05 20 44 00 00 00 00 00 00  ; guarda NMI: 84000-84FFF
+C7 05 30 44 00 00 00 00 00 00  ; guarda DF: 86000-86FFF
+C7 05 70 44 00 00 00 00 00 00  ; guarda normal: 8E000-8EFFF
+=02A3
+BF 80 47 00 00                 ; MOV EDI,4780: PT para ROM F0000
+BB 00 00 0F 00                 ; MOV EBX,F0000
+B9 10 00 00 00                 ; MOV ECX,16 paginas de ROM
+=02B2
+89 D8                          ; MOV EAX,EBX
+83 C8 01                       ; OR EAX,1: presente, solo lectura
+AB
+31 C0                          ; XOR EAX,EAX: NX=0 en ROM
+AB
+81 C3 00 10 00 00
+E2 EF                          ; LOOP 02B2
+=02C3
+0F 20 E0                       ; MOV EAX,CR4
+83 C8 20                       ; OR EAX,20: PAE
+0F 22 E0
+B8 00 10 00 00
+0F 22 D8                       ; MOV CR3,EAX
+B9 80 00 00 C0
+0F 32
+0D 00 09 00 00                 ; EFER.LME y NXE
+0F 30
+0F 20 C0
+0D 00 00 01 80                 ; CR0.PG y WP: respetar RO en supervisor
+0F 22 C0
+EA 00 10 0F 00 18 00           ; JMP FAR 18:F1000: instalar IDT/TSS
+=02F4

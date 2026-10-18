@@ -1,0 +1,7 @@
+@1800
+=1800
+C6 04 25 65 80 00 00 0E        ; IDT[6] no presente: #UD provoca #NP
+C6 04 25 B5 80 00 00 0E        ; IDT[11] no presente: #NP anidada -> #DF
+0F 0B                          ; 1810 UD2: cadena real de excepciones
+F4 EB FD
+=1815

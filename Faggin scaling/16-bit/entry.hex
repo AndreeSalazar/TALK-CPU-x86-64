@@ -1,0 +1,25 @@
+; Entrada real de 16 bits. ROM offset 0000, direccion fisica F0000.
+; Contrato de salida a 0024: DS=F000, SS=0000, SP=7000,
+; IF=0, DF=0, A20 activada, DX=00E9. Solo para PC emulado por QEMU.
+@0000
+=0000
+FA                 ; 0000 CLI
+FC                 ; 0001 CLD
+31 C0              ; 0002 XOR AX,AX
+8E D0              ; 0004 MOV SS,AX
+BC 00 70           ; 0006 MOV SP,7000: pila temporal en RAM de QEMU
+B8 00 F0           ; 0009 MOV AX,F000
+8E D8              ; 000C MOV DS,AX: leer datos desde la ROM
+E4 92              ; 000E IN AL,92: control A20 de la maquina PC
+0C 02              ; 0010 OR AL,02: habilitar A20
+24 FE              ; 0012 AND AL,FE: no activar el bit de reset
+E6 92              ; 0014 OUT 92,AL
+BA E9 00           ; 0016 MOV DX,00E9
+BE 80 00           ; 0019 MOV SI,0080: mensaje de esta etapa
+=001C
+AC                 ; 001C LODSB
+84 C0              ; 001D TEST AL,AL
+74 03              ; 001F JZ 0024: entregar control
+EE                 ; 0021 OUT DX,AL
+EB F8              ; 0022 JMP 001C
+=0024

@@ -1,0 +1,6 @@
+@1800
+=1800
+B8 00 E0 08 00                 ; MOV EAX,8E000: guarda inferior de pila normal
+C6 00 00                       ; 1805 MOV BYTE [RAX],0: #PF, error=2
+F4 EB FD
+=180B

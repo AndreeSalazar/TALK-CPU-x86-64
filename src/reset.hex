@@ -1,0 +1,36 @@
+; TALK: primer firmware propio para la maquina PC de QEMU.
+; ROM de 64 KiB, escrita byte a byte. Todavia NO implementa UEFI.
+; QEMU mapea esta ROM al final de 4 GiB y tambien en 0xF0000.
+; La CPU comienza en 0xFFFFFFF0 (offset 0xFFF0 de esta ROM).
+; No usamos servicios BIOS/UEFI, RAM, pila, ensamblador ni linker.
+;
+; Codigo de 16 bits. Offsets a la izquierda en los comentarios.
+=0000
+FA                 ; 0000 CLI: desactivar interrupciones enmascarables
+FC                 ; 0001 CLD: LODSB avanza hacia delante
+B8 00 F0           ; 0002 MOV AX,0xF000
+8E D8              ; 0005 MOV DS,AX: datos en la copia baja de la ROM
+BA E9 00           ; 0007 MOV DX,0x00E9: puerto debugcon de QEMU
+BE 40 00           ; 000A MOV SI,0x0040: direccion del mensaje en DS
+=000D
+AC                 ; 000D LODSB: AL = byte en DS:SI, SI++
+84 C0              ; 000E TEST AL,AL: terminador cero?
+74 03              ; 0010 JZ 0x0015: terminar
+EE                 ; 0012 OUT DX,AL: emitir un caracter
+EB F8              ; 0013 JMP 0x000D: siguiente caracter
+=0015
+F4                 ; 0015 HLT: detener hasta un evento que despierte CPU
+EB FD              ; 0016 JMP 0x0015: volver a detener
+;
+; Mensaje ASCII: TALK: firmware propio desde RESET. + CR LF + NUL
+@0040
+54 41 4C 4B 3A 20 66 69 72 6D 77 61 72 65 20 70
+72 6F 70 69 6F 20 64 65 73 64 65 20 52 45 53 45
+54 2E 0D 0A 00
+=0065
+;
+; Vector de reset: salto lejano que recarga CS y comienza en F000:0000.
+@FFF0
+EA 00 00 00 F0     ; JMP FAR 0xF000:0x0000
+@10000
+=10000

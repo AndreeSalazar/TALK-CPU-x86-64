@@ -1,0 +1,10 @@
+; Transicion 16 -> 32. Requiere DS=F000 y la GDT de esta carpeta.
+; Todavia se decodifica en 16 bits; 66 selecciona operandos de 32 bits.
+@0024
+=0024
+66 0F 01 16 F0 00        ; 0024 LGDT [DS:00F0], base de 32 bits
+0F 20 C0                 ; 002A MOV EAX,CR0
+66 83 C8 01              ; 002D OR EAX,1: solicitar modo protegido
+0F 22 C0                 ; 0031 MOV CR0,EAX
+66 EA 00 02 0F 00 08 00  ; 0034 JMP FAR 0008:000F0200
+=003C

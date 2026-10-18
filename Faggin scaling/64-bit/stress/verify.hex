@@ -1,0 +1,50 @@
+; Lee y verifica todo el patron hacia delante, escribe su complemento
+; y lo vuelve a verificar hacia atras. Repite con semilla invertida.
+@0660
+=0660
+BF 00 00 10 00                 ; 0660 MOV EDI,100000
+B9 00 00 02 00                 ; 0665 MOV ECX,20000
+=066A
+48 89 F8                       ; 066A MOV RAX,RDI
+4C 31 C0                       ; 066D XOR RAX,R8
+48 39 07                       ; 0670 CMP [RDI],RAX
+0F 85 87 01 00 00              ; 0673 JNE 0800: dato incorrecto
+48 F7 D0                       ; 0679 NOT RAX
+48 89 07                       ; 067C MOV [RDI],RAX: escribir complemento
+48 83 C7 08                    ; 067F ADD RDI,8
+E2 E5                          ; 0683 LOOP 066A
+BF F8 FF 1F 00                 ; 0685 MOV EDI,1FFFF8: ultimo valor de 8 bytes
+B9 00 00 02 00                 ; 068A MOV ECX,20000
+=068F
+48 89 F8                       ; 068F MOV RAX,RDI
+4C 31 C0                       ; 0692 XOR RAX,R8
+48 F7 D0                       ; 0695 NOT RAX
+48 39 07                       ; 0698 CMP [RDI],RAX
+0F 85 5F 01 00 00              ; 069B JNE 0800
+48 83 EF 08                    ; 06A1 SUB RDI,8
+E2 E8                          ; 06A5 LOOP 068F
+49 F7 D0                       ; 06A7 NOT R8: alternar semilla
+B0 2E                          ; 06AA MOV AL,'.': una ronda completada
+66 BA E9 00                    ; 06AC MOV DX,E9
+EE                             ; 06B0 OUT DX,AL
+FF CB                          ; 06B1 DEC EBX
+0F 85 67 FF FF FF              ; 06B3 JNE 0620: otra ronda
+BE 00 09 0F 00                 ; 06B9 MOV ESI,F0900: mensaje de exito
+EB 10                          ; 06BE JMP 06D0: emitir texto
+=06C0
+@06D0
+=06D0
+AC                             ; 06D0 LODSB
+84 C0                          ; 06D1 TEST AL,AL
+74 03                          ; 06D3 JZ 06D8
+EE                             ; 06D5 OUT DX,AL
+EB F8                          ; 06D6 JMP 06D0
+F4                             ; 06D8 HLT
+EB FD                          ; 06D9 JMP 06D8
+=06DB
+@0800
+=0800
+BE 40 09 0F 00                 ; 0800 MOV ESI,F0940: mensaje de fallo
+66 BA E9 00                    ; 0805 MOV DX,E9
+E9 C2 FE FF FF                 ; 0809 JMP 06D0: imprimir y detener
+=080E

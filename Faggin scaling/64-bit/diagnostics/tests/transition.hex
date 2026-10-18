@@ -1,0 +1,5 @@
+; Variante -Exception: ejecutar disparador despues del mensaje de 64 bits.
+@043D
+=043D
+E9 BE 13 00 00                 ; JMP F1800
+=0442

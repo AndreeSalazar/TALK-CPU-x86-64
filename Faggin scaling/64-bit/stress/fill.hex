@@ -1,0 +1,21 @@
+; Prueba de RAM, ejecutada por el firmware sin servicios externos.
+; Region exclusiva: 100000-1FFFFF (1 MiB), ya mapeada por identidad.
+; No toca ROM, GDT, tablas de paginas ni pilas. Solo destino QEMU.
+@0600
+=0600
+BB 20 00 00 00                 ; 0600 MOV EBX,32: rondas
+49 B8 88 77 66 55 44 33 22 11  ; 0605 MOV R8,1122334455667788: patron inicial
+E9 0C 00 00 00                 ; 060F JMP 0620
+=0614
+@0620
+=0620
+BF 00 00 10 00                 ; 0620 MOV EDI,100000: inicio de RAM de prueba
+B9 00 00 02 00                 ; 0625 MOV ECX,20000: 131072 valores de 8 bytes
+=062A
+48 89 F8                       ; 062A MOV RAX,RDI
+4C 31 C0                       ; 062D XOR RAX,R8: patron dependiente de direccion
+48 89 07                       ; 0630 MOV [RDI],RAX
+48 83 C7 08                    ; 0633 ADD RDI,8
+E2 F1                          ; 0637 LOOP 062A
+EB 05                          ; 0639 JMP 0640: punto de inyeccion opcional
+=063B

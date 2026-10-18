@@ -1,0 +1,6 @@
+@1800
+=1800
+B8 00 00 20 00                 ; MOV EAX,200000: fuera del mapa de 2 MiB
+48 8B 00                       ; 1805 MOV RAX,[RAX]: #PF, error=0, CR2=200000
+F4 EB FD
+=180B

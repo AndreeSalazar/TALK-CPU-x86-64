@@ -1,0 +1,6 @@
+; Salida normal de la prueba de transiciones.
+@043D
+=043D
+F4                             ; HLT
+EB FD                          ; JMP a HLT
+=0440

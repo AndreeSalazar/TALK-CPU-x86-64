@@ -1,0 +1,8 @@
+@1800
+=1800
+31 D2                          ; XOR EDX,EDX
+B8 01 00 00 00                 ; MOV EAX,1
+31 C9                          ; XOR ECX,ECX
+F7 F1                          ; 1809 DIV ECX: #DE
+F4 EB FD                       ; no se debe alcanzar
+=180E

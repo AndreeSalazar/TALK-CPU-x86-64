@@ -1,0 +1,5 @@
+; Alternativa a 64-bit/halt.hex. La CPU ya esta en 64 bits.
+@043D
+=043D
+E9 BE 01 00 00                 ; JMP F0600: prueba sostenida de RAM
+=0442

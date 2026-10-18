@@ -1,0 +1,29 @@
+; Funciones internas. Se usan desde el handler, con una pila valida.
+; print: RSI=ASCII NUL; destruye AL,DX,RSI. hex: RAX=valor;
+; destruye RAX,RBX,RCX,DX. Ambas conservan RBP y R12-R15.
+@1700
+=1700
+66 BA E9 00                    ; MOV DX,E9
+AC                             ; 1704 LODSB
+84 C0
+74 03                          ; JZ 170C
+EE
+EB F8                          ; JMP 1704
+C3                             ; RET
+=170D
+@1740
+=1740
+48 89 C3                       ; MOV RBX,RAX
+B9 10 00 00 00                 ; MOV ECX,16 digitos
+66 BA E9 00
+48 C1 C3 04                    ; 174C ROL RBX,4
+89 D8                          ; MOV EAX,EBX
+24 0F                          ; AND AL,0F
+04 30                          ; ADD AL,'0'
+3C 39                          ; CMP AL,'9'
+76 02                          ; JBE 175C
+04 07                          ; ADD AL,7: A-F
+EE                             ; 175C OUT DX,AL
+E2 ED                          ; LOOP 174C
+C3
+=1760

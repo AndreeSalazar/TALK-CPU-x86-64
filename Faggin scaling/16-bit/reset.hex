@@ -1,0 +1,7 @@
+; Esta entrada pertenece al reset de 16 bits. Va al final de la ROM.
+; QEMU situa este offset en FFFFFFF0 al encender la CPU virtual.
+@FFF0
+=FFF0
+EA 00 00 00 F0           ; JMP FAR F000:0000; recargar CS y usar copia baja
+@10000
+=10000

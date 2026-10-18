@@ -1,0 +1,6 @@
+@1800
+=1800
+BC 00 F0 08 00                 ; RSP=8F000: limite inferior de pila util
+0F 0B                          ; 1805 UD2: entrega del marco cruza la guarda
+F4 EB FD                       ; #PF anidado -> #DF en IST1
+=180A

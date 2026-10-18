@@ -1,0 +1,6 @@
+@1800
+=1800
+66 B8 30 00                    ; MOV AX,30: fuera del limite de GDT
+8E D8                          ; 1804 MOV DS,AX: #GP, error=30
+F4 EB FD
+=1809

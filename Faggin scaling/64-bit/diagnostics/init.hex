@@ -1,0 +1,46 @@
+; Primera entrada larga en F1000. Instalar diagnostico antes de entry.hex.
+; RAM reservada: GDT 6000-602F, TSS 7000-7067, IDT 8000-8FFF.
+; Pilas IST: DF=88000, NMI=86000, MC=84000, normal=90000.
+@1000
+=1000
+FA FC                          ; CLI; CLD
+BC 00 00 09 00                 ; MOV ESP,90000
+31 C0                          ; XOR EAX,EAX
+BF 00 70 00 00                 ; MOV EDI,7000
+B9 1A 00 00 00                 ; MOV ECX,26 dwords: 104 bytes de TSS
+F3 AB                          ; REP STOSD
+C7 04 25 04 70 00 00 00 00 09 00  ; DWORD [TSS+04]=90000: RSP0
+C7 04 25 24 70 00 00 00 80 08 00  ; DWORD [TSS+24]=88000: IST1, DF
+C7 04 25 2C 70 00 00 00 60 08 00  ; DWORD [TSS+2C]=86000: IST2, NMI
+C7 04 25 34 70 00 00 00 40 08 00  ; DWORD [TSS+34]=84000: IST3, MC
+66 C7 04 25 66 70 00 00 68 00     ; WORD [TSS+66]=68: sin mapa de I/O
+BE 00 01 0F 00                 ; MOV ESI,F0100: GDT en ROM
+BF 00 60 00 00                 ; MOV EDI,6000: copiar GDT a RAM
+B9 0C 00 00 00                 ; MOV ECX,12 dwords
+F3 A5                          ; REP MOVSD
+B8 00 1F 0F 00                 ; MOV EAX,F1F00: puntero GDTR
+0F 01 10                       ; LGDT [RAX]: LTR puede marcar busy en RAM
+66 B8 20 00                    ; MOV AX,20: selector TSS64
+0F 00 D8                       ; LTR AX
+BF 00 80 00 00                 ; MOV EDI,8000: IDT de 256 puertas
+B9 00 01 00 00                 ; MOV ECX,256
+48 B8 00 14 18 00 00 8E 0F 00  ; RAX = puerta para stub por defecto F1400
+; Bucle de 17 bytes: entrada de 16 bytes, offset alto 32 y reservado = 0.
+48 89 07                       ; MOV [RDI],RAX
+48 C7 47 08 00 00 00 00        ; MOV QWORD [RDI+8],0
+48 83 C7 10                    ; ADD RDI,16
+E2 EF                          ; LOOP al comienzo de la puerta
+BF 00 80 00 00                 ; MOV EDI,8000
+BA 00 12 00 00                 ; MOV EDX,1200: offsets bajos de stubs F1200+
+B9 20 00 00 00                 ; MOV ECX,32: excepciones arquitecturales
+66 89 17                       ; MOV [RDI],DX
+66 83 C2 10                    ; ADD DX,16: un stub por vector
+48 83 C7 10                    ; ADD RDI,16
+E2 F3                          ; LOOP al comienzo de la sustitucion
+C6 04 25 84 80 00 00 01        ; IDT[8].IST=1: doble fallo
+C6 04 25 24 80 00 00 02        ; IDT[2].IST=2: NMI
+C6 04 25 24 81 00 00 03        ; IDT[18].IST=3: machine check
+B8 10 1F 0F 00                 ; MOV EAX,F1F10: puntero IDTR
+0F 01 18                       ; LIDT [RAX]
+B8 00 04 0F 00                 ; MOV EAX,F0400
+FF E0                          ; JMP RAX: entrada larga ya protegida por IDT

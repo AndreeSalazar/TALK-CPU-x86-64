@@ -1,0 +1,74 @@
+; 32 stubs de 16 bytes. Normalizan la pila a vector,error,RIP,CS,RFLAGS...
+; Sin error hardware: PUSH 0; PUSH vector. Con error: solo PUSH vector.
+; Todos saltan al handler F1500. No regresan a la instruccion fallida.
+@1200
+=1200
+6A 00 6A 00 E9 F7 02 00 00     ; #DE
+@1210
+6A 00 6A 01 E9 E7 02 00 00     ; #DB
+@1220
+6A 00 6A 02 E9 D7 02 00 00     ; NMI, IST2
+@1230
+6A 00 6A 03 E9 C7 02 00 00     ; #BP
+@1240
+6A 00 6A 04 E9 B7 02 00 00     ; #OF
+@1250
+6A 00 6A 05 E9 A7 02 00 00     ; #BR
+@1260
+6A 00 6A 06 E9 97 02 00 00     ; #UD
+@1270
+6A 00 6A 07 E9 87 02 00 00     ; #NM
+@1280
+6A 08 E9 79 02 00 00           ; #DF, error hardware, IST1
+@1290
+6A 00 6A 09 E9 67 02 00 00
+@12A0
+6A 0A E9 59 02 00 00           ; #TS
+@12B0
+6A 0B E9 49 02 00 00           ; #NP
+@12C0
+6A 0C E9 39 02 00 00           ; #SS
+@12D0
+6A 0D E9 29 02 00 00           ; #GP
+@12E0
+6A 0E E9 19 02 00 00           ; #PF
+@12F0
+6A 00 6A 0F E9 07 02 00 00
+@1300
+6A 00 6A 10 E9 F7 01 00 00     ; #MF
+@1310
+6A 11 E9 E9 01 00 00           ; #AC
+@1320
+6A 00 6A 12 E9 D7 01 00 00     ; #MC, IST3
+@1330
+6A 00 6A 13 E9 C7 01 00 00     ; #XM
+@1340
+6A 00 6A 14 E9 B7 01 00 00     ; #VE
+@1350
+6A 15 E9 A9 01 00 00           ; #CP
+@1360
+6A 00 6A 16 E9 97 01 00 00
+@1370
+6A 00 6A 17 E9 87 01 00 00
+@1380
+6A 00 6A 18 E9 77 01 00 00
+@1390
+6A 00 6A 19 E9 67 01 00 00
+@13A0
+6A 00 6A 1A E9 57 01 00 00
+@13B0
+6A 00 6A 1B E9 47 01 00 00
+@13C0
+6A 00 6A 1C E9 37 01 00 00     ; #HV
+@13D0
+6A 1D E9 29 01 00 00           ; #VC
+@13E0
+6A 1E E9 19 01 00 00           ; #SX
+@13F0
+6A 00 6A 1F E9 07 01 00 00
+@1400
+=1400
+6A 00                          ; error sintetico para vector externo
+68 FF 00 00 00                 ; vector FF = puerta por defecto
+E9 F4 00 00 00                 ; JMP F1500
+=140C

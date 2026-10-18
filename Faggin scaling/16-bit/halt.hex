@@ -1,0 +1,6 @@
+; Alternativa a to-32.hex: finalizar aqui la variante -Stage 16.
+@0024
+=0024
+F4                       ; HLT
+EB FD                    ; JMP a HLT
+=0027

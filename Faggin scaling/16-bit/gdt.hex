@@ -1,0 +1,17 @@
+; Tabla compartida: la etapa de 16 bits la instala antes de pasar a 32.
+; Los bits Accessed ya estan a 1: la CPU no necesita escribir en la ROM.
+@00F0
+=00F0
+2F 00                    ; GDTR.limit = 48 bytes - 1 (incluye TSS de 16 bytes)
+00 01 0F 00              ; GDTR.base = 000F0100
+=00F6
+@0100
+=0100
+00 00 00 00 00 00 00 00  ; selector 00: nulo
+FF FF 00 00 00 9B CF 00  ; selector 08: codigo 32, base 0, limite 4 GiB
+FF FF 00 00 00 93 CF 00  ; selector 10: datos RW, base 0, limite 4 GiB
+00 00 00 00 00 9B 20 00  ; selector 18: codigo 64, L=1 y D=0
+=0120
+67 00 00 70 00 89 00 00  ; selector 20: TSS64 disponible, base 7000, limite 67
+00 00 00 00 00 00 00 00  ; mitad alta del descriptor TSS64
+=0130

@@ -1,0 +1,7 @@
+; SOLO variante -InjectFault. Corrompe a proposito un valor ya escrito.
+; Sustituye clean.hex; no cambia los otros archivos ni toca discos.
+@0640
+=0640
+48 C7 04 25 00 00 10 00 00 00 00 00  ; MOV QWORD [100000],0
+EB 12                                 ; JMP 0660
+=064E

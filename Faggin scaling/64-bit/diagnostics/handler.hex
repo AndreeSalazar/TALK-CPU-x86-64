@@ -1,0 +1,43 @@
+; Handler terminal. Captura el marco antes de usar CALL en la pila.
+; R12=vector, R13=error, R14=RIP, R15=CR2, RBP=marco de excepcion.
+@1500
+=1500
+FA FC                          ; CLI; CLD
+48 89 E5                       ; MOV RBP,RSP
+4C 8B 24 24                    ; MOV R12,[RSP]
+4C 8B 6C 24 08                 ; MOV R13,[RSP+8]
+4C 8B 74 24 10                 ; MOV R14,[RSP+16]
+0F 20 D0                       ; MOV RAX,CR2
+49 89 C7                       ; MOV R15,RAX
+BE 00 1A 0F 00                 ; MOV ESI,F1A00: cabecera y vector
+E8 DD 01 00 00                 ; CALL F1700: imprimir texto
+4C 89 E0                       ; MOV RAX,R12
+E8 15 02 00 00                 ; CALL F1740: hexadecimal de 16 digitos
+BE 40 1A 0F 00                 ; etiqueta RIP
+E8 CB 01 00 00
+4C 89 F0                       ; MOV RAX,R14
+E8 03 02 00 00
+BE 50 1A 0F 00                 ; etiqueta error
+E8 B9 01 00 00
+4C 89 E8                       ; MOV RAX,R13
+E8 F1 01 00 00
+BE 60 1A 0F 00                 ; etiqueta CR2
+E8 A7 01 00 00
+4C 89 F8                       ; MOV RAX,R15
+E8 DF 01 00 00
+BE 80 1A 0F 00                 ; etiqueta marco
+E8 95 01 00 00
+48 89 E8                       ; MOV RAX,RBP
+E8 CD 01 00 00
+BE 70 1A 0F 00                 ; etiqueta causa
+E8 83 01 00 00
+BE 80 1B 0F 00                 ; causa generica
+41 83 FC 20                    ; CMP R12D,32
+73 0A                          ; JAE 1592: vector externo
+44 89 E0                       ; MOV EAX,R12D
+8B 34 85 00 1C 0F 00           ; MOV ESI,[RAX*4+F1C00]
+=1592
+E8 69 01 00 00                 ; CALL F1700
+F4                             ; 1597 HLT: fallo informado, no continuar
+EB FD                          ; JMP 1597
+=159A
