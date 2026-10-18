@@ -59,3 +59,24 @@ En 08 se lee RTL8111H: [Realtek lo identifica como controlador Ethernet
 10/100/1000](https://www.realtek.com/Product/Index?cate_id=786&id=3959&menu_id=1006).
 Ninguno es la memoria flash BIOS buscada. Ambas inscripciones son útiles para
 el inventario físico; la ubicación del chip flash sigue sin confirmarse.
+
+## Cuarta tanda: candidata Winbond en foto 10
+
+En 10 se distingue Winbond y una referencia compatible visualmente con
+25Q256JW…; la transcripción del sufijo completo aún no se da por definitiva.
+Es una candidata clara a la memoria flash buscada: la familia W25Q256JW es
+QSPI NOR de 256 Mbit (32 MiB), consistente con la capacidad del manual MSI.
+La función precisa como almacén BIOS de esta unidad requiere corroborar el
+contexto físico y/o el contenido leído; no se ha leído ni programado.
+
+[Winbond W25Q256JW](https://www.winbond.com/hq/product/code-storage-flash-memory/serial-nor-flash/?__locale=ja&partNo=W25Q256JW)
+especifica 1,7..1,95 V y opciones WSON8, SOP16 y BGA. Si se confirma JW, se
+trataría de la familia de 1,8 V. No se prescribe un voltaje basándose únicamente
+en la capacidad o en esta lectura parcial. El encapsulado exacto tampoco se
+da por cerrado. El esquema de ocho patillas salientes mostrado en el chat era
+solo una ilustración; una flash puede tener contactos inferiores sin patillas
+laterales accesibles a una pinza habitual.
+
+La foto 09 muestra NIKOS P5003QVG; no es la candidata Winbond. Se conservan
+ambos originales. Por ahora no se solicitan más fotografías para buscar otros
+componentes: primero revisar esta candidata y su forma de acceso.
