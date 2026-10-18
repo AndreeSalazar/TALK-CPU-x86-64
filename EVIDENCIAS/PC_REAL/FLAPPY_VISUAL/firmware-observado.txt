@@ -1,0 +1,81 @@
+
+Administrador de arranque de firmware
+-----------------------------------
+Identificador           {a5a30fa2-3d06-4e9f-b5f4-a01df9d1fcba}
+displayorder            {57cb1744-7f84-11f1-930d-c3a2d7ca848a}
+                        {9dea862c-5cdd-4e70-acc1-f32b344d4795}
+                        {97150c60-848b-11f1-8fb7-806e6f6e6963}
+                        {66ae01cf-87cf-11f1-9014-806e6f6e6963}
+                        {57cb1745-7f84-11f1-930d-c3a2d7ca848a}
+                        {57cb1746-7f84-11f1-930d-c3a2d7ca848a}
+timeout                 1
+
+Administrador de arranque de Windows
+----------------------------------
+Identificador           {57cb1744-7f84-11f1-930d-c3a2d7ca848a}
+device                  partition=A:
+path                    \EFI\BOOT\BOOTX64.EFI
+description             BMO-X
+locale                  es-ES
+inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
+default                 {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+resumeobject            {57cb1740-7f84-11f1-930d-c3a2d7ca848a}
+displayorder            {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+toolsdisplayorder       {b2721d73-1db4-4c62-bf78-c548a880142d}
+timeout                 30
+
+Administrador de arranque de Windows
+----------------------------------
+Identificador           {57cb1745-7f84-11f1-930d-c3a2d7ca848a}
+device                  partition=A:
+path                    \EFI\ORQUESTADOR\METAL.EFI
+description             Orquestador del Metal (prueba)
+locale                  es-ES
+inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
+default                 {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+resumeobject            {57cb1740-7f84-11f1-930d-c3a2d7ca848a}
+displayorder            {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+toolsdisplayorder       {b2721d73-1db4-4c62-bf78-c548a880142d}
+timeout                 30
+
+Administrador de arranque de Windows
+----------------------------------
+Identificador           {57cb1746-7f84-11f1-930d-c3a2d7ca848a}
+device                  partition=A:
+path                    \EFI\ORQUESTADOR\FLAPPY.EFI
+description             Flappy Metal (prueba visual)
+locale                  es-ES
+inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
+default                 {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+resumeobject            {57cb1740-7f84-11f1-930d-c3a2d7ca848a}
+displayorder            {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+toolsdisplayorder       {b2721d73-1db4-4c62-bf78-c548a880142d}
+timeout                 30
+
+Administrador de arranque de Windows
+----------------------------------
+Identificador           {9dea862c-5cdd-4e70-acc1-f32b344d4795}
+device                  partition=\Device\HarddiskVolume4
+path                    \EFI\MICROSOFT\BOOT\BOOTMGFW.EFI
+description             Windows Boot Manager
+locale                  es-ES
+inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
+default                 {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+resumeobject            {57cb1740-7f84-11f1-930d-c3a2d7ca848a}
+displayorder            {57cb1741-7f84-11f1-930d-c3a2d7ca848a}
+toolsdisplayorder       {b2721d73-1db4-4c62-bf78-c548a880142d}
+timeout                 30
+
+Aplicación de firmware (101fffff)
+---------------------------------
+Identificador           {66ae01cf-87cf-11f1-9014-806e6f6e6963}
+device                  partition=\Device\HarddiskVolume8
+path                    \EFI\BOOT\BOOTX64.EFI
+description             UEFI OS
+
+Aplicación de firmware (101fffff)
+---------------------------------
+Identificador           {97150c60-848b-11f1-8fb7-806e6f6e6963}
+device                  partition=A:
+path                    \EFI\BOOT\BOOTX64.EFI
+description             UEFI: KINGSTON SA400S37480G, Partition 2

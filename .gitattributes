@@ -2,3 +2,4 @@
 CASM/examples/*.casm text eol=lf
 EVIDENCIAS/CASM/** -text
 EVIDENCIAS/FLAPPY_METAL/** -text
+EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/** -text

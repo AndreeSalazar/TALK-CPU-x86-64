@@ -1,5 +1,10 @@
 # Flappy Metal — playable QEMU prototype
 
+**Physical status:** a separate static graphics probe is installed on A: BMO as
+**Flappy Metal (prueba visual)**. USB-only keyboard availability was confirmed;
+the interactive real-PC game is not installed. See [PC-PREVIEW.md](PC-PREVIEW.md)
+and the [installation record](../../EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
+
 An original rectangle-based game running after ExitBootServices. It now has
 gravity, upward impulse, moving pipes, collisions, score and restart. The game
 polls QEMU's PS/2 keyboard and PIT directly, with maskable interrupts disabled.

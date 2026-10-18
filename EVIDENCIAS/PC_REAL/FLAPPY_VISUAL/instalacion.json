@@ -1,0 +1,25 @@
+{
+  "Fecha": "2026-10-18T10:38:37.9719180-05:00",
+  "Perfil": "FlappyPreview",
+  "Destino": "A:\\",
+  "Etiqueta": "BMO",
+  "DiskNumber": 0,
+  "PartitionNumber": 2,
+  "GptType": "{ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}",
+  "FormatoModificado": false,
+  "ArranqueWindowsModificado": false,
+  "Archivos": [
+    {
+      "Ruta": "EFI/ORQUESTADOR/FLAPPY.EFI",
+      "SHA256": "A5A0F8F4A93E4730AE60E80A1A10C6F19560C34A5AB2449CAB670A13131D3DE2",
+      "AnteriorSHA256": null,
+      "Respaldo": null
+    },
+    {
+      "Ruta": "METAL/FLAPPY.X86",
+      "SHA256": "10780153B26F7518D905FA75641D21A5C1606B80FC4D1E8B23BC1DA263AE7F25",
+      "AnteriorSHA256": null,
+      "Respaldo": null
+    }
+  ]
+}

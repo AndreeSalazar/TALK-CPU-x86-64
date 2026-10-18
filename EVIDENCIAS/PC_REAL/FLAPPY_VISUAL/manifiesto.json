@@ -1,0 +1,51 @@
+{
+  "RecordedDate": "2026-10-18",
+  "Scope": "Separate static preview installed; physical execution not yet observed",
+  "Files": [
+    {
+      "File": "baseline.json",
+      "SHA256": "234E3BF349C4A1FFAF4B68E00DD69ACF153D7FA1C1330F9BAFDA1267FC4C24E7",
+      "Bytes": 516
+    },
+    {
+      "File": "entrada.json",
+      "SHA256": "24FF78AF39E83118FF050B99CE13EEE0FCF8F0B17F3B4FA33EC5CCD9058569DC",
+      "Bytes": 885
+    },
+    {
+      "File": "firmware-observado.txt",
+      "SHA256": "FE526B4A005E709CCA332A3E946A63B3D24F3238F7D536B6369AC9C3F1F457A4",
+      "Bytes": 3682
+    },
+    {
+      "File": "instalacion.json",
+      "SHA256": "DD65D9E12854BCAA785853AD4D5EE1AD8330A47FA78D1339E47A0589D43965E2",
+      "Bytes": 686
+    },
+    {
+      "File": "LEEME.md",
+      "SHA256": "E8208CD6BD6984DD620A58E1AB088F644F77EF5C5101015A419427D46B46192D",
+      "Bytes": 2949
+    },
+    {
+      "File": "paquete.json",
+      "SHA256": "8DE4A62CDE46F8391A70577667840301545EC101FE3C189C0E0D0FE6191D273C",
+      "Bytes": 758
+    },
+    {
+      "File": "qemu-preview.json",
+      "SHA256": "3EDDCBB65FD747BC4FD71CEA113303EAD74984570383D1B6CAA785F7860B70AF",
+      "Bytes": 436
+    },
+    {
+      "File": "qemu-preview.png",
+      "SHA256": "3E6BD707F6351E570001909C14D8B0ACC8C51AE06A0B06099AB38A81AC11FE20",
+      "Bytes": 5572
+    },
+    {
+      "File": "verificacion.json",
+      "SHA256": "B135B5F359D2FCE7A5B7CB8FE9FB58274CC59229A2A1A8FB616BC7183D5DBF25",
+      "Bytes": 357
+    }
+  ]
+}

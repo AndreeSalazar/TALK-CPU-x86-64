@@ -1,0 +1,20 @@
+{
+  "Destino": "A:\\",
+  "Etiqueta": "BMO",
+  "FileSystem": "FAT32",
+  "DiskNumber": 0,
+  "PartitionNumber": 2,
+  "SecureBootEnabled": 0,
+  "WindowsKeyboardTransport": "USB/HID",
+  "PS2KeyboardAvailable": false,
+  "HelloBefore": [
+    {
+      "Path": "A:\\EFI\\ORQUESTADOR\\METAL.EFI",
+      "SHA256": "4287AD788CB7A75A74922F7F73E69363560C84501B9A73BA271D357F5F71469F"
+    },
+    {
+      "Path": "A:\\METAL\\INICIO.X86",
+      "SHA256": "B3FD9814BCCE6881F9CF3AD10B299D759F4F5B801A6526C59131A4D1C84E4B33"
+    }
+  ]
+}

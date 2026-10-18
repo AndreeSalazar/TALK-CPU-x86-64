@@ -13,13 +13,15 @@ root = Path(__file__).resolve().parents[2]
 build = root / 'build'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--caso', choices=['normal', 'firma', 'suma', 'ausente', 'excesivo', 'entrada', 'salida'], default='normal')
+parser.add_argument('--profile',choices=['hello','flappy-preview'],default='hello')
 args = parser.parse_args()
+if args.profile=='flappy-preview' and args.caso!='normal':raise ValueError('Visual preview uses only the normal virtual image case')
 source = build / 'disco-fat32-gpt.img'
 output = build / f'puente-{args.caso}.img'
 if not source.resolve().is_relative_to(build.resolve()) or not output.resolve().is_relative_to(build.resolve()):
     raise ValueError('Las imagenes deben estar dentro de build/')
 shutil.copyfile(source, output)
-efi = (build / 'Puente_Metal/EFI/BOOT/BOOTX64.EFI').read_bytes()
+efi = (build / ('Flappy_Metal/PC_PREVIEW/EFI/ORQUESTADOR/FLAPPY.EFI' if args.profile=='flappy-preview' else 'Puente_Metal/EFI/BOOT/BOOTX64.EFI')).read_bytes()
 if args.caso == 'salida':
     # Solo la copia de prueba: MapKey cero para provocar INVALID_PARAMETER.
     if efi[0xc90:0xc94] != bytes.fromhex('488b5558'):
@@ -95,6 +97,7 @@ with output.open('r+b') as disk:
     metal_offset = cluster_offset(metal_cluster)
     directory = bytearray(read(metal_offset, cluster_bytes))
     packet_pos = next(p for p in range(0, cluster_bytes, 32) if directory[p:p + 11] == b'INICIO  X86')
+    if args.profile=='flappy-preview':directory[packet_pos:packet_pos+11]=b'FLAPPY  X86'
     packet_cluster = (struct.unpack_from('<H', directory, packet_pos + 20)[0] << 16) | struct.unpack_from('<H', directory, packet_pos + 26)[0]
     packet_offset = cluster_offset(packet_cluster)
     if args.caso == 'ausente':

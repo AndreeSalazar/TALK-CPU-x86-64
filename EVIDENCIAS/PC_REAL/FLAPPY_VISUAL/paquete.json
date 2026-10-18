@@ -1,0 +1,31 @@
+{
+  "Nombre": "Flappy Metal - prueba visual",
+  "Perfil": "FlappyPreview",
+  "Interactive": false,
+  "PhysicalTest": false,
+  "BaseEFISHA256": "4287ad788cb7a75a74922f7f73e69363560c84501b9a73ba271d357f5f71469f",
+  "Changes": [
+    {
+      "Offset": 6208,
+      "Bytes": 36,
+      "Kind": "UTF16 path/error text only"
+    },
+    {
+      "Offset": 6528,
+      "Bytes": 94,
+      "Kind": "UTF16 path/error text only"
+    }
+  ],
+  "Archivos": [
+    {
+      "Ruta": "EFI/ORQUESTADOR/FLAPPY.EFI",
+      "Bytes": 12288,
+      "SHA256": "A5A0F8F4A93E4730AE60E80A1A10C6F19560C34A5AB2449CAB670A13131D3DE2"
+    },
+    {
+      "Ruta": "METAL/FLAPPY.X86",
+      "Bytes": 1300,
+      "SHA256": "10780153B26F7518D905FA75641D21A5C1606B80FC4D1E8B23BC1DA263AE7F25"
+    }
+  ]
+}

@@ -24,3 +24,8 @@ Examples:
 Installation tools affect the explicitly chosen volume/firmware entry; testing
 and game preview commands use virtual images. Paths changed during the cleanup;
 use the current README commands rather than historical shell history.
+
+Install tools default to `-Profile Hello`. `-Profile FlappyPreview` selects a
+separate static PC probe, with its own EFI/payload paths, entry name and logs.
+See [preparation and limits](../Games/Flappy_Metal/PC-PREVIEW.md); it does not
+install the QEMU-only interactive game or provide a USB keyboard driver.

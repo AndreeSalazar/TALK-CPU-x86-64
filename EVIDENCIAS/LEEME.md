@@ -34,6 +34,10 @@ las pruebas ni certifica que esos archivos no hayan sido editados después.
 
 ## PC real — primer saludo mediante puente fotografiado
 
+La [prueba visual de Flappy Metal](PC_REAL/FLAPPY_VISUAL/LEEME.md) ya está instalada
+como entrada separada en A: BMO, con archivos verificados y saludo intacto. Falta
+su foto física; no incluye el juego interactivo porque el teclado disponible es USB.
+
 El usuario reportó éxito en el primer intento físico del puente y aportó
 [tres fotos originales](PC_REAL/PRIMER_ARRANQUE/LEEME.md): entrada en el menú,
 saludo legible y vista general. El código propio se ejecuta después de

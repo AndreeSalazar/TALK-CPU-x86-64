@@ -1,0 +1,25 @@
+{
+  "Id": "{57cb1746-7f84-11f1-930d-c3a2d7ca848a}",
+  "Perfil": "FlappyPreview",
+  "Destino": "A:\\",
+  "Ruta": "\\EFI\\ORQUESTADOR\\FLAPPY.EFI",
+  "Nombre": "Flappy Metal (prueba visual)",
+  "OrdenAnterior": [
+    "{57cb1744-7f84-11f1-930d-c3a2d7ca848a}",
+    "{9dea862c-5cdd-4e70-acc1-f32b344d4795}",
+    "{97150c60-848b-11f1-8fb7-806e6f6e6963}",
+    "{66ae01cf-87cf-11f1-9014-806e6f6e6963}",
+    "{57cb1745-7f84-11f1-930d-c3a2d7ca848a}"
+  ],
+  "OrdenPosterior": [
+    "{57cb1744-7f84-11f1-930d-c3a2d7ca848a}",
+    "{9dea862c-5cdd-4e70-acc1-f32b344d4795}",
+    "{97150c60-848b-11f1-8fb7-806e6f6e6963}",
+    "{66ae01cf-87cf-11f1-9014-806e6f6e6963}",
+    "{57cb1745-7f84-11f1-930d-c3a2d7ca848a}",
+    "{57cb1746-7f84-11f1-930d-c3a2d7ca848a}"
+  ],
+  "PredeterminadoPreservado": true,
+  "Reiniciado": false,
+  "RetirarEntrada": "bcdedit /delete {57cb1746-7f84-11f1-930d-c3a2d7ca848a}"
+}

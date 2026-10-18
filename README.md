@@ -37,6 +37,10 @@ interactivas, siete casos aislados de límites/fallos y tres de la escena estát
 Las instrucciones siguen en .hex manual; CASM todavía no emite el juego.
 El SSD real conserva el saludo instalado y el teclado USB real sigue pendiente.
 
+Para el PC se instaló una entrada separada **Flappy Metal (prueba visual)** en
+A: BMO: dibujo estático, sin teclado ni movimiento. El saludo anterior se conserva.
+Falta observarla físicamente; [instrucciones y registro](EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
+
 La raíz se ha reducido a entradas de uso y este README. Las utilidades y pruebas
 están agrupadas en [tools](tools/README.md), el perfil y plan en `docs/`. Se
 fusionaron las guías duplicadas de Orquestador_Metal en su README; se conservaron
