@@ -1,0 +1,217 @@
+; =====================================================================
+;  TALK CPU x86-64 — eco.hex
+;  Segundo programa a mano: una consola. Lo que tecleas, la CPU lo
+;  recibe y lo devuelve a la pantalla. Enter = salto de línea.
+;
+;  Misma sintaxis que hola.hex:
+;    4D 5A  byte   ; comentario   @200 rellena   =058 comprueba offset
+;
+;  Mapa del archivo (1024 bytes):
+;    0x000  cabecera DOS
+;    0x040  firma PE
+;    0x044  cabecera COFF
+;    0x058  optional header PE32+
+;    0x148  tabla de secciones (.text)
+;    0x200  .text (RVA 0x1000): código 0x1000-0x1075, textos desde 0x1080
+; =====================================================================
+
+
+; ---- CABECERA DOS (0x000) -------------------------------------------
+=000
+4D 5A                    ; "MZ"
+@03C
+40 00 00 00              ; e_lfanew = 0x40
+
+
+; ---- FIRMA PE (0x040) -----------------------------------------------
+=040
+50 45 00 00              ; "PE\0\0"
+
+
+; ---- CABECERA COFF (0x044) ------------------------------------------
+=044
+64 86                    ; Machine = x86-64
+01 00                    ; NumberOfSections = 1
+00 00 00 00              ; TimeDateStamp
+00 00 00 00              ; PointerToSymbolTable
+00 00 00 00              ; NumberOfSymbols
+F0 00                    ; SizeOfOptionalHeader = 240
+22 00                    ; EXECUTABLE_IMAGE | LARGE_ADDRESS_AWARE
+
+
+; ---- OPTIONAL HEADER PE32+ (0x058) ----------------------------------
+=058
+0B 02                    ; Magic = PE32+
+00 00                    ; Linker version (no hubo linker)
+00 02 00 00              ; SizeOfCode = 0x200
+00 00 00 00              ; SizeOfInitializedData
+00 00 00 00              ; SizeOfUninitializedData
+00 10 00 00              ; AddressOfEntryPoint = 0x1000
+00 10 00 00              ; BaseOfCode = 0x1000
+00 00 40 00 00 00 00 00  ; ImageBase = 0x400000
+00 10 00 00              ; SectionAlignment = 0x1000
+00 02 00 00              ; FileAlignment = 0x200
+00 00 00 00              ; OS version
+00 00 00 00              ; Image version
+00 00 00 00              ; Subsystem version
+00 00 00 00              ; Win32VersionValue
+00 20 00 00              ; SizeOfImage = 0x2000
+00 02 00 00              ; SizeOfHeaders = 0x200
+00 00 00 00              ; CheckSum
+0A 00                    ; Subsystem = EFI_APPLICATION
+00 00                    ; DllCharacteristics
+00 00 00 00 00 00 00 00  ; SizeOfStackReserve
+00 00 00 00 00 00 00 00  ; SizeOfStackCommit
+00 00 00 00 00 00 00 00  ; SizeOfHeapReserve
+00 00 00 00 00 00 00 00  ; SizeOfHeapCommit
+00 00 00 00              ; LoaderFlags
+10 00 00 00              ; NumberOfRvaAndSizes = 16
+=0C8
+; 16 directorios de datos vacíos (sin imports, sin relocaciones)
+@148
+
+
+; ---- TABLA DE SECCIONES (0x148) -------------------------------------
+=148
+2E 74 65 78 74 00 00 00  ; ".text"
+00 02 00 00              ; VirtualSize = 0x200
+00 10 00 00              ; VirtualAddress = 0x1000
+00 02 00 00              ; SizeOfRawData = 0x200
+00 02 00 00              ; PointerToRawData = 0x200
+00 00 00 00              ; PointerToRelocations
+00 00 00 00              ; PointerToLinenumbers
+00 00                    ; NumberOfRelocations
+00 00                    ; NumberOfLinenumbers
+20 00 00 60              ; CODE | EXECUTE | READ
+=170
+@200
+
+
+; =====================================================================
+;  .text (archivo 0x200 = RVA 0x1000)
+;
+;  Entrada: RCX = ImageHandle, RDX = EFI_SYSTEM_TABLE
+;
+;  Lo que usamos de la System Table:
+;    +0x30 ConIn         teclado    -> +0x08 ReadKeyStroke(This, *Key)
+;    +0x40 ConOut        pantalla   -> +0x08 OutputString(This, *Str)
+;                                      +0x30 ClearScreen(This)
+;    +0x60 BootServices             -> +0x100 SetWatchdogTimer(...)
+;
+;  Registros que guardamos (el firmware no los toca: son callee-saved):
+;    RBX = ConOut   RSI = ConIn   RDI = BootServices
+;
+;  Pila (después de sub rsp, 0x38):
+;    [rsp+0x00..0x1F]  shadow space para las llamadas
+;    [rsp+0x28]        EFI_INPUT_KEY: ScanCode (2 bytes) + UnicodeChar (2)
+;    [rsp+0x30]        texto de 1 carácter: char + terminador nulo
+; =====================================================================
+
+=200                                 ; ---- RVA 0x1000: ENTRADA ----
+48 83 EC 38                          ; sub  rsp, 0x38
+                                     ;   entrada: rsp termina en 8 (mod 16)
+                                     ;   8 - 0x38 -> múltiplo de 16 (alineada)
+
+48 8B 5A 40                          ; mov  rbx, [rdx+0x40]   ; ConOut
+                                     ;   5A = 01 011 010 (rbx <- [rdx+d8])
+48 8B 72 30                          ; mov  rsi, [rdx+0x30]   ; ConIn
+                                     ;   72 = 01 110 010 (rsi <- [rdx+d8])
+48 8B 7A 60                          ; mov  rdi, [rdx+0x60]   ; BootServices
+                                     ;   7A = 01 111 010 (rdi <- [rdx+d8])
+
+; -- SetWatchdogTimer(0, 0, 0, NULL): apaga el reinicio de 5 minutos --
+=210                                 ; RVA 0x1010
+31 C9                                ; xor  ecx, ecx          ; Timeout = 0
+31 D2                                ; xor  edx, edx          ; WatchdogCode = 0
+45 31 C0                             ; xor  r8d, r8d          ; DataSize = 0
+                                     ;   45 = REX.R + REX.B (r8 en ambos lados)
+45 31 C9                             ; xor  r9d, r9d          ; WatchdogData = NULL
+=21A                                 ; RVA 0x101A
+FF 97 00 01 00 00                    ; call [rdi+0x100]
+                                     ;   97 = 10 010 111: /2 CALL, [rdi+disp32]
+                                     ;   0x100 no cabe en 8 bits -> disp32
+
+; -- ClearScreen(ConOut) --
+=220                                 ; RVA 0x1020
+48 89 D9                             ; mov  rcx, rbx
+FF 53 30                             ; call [rbx+0x30]
+
+; -- OutputString(ConOut, saludo) --
+48 89 D9                             ; mov  rcx, rbx
+=229                                 ; RVA 0x1029
+48 8D 15 50 00 00 00                 ; lea  rdx, [rip+0x50]
+                                     ;   siguiente instrucción = 0x1030
+                                     ;   0x1030 + 0x50 = 0x1080 (saludo)
+FF 53 08                             ; call [rbx+0x08]
+
+; ---- BUCLE (RVA 0x1033): esperar tecla ------------------------------
+=233
+48 89 F1                             ; mov  rcx, rsi          ; This = ConIn
+                                     ;   F1 = 11 110 001 (rsi -> rcx)
+48 8D 54 24 28                       ; lea  rdx, [rsp+0x28]   ; &Key
+                                     ;   54 = 01 010 100 -> hay byte SIB
+                                     ;   24 = SIB: base = rsp, sin índice
+FF 56 08                             ; call [rsi+0x08]        ; ReadKeyStroke
+                                     ;   56 = 01 010 110: /2 CALL, [rsi+d8]
+=23E                                 ; RVA 0x103E
+48 85 C0                             ; test rax, rax
+                                     ;   0 = EFI_SUCCESS (llegó una tecla)
+                                     ;   otro = EFI_NOT_READY (todavía nada)
+75 F0                                ; jnz  bucle
+                                     ;   desde 0x1043 vuelve a 0x1033: -0x10
+
+=243                                 ; RVA 0x1043
+0F B7 44 24 2A                       ; movzx eax, word [rsp+0x2A]  ; UnicodeChar
+                                     ;   0F B7 = MOVZX r32, r/m16
+66 83 F8 0D                          ; cmp  ax, 0x0D          ; ¿Enter?
+                                     ;   66 = prefijo de operando de 16 bits
+                                     ;   F8 = 11 111 000: /7 CMP, registro ax
+74 19                                ; je   nueva_linea
+                                     ;   desde 0x104E salta +0x19 -> 0x1067
+
+; -- imprimir el carácter tecleado --
+=24E                                 ; RVA 0x104E
+66 89 44 24 30                       ; mov  [rsp+0x30], ax    ; el carácter
+66 C7 44 24 32 00 00                 ; mov  word [rsp+0x32], 0 ; terminador
+                                     ;   C7 /0 iw = MOV r/m16, imm16
+48 89 D9                             ; mov  rcx, rbx          ; This = ConOut
+48 8D 54 24 30                       ; lea  rdx, [rsp+0x30]   ; &texto
+FF 53 08                             ; call [rbx+0x08]        ; OutputString
+=265                                 ; RVA 0x1065
+EB CC                                ; jmp  bucle
+                                     ;   desde 0x1067 vuelve a 0x1033: -0x34
+
+; ---- NUEVA_LINEA (RVA 0x1067) ---------------------------------------
+=267
+48 89 D9                             ; mov  rcx, rbx
+=26A                                 ; RVA 0x106A
+48 8D 15 37 00 00 00                 ; lea  rdx, [rip+0x37]
+                                     ;   0x1071 + 0x37 = 0x10A8 (salto + "> ")
+FF 53 08                             ; call [rbx+0x08]
+=274                                 ; RVA 0x1074
+EB BD                                ; jmp  bucle
+                                     ;   desde 0x1076 vuelve a 0x1033: -0x43
+
+=276
+@280
+
+; =====================================================================
+;  TEXTOS en UCS-2 (2 bytes por carácter)
+; =====================================================================
+=280                                 ; RVA 0x1080: saludo
+54 00 41 00 4C 00 4B 00              ; "TALK"
+20 00                                ; " "
+43 00 50 00 55 00                    ; "CPU"
+20 00                                ; " "
+78 00 38 00 36 00 2D 00 36 00 34 00  ; "x86-64"
+0D 00 0A 00                          ; "\r\n"
+3E 00 20 00                          ; "> "
+00 00                                ; fin
+
+=2A8                                 ; RVA 0x10A8: nueva línea
+0D 00 0A 00                          ; "\r\n"
+3E 00 20 00                          ; "> "
+00 00                                ; fin
+
+=2B2
+@400
