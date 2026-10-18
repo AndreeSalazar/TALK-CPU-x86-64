@@ -39,3 +39,14 @@ solicitar esta vista general.
 [Foto y ficha oficial MSI A320M-A PRO MAX](https://storage-asset.msi.com/datasheet/original/mb/global/A320M-A-PRO-MAX.pdf)
 permite comparar la distribución general. No es una hoja de datos del chip flash
 ni garantiza que una referencia de memoria concreta esté montada en esta placa.
+
+## Segunda tanda: fotos 04..06
+
+El componente de ocho patillas en 05 permite leer tentativamente NIKOS y una
+referencia que empieza por P0603. El sufijo no se transcribe como confirmado.
+Esa lectura apunta a un MOSFET, no a memoria flash; no se da por identificado
+el chip BIOS. [VBsemi documenta P0603BVG como MOSFET](https://www.vbsemi.com/index.php?id=141030),
+pero su variante no demuestra por sí sola el modelo exacto fotografiado.
+Los componentes centrales de 04 y 06 tampoco muestran una inscripción legible
+que permita identificarlos como memoria BIOS. Hace falta una vista de contexto
+más amplia para ubicar los candidatos antes de insistir con otro macro.
