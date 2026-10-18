@@ -54,6 +54,11 @@ No se eliminan los servicios runtime, SMM ni los componentes AMD de la plataform
 
 ## Archivos para la primera prueba física
 
+**Instalado en A: BMO el 18 de octubre de 2026**, con la entrada separada
+**Orquestador del Metal (prueba)** al final del orden previo. Las huellas de ambos
+archivos se verificaron. Aún falta el arranque físico y su foto: consulta el
+[registro de instalación y pasos](../EVIDENCIAS/PC_REAL/PUENTE_INSTALADO/LEEME.md).
+
 `./construir-puente.ps1` genera:
 
 ```text

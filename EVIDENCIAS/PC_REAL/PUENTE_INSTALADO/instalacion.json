@@ -1,0 +1,24 @@
+{
+  "Fecha": "2026-10-18T08:16:19.0621205-05:00",
+  "Destino": "A:\\",
+  "Etiqueta": "BMO",
+  "DiskNumber": 0,
+  "PartitionNumber": 2,
+  "GptType": "{ebd0a0a2-b9e5-4433-87c0-68b6b72699c7}",
+  "FormatoModificado": false,
+  "ArranqueWindowsModificado": false,
+  "Archivos": [
+    {
+      "Ruta": "EFI/ORQUESTADOR/METAL.EFI",
+      "SHA256": "4287AD788CB7A75A74922F7F73E69363560C84501B9A73BA271D357F5F71469F",
+      "AnteriorSHA256": null,
+      "Respaldo": null
+    },
+    {
+      "Ruta": "METAL/INICIO.X86",
+      "SHA256": "B3FD9814BCCE6881F9CF3AD10B299D759F4F5B801A6526C59131A4D1C84E4B33",
+      "AnteriorSHA256": null,
+      "Respaldo": null
+    }
+  ]
+}
