@@ -1,0 +1,198 @@
+; =====================================================================
+;  TALK CPU x86-64 — hola.hex
+;  Primer programa UEFI escrito byte por byte. Sin ensamblador,
+;  sin compilador, sin linker: cada byte del .efi está aquí.
+;
+;  Sintaxis (lo único que entiende build.ps1):
+;    4D 5A     un byte en hexadecimal (siempre 2 dígitos)
+;    ; texto   comentario hasta el final de la línea
+;    @200      rellena con 00 hasta el offset 0x200 del archivo
+;    =058      comprueba que estamos EXACTAMENTE en el offset 0x58
+;              (si me equivoqué contando bytes, el build falla)
+;
+;  Mapa del archivo (1024 bytes):
+;    0x000  cabecera DOS        "MZ" + puntero a la cabecera PE
+;    0x040  firma PE            "PE\0\0"
+;    0x044  cabecera COFF       máquina x86-64, 1 sección
+;    0x058  optional header     punto de entrada, subsistema EFI
+;    0x148  tabla de secciones  una sola: .text
+;    0x200  .text               el código + el texto a imprimir
+;
+;  En memoria, la sección .text queda en RVA 0x1000
+;  (offset de archivo 0x200 = dirección relativa 0x1000).
+; =====================================================================
+
+
+; ---------------------------------------------------------------------
+;  CABECERA DOS (0x000)
+;  Herencia de MS-DOS. UEFI solo lee "MZ" y el puntero en 0x3C.
+; ---------------------------------------------------------------------
+=000
+4D 5A                    ; "MZ"
+@03C                     ; el resto de la cabecera DOS va en ceros
+40 00 00 00              ; e_lfanew = 0x40 -> ahí empieza la cabecera PE
+
+
+; ---------------------------------------------------------------------
+;  FIRMA PE (0x040)
+; ---------------------------------------------------------------------
+=040
+50 45 00 00              ; "PE\0\0"
+
+
+; ---------------------------------------------------------------------
+;  CABECERA COFF (0x044, 20 bytes)
+; ---------------------------------------------------------------------
+=044
+64 86                    ; Machine = 0x8664 -> x86-64
+01 00                    ; NumberOfSections = 1
+00 00 00 00              ; TimeDateStamp (no importa)
+00 00 00 00              ; PointerToSymbolTable (sin símbolos)
+00 00 00 00              ; NumberOfSymbols
+F0 00                    ; SizeOfOptionalHeader = 240 bytes
+22 00                    ; Characteristics = 0x0022
+                         ;   0x0002 EXECUTABLE_IMAGE
+                         ;   0x0020 LARGE_ADDRESS_AWARE
+                         ;   (NO marcamos RELOCS_STRIPPED: así el firmware
+                         ;    puede cargarnos en cualquier dirección; el
+                         ;    código es independiente de la posición)
+
+
+; ---------------------------------------------------------------------
+;  OPTIONAL HEADER PE32+ (0x058, 240 bytes)
+;  "Optional" de nombre nada más: sin él no arranca.
+; ---------------------------------------------------------------------
+=058
+0B 02                    ; Magic = 0x020B -> PE32+ (64 bits)
+00                       ; MajorLinkerVersion (no hubo linker)
+00                       ; MinorLinkerVersion
+00 02 00 00              ; SizeOfCode = 0x200
+00 00 00 00              ; SizeOfInitializedData
+00 00 00 00              ; SizeOfUninitializedData
+00 10 00 00              ; AddressOfEntryPoint = 0x1000  <-- primera instrucción
+00 10 00 00              ; BaseOfCode = 0x1000
+00 00 40 00 00 00 00 00  ; ImageBase = 0x400000 (preferida, no obligatoria)
+00 10 00 00              ; SectionAlignment = 0x1000 (páginas de 4 KiB en RAM)
+00 02 00 00              ; FileAlignment = 0x200 (bloques de 512 en disco)
+00 00                    ; MajorOperatingSystemVersion
+00 00                    ; MinorOperatingSystemVersion
+00 00                    ; MajorImageVersion
+00 00                    ; MinorImageVersion
+00 00                    ; MajorSubsystemVersion
+00 00                    ; MinorSubsystemVersion
+00 00 00 00              ; Win32VersionValue
+00 20 00 00              ; SizeOfImage = 0x2000 (cabeceras + 1 página de .text)
+00 02 00 00              ; SizeOfHeaders = 0x200
+00 00 00 00              ; CheckSum (UEFI no lo revisa)
+0A 00                    ; Subsystem = 10 -> EFI_APPLICATION
+00 00                    ; DllCharacteristics
+00 00 00 00 00 00 00 00  ; SizeOfStackReserve (UEFI nos da su propia pila)
+00 00 00 00 00 00 00 00  ; SizeOfStackCommit
+00 00 00 00 00 00 00 00  ; SizeOfHeapReserve
+00 00 00 00 00 00 00 00  ; SizeOfHeapCommit
+00 00 00 00              ; LoaderFlags
+10 00 00 00              ; NumberOfRvaAndSizes = 16 directorios
+
+=0C8
+; 16 directorios de datos x 8 bytes = 128 bytes, TODOS vacíos:
+; sin imports, sin exports, sin relocaciones, sin nada.
+; Nuestro programa no depende de ninguna biblioteca.
+@148
+
+
+; ---------------------------------------------------------------------
+;  TABLA DE SECCIONES (0x148, 40 bytes por sección)
+; ---------------------------------------------------------------------
+=148
+2E 74 65 78 74 00 00 00  ; Name = ".text"
+00 02 00 00              ; VirtualSize = 0x200
+00 10 00 00              ; VirtualAddress = 0x1000 (RVA en memoria)
+00 02 00 00              ; SizeOfRawData = 0x200
+00 02 00 00              ; PointerToRawData = 0x200 (offset en el archivo)
+00 00 00 00              ; PointerToRelocations
+00 00 00 00              ; PointerToLinenumbers
+00 00                    ; NumberOfRelocations
+00 00                    ; NumberOfLinenumbers
+20 00 00 60              ; Characteristics = 0x60000020
+                         ;   0x00000020 CODE
+                         ;   0x20000000 EXECUTE
+                         ;   0x40000000 READ
+=170
+@200                     ; relleno hasta el final de las cabeceras
+
+
+; ---------------------------------------------------------------------
+;  .text (archivo 0x200 = RVA 0x1000)
+;
+;  El firmware nos llama así (convención Microsoft x64):
+;    RCX = ImageHandle
+;    RDX = puntero a EFI_SYSTEM_TABLE
+;
+;  EFI_SYSTEM_TABLE + 0x40 = ConOut (la consola de texto)
+;  ConOut + 0x08 = OutputString(This, *String)
+;  ConOut + 0x30 = ClearScreen(This)
+; ---------------------------------------------------------------------
+=200                                 ; RVA 0x1000  <-- ENTRADA
+
+48 83 EC 28                          ; sub  rsp, 0x28
+                                     ;   48 = REX.W (64 bits)
+                                     ;   83 /5 ib = SUB r/m64, imm8
+                                     ;   EC = ModR/M 11 101 100 -> rsp
+                                     ;   28 = 40 bytes: 32 de "shadow space"
+                                     ;        + 8 para alinear la pila a 16
+
+48 8B 5A 40                          ; mov  rbx, [rdx+0x40]   ; rbx = ConOut
+                                     ;   8B /r = MOV r64, r/m64
+                                     ;   5A = ModR/M 01 011 010
+                                     ;        mod=01 (desplazamiento de 8 bits)
+                                     ;        reg=011 (rbx), rm=010 (rdx)
+                                     ;   40 = desplazamiento +0x40
+
+48 89 D9                             ; mov  rcx, rbx          ; This = ConOut
+                                     ;   89 /r = MOV r/m64, r64
+                                     ;   D9 = ModR/M 11 011 001 (rbx -> rcx)
+
+FF 53 30                             ; call [rbx+0x30]        ; ClearScreen(ConOut)
+                                     ;   FF /2 = CALL r/m64
+                                     ;   53 = ModR/M 01 010 011
+                                     ;        reg=010 (/2 = CALL), rm=011 (rbx)
+
+48 89 D9                             ; mov  rcx, rbx          ; This = ConOut
+                                     ;   (CALL destruye RCX, hay que recargarlo)
+
+=211                                 ; RVA 0x1011
+48 8D 15 08 00 00 00                 ; lea  rdx, [rip+0x08]   ; rdx = &texto
+                                     ;   8D /r = LEA
+                                     ;   15 = ModR/M 00 010 101
+                                     ;        mod=00 rm=101 -> [RIP + disp32]
+                                     ;   RIP apunta a la siguiente
+                                     ;   instrucción (0x1018); 0x1018 + 8
+                                     ;   = 0x1020 = donde empieza el texto.
+                                     ;   Así funciona en CUALQUIER dirección.
+
+=218                                 ; RVA 0x1018
+FF 53 08                             ; call [rbx+0x08]        ; OutputString(ConOut, texto)
+
+=21B                                 ; RVA 0x101B
+F4                                   ; hlt                    ; la CPU duerme hasta
+                                     ;                          la próxima interrupción
+EB FD                                ; jmp  -3                ; vuelve al hlt (0x101B)
+                                     ;   EB = JMP rel8
+                                     ;   FD = -3: desde 0x101E vuelve a 0x101B
+
+00 00                                ; relleno: el texto UCS-2 va alineado a 2
+
+; ---------------------------------------------------------------------
+;  TEXTO (RVA 0x1020) en UCS-2: cada carácter ocupa 2 bytes
+; ---------------------------------------------------------------------
+=220
+54 00 41 00 4C 00 4B 00              ; "TALK"
+20 00                                ; " "
+43 00 50 00 55 00                    ; "CPU"
+20 00                                ; " "
+78 00 38 00 36 00 2D 00 36 00 34 00  ; "x86-64"
+0D 00 0A 00                          ; "\r\n"
+00 00                                ; fin del texto (terminador nulo)
+
+=244
+@400                                 ; relleno hasta 0x200 bytes de sección
