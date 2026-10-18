@@ -1,6 +1,6 @@
 # Consola propia de 64 bits
 
-Desde la raiz: `./run-firmware.ps1 -Monitor`. Abre la ventana Orquestador_Metal.
+Desde la raiz: `./run-firmware.ps1 -Monitor`. Abre la ventana Orquestador del Metal.
 Pulsa dentro de ella para escribir con su teclado PS/2; no requiere Enter para
 elegir una orden. `-Headless` conserva solo la terminal. UART y VGA reciben la
 misma salida; se acepta entrada por UART o PS/2, con prioridad a UART.

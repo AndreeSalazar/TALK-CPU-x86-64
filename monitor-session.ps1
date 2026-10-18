@@ -12,12 +12,12 @@ if (-not $LogName) { $LogName=if ($Check) { 'faggin-64-monitor-check' } else { '
 $base="build/$LogName"
 $display=if($Check -or $Headless){'none'}else{'gtk'}
 $arguments=@('-machine','pc','-cpu','qemu64','-accel','tcg','-m','16M','-smp','1',
-    '-name','Orquestador_Metal','-bios',$RomPath,'-nodefaults','-device','VGA,addr=2','-display',$display,'-monitor','none',
+    '-bios',$RomPath,'-nodefaults','-device','VGA,addr=2','-display',$display,'-monitor','none',
     '-serial','stdio','-chardev',"file,id=debug,path=$base-debug.log",
     '-device','isa-debugcon,iobase=0xe9,chardev=debug','-no-reboot')
 if (-not $Check) {
-    Write-Host 'Orquestador_Metal: escribe en la ventana o en esta terminal. h ayuda, o hola, e eco, ESC vuelve, q detiene. Ctrl+C sale de QEMU.'
-    & $Qemu @arguments
+    Write-Host 'Orquestador del Metal: escribe en la ventana o en esta terminal. h ayuda, o hola, e eco, ESC vuelve, q detiene. Ctrl+C sale de QEMU.'
+    & $Qemu @arguments -name 'Orquestador del Metal'
     if ($LASTEXITCODE -ne 0) { throw "QEMU termino con codigo $LASTEXITCODE" }
     return
 }
@@ -42,7 +42,7 @@ try {
     $timer=[Diagnostics.Stopwatch]::StartNew()
     # Una orden cada vez: no depender del tamano del FIFO UART.
     $steps=@(
-        @{Command='';Expected='Faggin monitor64 READY'},
+        @{Command='';Expected='Orquestador del Metal: listo (64 bits)'},
         @{Command='h';Expected='h help | s status | a alloc256 | o hola | e eco | q halt'},
         @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
         @{Command='a';Expected='GREEN [alloc256] ptr=0000000000100000'},
@@ -64,7 +64,7 @@ try {
     )
     if ($Rejection) {
         $steps=@(
-            @{Command='';Expected='Faggin monitor64 READY'},
+            @{Command='';Expected='Orquestador del Metal: listo (64 bits)'},
             @{Command='o';Expected="RED [load] $Rejection"},
             @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
             @{Command='q';Expected='GREEN [halt] stopped'}

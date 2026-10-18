@@ -1,4 +1,4 @@
-# Modelo de Orquestador_Metal
+# Modelo de Orquestador del Metal
 
 Hoy se escriben instrucciones x86 en `.hex`. El constructor copia esos bytes
 a una ROM y los guardianes verifican ventanas, reservas y contratos especificos.

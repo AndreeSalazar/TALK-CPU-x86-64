@@ -8,7 +8,7 @@ if (-not $Qemu) {
 Push-Location $PSScriptRoot
 $process=$null
 try {
-    & "$PSScriptRoot/Faggin scaling/build-firmware.ps1" -Monitor
+    & "$PSScriptRoot/Orquestador_Metal/build-firmware.ps1" -Monitor
     $base='build/screen-test'
     $rom='build/faggin-64-monitor.rom'
     if($InjectCursorFault){
@@ -54,7 +54,7 @@ try {
         } until($text.Contains($expected))
     }
     function Send-Monitor([string]$command) {$process.StandardInput.WriteLine($command);$process.StandardInput.Flush()}
-    Wait-Serial 'Faggin monitor64 READY'
+    Wait-Serial 'Orquestador del Metal: listo (64 bits)'
     Send-Monitor 'sendkey o 10'
     Wait-Serial 'Hola mundo desde mi .hex!'
     Send-Monitor 'sendkey e 10'
@@ -76,7 +76,7 @@ try {
     $characters=New-Object byte[] 2000
     for($i=0;$i -lt 2000;$i++){$characters[$i]=$bytes[$i*2]}
     $screen=[Text.Encoding]::ASCII.GetString($characters)
-    foreach($expected in @('Orquestador_Metal','Hola mundo desde mi .hex!','ECO64 READY','Hola','ECO64 END')) {
+    foreach($expected in @('Orquestador del Metal','Hola mundo desde mi .hex!','ECO64 READY','Hola','ECO64 END')) {
         if(-not $screen.Contains($expected)){throw "Falta texto en VGA: $expected"}
     }
     if(-not $InjectCursorFault){
@@ -110,7 +110,7 @@ try {
     $after=[IO.File]::ReadAllBytes($scrollVram)
     for($i=0;$i -lt 2000;$i++){$characters[$i]=$after[$i*2]}
     $afterText=[Text.Encoding]::ASCII.GetString($characters)
-    if([BitConverter]::ToUInt32($state,0) -ge 2000 -or $afterText.Contains('Orquestador_Metal') -or -not $afterText.Contains('Hola mundo desde mi .hex!')) {
+    if([BitConverter]::ToUInt32($state,0) -ge 2000 -or $afterText.Contains('Orquestador del Metal') -or -not $afterText.Contains('Hola mundo desde mi .hex!')) {
         throw 'El desplazamiento no conservo los limites o el texto esperado.'
     }
     Send-Monitor 'sendkey q 10'

@@ -1,4 +1,9 @@
-# Faggin scaling
+# Orquestador del Metal
+
+Esta es la carpeta técnica `Orquestador_Metal`. La secuencia de arranque
+de 16, 32 y 64 bits conserva el nombre «Faggin scaling».
+Consulta [LEEME](LEEME.md) para orientarte y [Arranque propio](arranque/LEEME.md)
+para distinguir el firmware desde RESET de un archivo de arranque en disco.
 
 Firmware propio desde cero, en homenaje a Federico Faggin. Las instrucciones
 estan escritas byte por byte en archivos .hex, sin ensamblador ni linker.
@@ -72,7 +77,7 @@ comprueban punteros, carry, errores y estado antes de continuar.
 Solo construir, sin ejecutar:
 
 ```powershell
-& '.\Faggin scaling\build-firmware.ps1' -Stage 64
+& '.\Orquestador_Metal\build-firmware.ps1' -Stage 64
 ```
 
 El constructor selecciona y concatena los archivos respetando sus offsets,

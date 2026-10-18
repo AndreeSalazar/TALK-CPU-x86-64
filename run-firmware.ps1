@@ -38,7 +38,7 @@ if (-not $qemuCommand) {
 
 Push-Location $PSScriptRoot
 try {
-    & "$PSScriptRoot\Faggin scaling\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception -Monitor:$Monitor
+    & "$PSScriptRoot\Orquestador_Metal\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception -Monitor:$Monitor
     $romPath = "build/$buildName.rom"
     if ((Get-Item $romPath).Length -ne 65536) {
         throw "La ROM debe medir exactamente 65536 bytes."
@@ -59,7 +59,7 @@ try {
         $haltAddress = @{ '16'='000f0024'; '32'='000f0225'; '64'='000f22e0' }[$Stage]
         if ($Stress) { $haltAddress = '000f06d8' }
         if ($Exception -ne 'None') {
-            $exceptionCases = Import-PowerShellDataFile "$PSScriptRoot\Faggin scaling\64-bit\diagnostics\tests\cases.psd1"
+            $exceptionCases = Import-PowerShellDataFile "$PSScriptRoot\Orquestador_Metal\64-bit\diagnostics\tests\cases.psd1"
             $faultCase = $exceptionCases[$Exception]
             $expectedMessage += ('RED [CPU] Faggin scaling: CPU fault vector={0:X16}' -f [long]$faultCase.Vector)
             $expectedMessage += ("`r`nrip={0:X16}" -f [long]$faultCase.Rip)

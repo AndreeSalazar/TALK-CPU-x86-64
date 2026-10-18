@@ -1,10 +1,23 @@
-# Orquestador_Metal / Faggin scaling
+# Orquestador del Metal
+
+El nombre visible del proyecto es **Orquestador del Metal** y su carpeta técnica
+es `Orquestador_Metal/`. «Faggin scaling» identifica las etapas de 16, 32 y 64 bits,
+en homenaje a Federico Faggin.
+
+Para abrir la pantalla y escribir con eco:
+
+```powershell
+.\iniciar.ps1
+```
+
+Pulsa `o` para «Hola mundo», `e` para eco y Escape para volver al monitor.
+La guía de organización está en [LEEME](Orquestador_Metal/LEEME.md).
 
 Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.
-El desarrollo actual esta organizado en Faggin scaling/:
+El desarrollo actual está organizado en `Orquestador_Metal/`:
 
 ```text
-Faggin scaling/
+Orquestador_Metal/
   16-bit/              reset, entrada real, A20, GDT y transicion a 32
   32-bit/              entrada protegida, paginacion y transicion a 64
   64-bit/              diagnosticos, memoria, monitor, programas y pantalla
@@ -34,7 +47,7 @@ GREEN [Memory] bounded allocator OK
 ```
 
 Ctrl+C para salir. El perfil normal transmite por el puerto de depuracion de
-QEMU. Para abrir la pantalla propia de Orquestador_Metal:
+QEMU. Para abrir la pantalla propia de Orquestador del Metal:
 
 ```powershell
 .\run-firmware.ps1 -Monitor
@@ -47,12 +60,12 @@ La ventana usa VGA y teclado PS/2 inicializados por nuestros bytes. La terminal
 sigue operativa por UART. Para ejecutar solamente en terminal:
 `./run-firmware.ps1 -Monitor -Headless`. Las pruebas siempre ocultan la ventana.
 Los binarios propios se exportan como `build/hola.x86` y `build/eco.x86`.
-Sus fuentes estan en [programs](Faggin%20scaling/64-bit/programs/README.md).
+Sus fuentes estan en [programs](Orquestador_Metal/64-bit/programs/README.md).
 Los originales `src/hola.hex` y `src/eco.hex` se conservan como ejemplos UEFI.
 La implementacion de pantalla y sus limites estan en
-[screen](Faggin%20scaling/64-bit/screen/README.md).
-Consulta [el contrato de la consola](Faggin%20scaling/64-bit/monitor/README.md)
-y [las entregas pendientes](Faggin%20scaling/ENTREGAS.md).
+[screen](Orquestador_Metal/64-bit/screen/README.md).
+Consulta [el contrato de la consola](Orquestador_Metal/64-bit/monitor/README.md)
+y [las entregas pendientes](Orquestador_Metal/ENTREGAS.md).
 
 Nuestra ROM sustituye el firmware
 de la VM: no se carga SeaBIOS, OVMF ni un archivo .efi.
@@ -90,15 +103,15 @@ punto confirma una ronda; termina con RAM 1 MiB x 32 OK. La ultima variante
 provoca una corrupcion en la RAM de la VM y exige RAM FAIL para comprobar
 que el firmware la detecta. Las pruebas con -Check cierran su propia VM.
 
-Los bytes y la explicacion estan en Faggin scaling/64-bit/stress/.
+Los bytes y la explicacion estan en Orquestador_Metal/64-bit/stress/.
 La investigacion sobre las fases de UEFI y el orden de desarrollo propio
-esta en Faggin scaling/COMO-SE-CONSTRUYE-UN-FIRMWARE.md.
+esta en Orquestador_Metal/COMO-SE-CONSTRUYE-UN-FIRMWARE.md.
 
 ## Solidez antes de optimizar
 
 La etapa de 64 bits instala IDT y TSS para informar excepciones con vector,
 RIP, error, CR2 y pila utilizada. Las explicaciones estan en
-Faggin scaling/64-bit/diagnostics/README.md.
+Orquestador_Metal/64-bit/diagnostics/README.md.
 
 ```powershell
 .\test-firmware.ps1
@@ -130,7 +143,7 @@ y datos no ejecutables. Puedes provocar un cruce real de pila dentro de la VM:
 .\run-firmware.ps1 -Exception stack -Check
 ```
 
-Las reglas, sus motivos y limites estan en Faggin scaling/guardians/README.md.
+Las reglas, sus motivos y limites estan en Orquestador_Metal/guardians/README.md.
 Los informes de cada construccion usan el sufijo -guardians.json.
 Los bloqueos incluyen codigo, propietario, motivo y correccion sugerida;
 los contratos criticos tambien muestran bytes esperados y encontrados.
@@ -138,7 +151,7 @@ build/guardian-example.json contiene un ejemplo rojo de una copia de prueba.
 
 ## Servicio de memoria de 64 bits
 
-Faggin scaling/64-bit/services/ implementa asignacion lineal de una arena de
+Orquestador_Metal/64-bit/services/ implementa asignacion lineal de una arena de
 512 KiB, alineacion a 16 bytes, limites, comprobacion de overflow y rechazo
 sin consumir espacio ante rechazos normales. El ABI version 2 conserva una
 bandera persistente si detecta corrupcion del cursor o su complemento.
@@ -147,7 +160,7 @@ El mensaje GREEN [Memory] confirma que pasaron y el estado quedo limpio.
 
 Se conservan los .hex manuales. La primera compactacion comprobada redujo
 los bytes explicitos del perfil normal de 2319 a 2248, sin cambiar el ABI
-ni quitar guardianes. Los detalles estan en Faggin scaling/COMPACTACION.md.
+ni quitar guardianes. Los detalles estan en Orquestador_Metal/COMPACTACION.md.
 Esas cifras son historicas: la version 2 agrega nuevas protecciones y su
 tamano actual se consulta en build/faggin-64-map.json.
 
@@ -166,4 +179,4 @@ solamente la ROM original:
 
 Este proyecto utiliza la RAM y los dispositivos emulados de QEMU. Todavia
 no inicializa una placa fisica ni implementa la especificacion UEFI.
-Los contratos, mapa de memoria y limites estan en Faggin scaling/README.md.
+Los contratos, mapa de memoria y limites estan en Orquestador_Metal/README.md.

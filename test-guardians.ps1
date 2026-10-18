@@ -1,8 +1,8 @@
 # Pruebas de reglas con copias de metadatos. No modifica fuentes ni ROM.
 $ErrorActionPreference = 'Stop'
-. "$PSScriptRoot\Faggin scaling\guardians\check-layout.ps1"
-$layoutPath = "$PSScriptRoot\Faggin scaling\guardians\layout.psd1"
-$sourceRoot = "$PSScriptRoot\Faggin scaling"
+. "$PSScriptRoot\Orquestador_Metal\guardians\check-layout.ps1"
+$layoutPath = "$PSScriptRoot\Orquestador_Metal\guardians\layout.psd1"
+$sourceRoot = "$PSScriptRoot\Orquestador_Metal"
 $baselineSources = @('16-bit\entry.hex','16-bit\halt.hex','16-bit\message.hex','16-bit\reset.hex')
 $tests = @(
     @{Name='Distribucion valida';Allowed=$true;Guard='Layout';Level='GREEN';Mutate=$null},

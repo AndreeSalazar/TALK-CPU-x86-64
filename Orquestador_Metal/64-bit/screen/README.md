@@ -1,4 +1,4 @@
-# Pantalla de Orquestador_Metal
+# Pantalla de Orquestador del Metal
 
 Desde la raiz: `./run-firmware.ps1 -Monitor`. La ventana de QEMU muestra texto
 80x25 y recibe teclado PS/2. `-Headless` deja solo la terminal; `-Check` no abre

@@ -7,7 +7,7 @@ if (-not $Qemu) {
 }
 Push-Location $PSScriptRoot
 try {
-    & "$PSScriptRoot/Faggin scaling/build-firmware.ps1" -Monitor
+    & "$PSScriptRoot/Orquestador_Metal/build-firmware.ps1" -Monitor
     $image=[IO.File]::ReadAllBytes("$PSScriptRoot/build/faggin-64-monitor.rom")
     $holaSize=[BitConverter]::ToUInt32($image,0x4008)
     foreach ($program in @(@{Name='hola';Offset=0x4000},@{Name='eco';Offset=0x5000})) {
