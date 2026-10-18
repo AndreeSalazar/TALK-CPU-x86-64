@@ -1,12 +1,20 @@
-param([string]$Qemu, [switch]$Check)
+param(
+    [string]$Qemu,
+    [switch]$Check,
+    [string]$RomPath='build/faggin-64-monitor.rom',
+    [string]$LogName,
+    [ValidateSet('','magic','size','entry','flags','checksum')]
+    [string]$Rejection=''
+)
 $ErrorActionPreference='Stop'
-$base='build/faggin-64-monitor'
+if (-not $LogName) { $LogName=if ($Check) { 'faggin-64-monitor-check' } else { 'faggin-64-monitor-live' } }
+$base="build/$LogName"
 $arguments=@('-machine','pc','-cpu','qemu64','-accel','tcg','-m','16M','-smp','1',
-    '-bios',"$base.rom",'-nodefaults','-display','none','-monitor','none',
+    '-bios',$RomPath,'-nodefaults','-display','none','-monitor','none',
     '-serial','stdio','-chardev',"file,id=debug,path=$base-debug.log",
     '-device','isa-debugcon,iobase=0xe9,chardev=debug','-no-reboot')
 if (-not $Check) {
-    Write-Host 'Monitor: h ayuda, s estado, a reservar 256 bytes, q detener. Ctrl+C sale de QEMU.'
+    Write-Host 'Monitor: h ayuda, s estado, a reservar, o hola, e eco (ESC vuelve), q detener. Ctrl+C sale de QEMU.'
     & $Qemu @arguments
     if ($LASTEXITCODE -ne 0) { throw "QEMU termino con codigo $LASTEXITCODE" }
     return
@@ -33,22 +41,57 @@ try {
     # Una orden cada vez: no depender del tamano del FIFO UART.
     $steps=@(
         @{Command='';Expected='Faggin monitor64 READY'},
-        @{Command='h';Expected='h help | s status | a alloc256 | q halt'},
+        @{Command='h';Expected='h help | s status | a alloc256 | o hola | e eco | q halt'},
         @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
         @{Command='a';Expected='GREEN [alloc256] ptr=0000000000100000'},
         @{Command='a';Expected='GREEN [alloc256] ptr=0000000000100100'},
         @{Command='s';Expected='GREEN [64] cursor=0000000000100200 latch=0000000000000000'},
+        @{Command='o';Expected='Hola mundo desde mi .hex!'},
+        @{Command='e';Expected='ECO64 READY (ESC vuelve)'},
+        @{Command='H';Expected='H';Raw=$true},
+        @{Command='o';Expected='o';Raw=$true},
+        @{Command='l';Expected='l';Raw=$true},
+        @{Command='a';Expected='a';Raw=$true},
+        @{Command="`b";Expected="`b `b";Raw=$true},
+        @{Command='A';Expected='A';Raw=$true},
+        @{Command="`n";Expected="`r`n";Raw=$true},
+        @{Command=[string][char]27;Expected='ECO64 END'},
+        @{Command='o';Expected='Hola mundo desde mi .hex!'},
         @{Command='?';Expected='YELLOW [command] unknown; press h'},
         @{Command='q';Expected='GREEN [halt] stopped'}
     )
+    if ($Rejection) {
+        $steps=@(
+            @{Command='';Expected='Faggin monitor64 READY'},
+            @{Command='o';Expected="RED [load] $Rejection"},
+            @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
+            @{Command='q';Expected='GREEN [halt] stopped'}
+        )
+    }
     foreach ($step in $steps) {
         if ($step.Command) { $process.StandardInput.Write($step.Command); $process.StandardInput.Flush() }
-        $pending=$process.StandardOutput.ReadLineAsync()
-        while (-not $pending.IsCompleted) {
-            if ($process.HasExited -or $timer.Elapsed.TotalSeconds -gt 30) { throw 'El monitor no respondio en el plazo esperado.' }
-            Start-Sleep -Milliseconds 20
+        if ($step.Raw) {
+            $line=''
+            foreach ($expectedCharacter in $step.Expected.ToCharArray()) {
+                $buffer=New-Object char[] 1
+                $pending=$process.StandardOutput.ReadAsync($buffer,0,1)
+                while (-not $pending.IsCompleted) {
+                    if ($process.HasExited -or $timer.Elapsed.TotalSeconds -gt 30) { throw 'Eco no respondio en el plazo esperado.' }
+                    Start-Sleep -Milliseconds 10
+                }
+                if ($pending.GetAwaiter().GetResult() -ne 1) { throw 'La salida del eco se cerro.' }
+                $line += $buffer[0]
+            }
         }
-        $line=$pending.GetAwaiter().GetResult()
+        else {
+            $pending=$process.StandardOutput.ReadLineAsync()
+            while (-not $pending.IsCompleted) {
+                if ($process.HasExited) { throw "QEMU termino: $($errors.GetAwaiter().GetResult())" }
+                if ($timer.Elapsed.TotalSeconds -gt 30) { throw 'El monitor no respondio en el plazo esperado.' }
+                Start-Sleep -Milliseconds 20
+            }
+            $line=$pending.GetAwaiter().GetResult()
+        }
         $transcript.Add($line)
         if ($line -cne $step.Expected) { throw "Respuesta incorrecta: esperado '$($step.Expected)', recibido '$line'" }
     }
@@ -61,10 +104,11 @@ try {
         if ($timer.Elapsed.TotalSeconds -gt 30) { throw 'No se confirmo HLT del monitor.' }
         Start-Sleep -Milliseconds 20
     } until ($trace -match '0x000f328b:\s+f4\s+hlt')
+    if (-not $Rejection -and $trace -notmatch '0x00080000:') { throw 'No se confirmo ejecucion del binario desde RAM.' }
     $debug=Get-Content "$PSScriptRoot/$base-debug.log" -Raw
     $expected="Faggin scaling: 16 bits OK`r`nFaggin scaling: 32 bits OK`r`nFaggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`nGREEN [Memory] integrity latch OK`r`nGREEN [Memory] bounded allocator OK`r`n"
     if ($debug -cne $expected) { throw 'El monitor no completo todas las autopruebas previas.' }
-    Write-Host 'OK: consola propia de 64 bits, estado, dos reservas, rechazo de orden y parada.'
+    Write-Host "OK: $($steps.Count) respuestas exactas del monitor, autopruebas previas y parada sin fallos."
 }
 finally {
     if ($started -and -not $process.HasExited) { $process.Kill(); $process.WaitForExit() }

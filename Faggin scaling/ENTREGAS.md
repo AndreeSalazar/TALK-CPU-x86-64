@@ -6,12 +6,18 @@ UEFI completa o arrancar en cualquier placa no forma parte de esta primera versi
 
 1. **Consola: implementada.** Controlador serie propio, consulta de estado,
    reservas de memoria protegidas y parada. Iniciar con `./run-firmware.ps1 -Monitor`.
-2. **Carga de binario: pendiente.** Definir formato propio, entrada y regiones
-   permitidas; recibirlo, comprobar longitud e integridad, y transferir el control.
-   Una entrada rechazada debera explicar el motivo y conservar el monitor operativo.
-3. **Cierre y compactacion: pendiente.** Probar carga valida, truncada, corrupta
-   y fuera de limites; documentar el contrato de entrega; reducir instrucciones
-   conservando los `.hex` y repetir los mismos contratos funcionales.
+2. **Carga desde ROM: implementada.** Formato propio FAGRAW64, pagina dedicada,
+   comprobacion de tamano, punto de entrada, flags y checksum antes de ejecutar.
+   `o` ejecuta hola mundo; `e` permite escribir con eco y Escape retorna al monitor.
+   Se prueban ocho rechazos y la continuidad del monitor tras cada uno.
+3. **Entrada externa y compactacion: pendiente.** Recibir un paquete por un medio
+   elegido, medir su longitud real y rechazar transferencias truncadas. Despues,
+   reducir instrucciones conservando los `.hex` y repetir los contratos funcionales.
+
+Los `.x86` actuales se exportan y se incluyen en la ROM al construirla. El
+firmware todavia no busca archivos en USB/disco ni recibe paquetes por la consola.
+La prueba de integridad es una suma de bytes; detecta las alteraciones probadas,
+no autentica programas ni detecta modificaciones que conserven la suma.
 
 La base existente ya incluye transiciones, permisos de paginas, diagnosticos de
 excepciones, prueba de RAM y asignador con bloqueo persistente por corrupcion.

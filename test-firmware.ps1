@@ -29,7 +29,8 @@ try {
             if ($Qemu) { $arguments.Qemu = $Qemu }
             foreach ($key in $case.Options.Keys) { $arguments[$key] = $case.Options[$key] }
             & "$PSScriptRoot\run-firmware.ps1" @arguments
-            $trace = Get-Content -LiteralPath "build\$($case.Profile)-instructions.log" -Raw
+            $traceName=if ($case.Options.Monitor) { "$($case.Profile)-check" } else { $case.Profile }
+            $trace = Get-Content -LiteralPath "build\$traceName-instructions.log" -Raw
             if ($trace -match 'Triple fault') { throw 'Triple fallo de CPU.' }
             if (-not $case.Options.ContainsKey('Exception') -and $trace -match 'check_exception') {
                 throw 'Una prueba normal produjo una excepcion inesperada.'
@@ -60,13 +61,17 @@ try {
         }
     }
     $passedCount = @($results | Where-Object Passed).Count
+    & "$PSScriptRoot\test-programs.ps1" -Qemu $Qemu
+    $programTests=Get-Content 'build\program-test-results.json' -Raw | ConvertFrom-Json
     [ordered]@{
         Platform='QEMU pc / qemu64 / TCG / 16 MiB / 1 CPU'
         Passed=$passedCount; Total=$results.Count; Cases=$results
         GuardianTests=@{Passed=$guardianTests.Passed;Total=$guardianTests.Total}
+        ProgramTests=@{Passed=$programTests.Passed;Total=$programTests.Total}
     } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\test-results.json' -Encoding utf8
     Write-Host "`nResultado: $passedCount de $($results.Count) pruebas aprobadas."
     Write-Host "Guardianes de construccion: $($guardianTests.Passed) de $($guardianTests.Total) reglas comprobadas."
+    Write-Host "Paquetes invalidos: $($programTests.Passed) de $($programTests.Total) rechazos comprobados."
     Write-Host 'Informe: build\test-results.json'
     if ($passedCount -ne $results.Count) { throw 'La bateria de pruebas no esta completa: revisar el informe.' }
 }

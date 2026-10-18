@@ -7,10 +7,13 @@ Desde la raiz: `./run-firmware.ps1 -Monitor`. No requiere Enter.
 | `h` | Ayuda |
 | `s` | Cursor actual y bandera persistente del asignador, en hexadecimal |
 | `a` | Reservar 256 bytes; mostrar direccion o codigo de rechazo |
+| `o` | Cargar el hola mundo propio desde ROM a RAM y ejecutarlo |
+| `e` | Cargar el eco propio; Escape retorna al monitor |
 | `q` | Informar parada y ejecutar HLT |
 
 Ctrl+C termina QEMU. `q` detiene la CPU virtual; QEMU sigue abierto.
-CR/LF se ignoran. Una tecla desconocida produce YELLOW y explica como pedir ayuda.
+En el monitor CR/LF se ignoran. En el eco producen una linea nueva;
+BS/DEL borran visualmente. Una orden desconocida produce YELLOW y explica como pedir ayuda.
 
 El controlador propio usa COM1 (0x3F8), 115200, 8N1, FIFO e interrupciones desactivadas.
 Lee por sondeo; esperar una tecla es intencional. Cada transmision permite hasta
@@ -24,10 +27,12 @@ CF indica rechazo y EDX explica el motivo. Nunca interpreta una reserva rechazad
 como direccion. No libera ni borra bloques; una reserva no significa que contenga ceros.
 La consola conserva las protecciones de memoria y las pilas de excepciones existentes.
 
-`./run-firmware.ps1 -Monitor -Check` verifica ocho intercambios exactos: inicio,
-ayuda, estado, dos reservas consecutivas, estado actualizado, orden desconocida y
-parada. Tambien comprueba las autopruebas anteriores, HLT y ausencia de excepciones.
-El registro queda en `build/faggin-64-monitor-console.log`.
+`./run-firmware.ps1 -Monitor -Check` verifica 19 intercambios exactos, incluyendo
+hola mundo desde RAM, eco caracter a caracter, borrado, salto de linea y regreso.
+Tambien comprueba las autopruebas anteriores, HLT y ausencia de excepciones.
+El registro queda en `build/faggin-64-monitor-check-console.log`.
+La ejecucion interactiva usa registros separados con sufijo `-live`, para que
+las pruebas no colisionen con una consola abierta.
 
 Limites: una CPU, sin interrupciones de dispositivos, sin editor de linea ni
 control de flujo. Enviar una orden cada vez evita desbordar el FIFO de entrada.

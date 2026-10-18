@@ -3,8 +3,9 @@
     RomBytes = 0x10000
     MappedBytes = 0x200000
     WarningPercent = 80
-    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','GuardMain','StackMain','ROM','WorkRAM')
+    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
     MemoryContracts = @(
+        @{Name='ProgramPage';Start=0x80000;End=0x81000}
         @{Name='PT';Start=0x4000;End=0x5000}
         @{Name='TSS';Start=0x7000;End=0x7068}
         @{Name='IDT';Start=0x8000;End=0x9000}
@@ -14,6 +15,8 @@
         @{Name='ROM';Start=0xF0000;End=0x100000}
     )
     Contracts = @(
+        @{Source='64-bit\programs\loader.hex';Offset=0x3CB7;Bytes='C7 04 25 00 44 00 00 01 00 08 00';Why='Quitar escritura antes de permitir ejecutar la pagina del programa.'}
+        @{Source='64-bit\programs\loader.hex';Offset=0x3CE6;Bytes='C7 04 25 04 44 00 00 00 00 00 80';Why='Restaurar NX antes de devolver escritura al regresar del programa.'}
         @{Source='16-bit\reset.hex';Offset=0xFFF0;Bytes='EA 00 00 00 F0';Why='La CPU debe saltar a nuestra entrada de reset.'}
         @{Source='32-bit\to-64.hex';Offset=0x02DB;Bytes='0D 00 09 00 00';Why='LME y NXE deben activarse juntos.'}
         @{Source='32-bit\to-64.hex';Offset=0x02E5;Bytes='0D 00 00 01 80';Why='La paginacion y CR0.WP protegen el codigo incluso en supervisor.'}
@@ -23,6 +26,11 @@
     )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\programs\loader.hex' = @{Start=0x3C00;End=0x4000;Why='Validacion, copia y permisos del binario crudo'}
+        '64-bit\programs\hola-header.hex' = @{Start=0x4000;End=0x4018;Fixed=$true;Why='Cabecera del hola mundo'}
+        '64-bit\programs\hola.hex' = @{Start=0x4018;End=0x5000;Why='Binario propio hola mundo'}
+        '64-bit\programs\eco-header.hex' = @{Start=0x5000;End=0x5018;Fixed=$true;Why='Cabecera del eco'}
+        '64-bit\programs\eco.hex' = @{Start=0x5018;End=0x6000;Why='Binario propio eco'}
         '64-bit\monitor\console.hex' = @{Start=0x3000;End=0x3C00;Why='Consola UART con transmision acotada y comandos fijos'}
         '64-bit\services\target-monitor.hex' = @{Start=0x22F0;End=0x2300;Why='Destino exclusivo del monitor'}
         '64-bit\services\state-init.hex' = @{Start=0x2A00;End=0x2B00;Why='Inicializar cursor, espejo y bandera'}
@@ -72,6 +80,7 @@
         '64-bit\diagnostics\tests\stack.hex' = @{Start=0x1800;End=0x1A00;Why='Cruce real de pila hacia guarda'}
     }
     Memory = @(
+        @{Name='ProgramPage';Start=0x80000;End=0x81000;Alignment=0x1000;Why='Pagina dedicada: RW/NX durante copia, RX durante ejecucion'}
         @{Name='NullGuard';Start=0;End=0x1000;Alignment=0x1000;Why='Atrapar punteros nulos'}
         @{Name='PML4';Start=0x1000;End=0x2000;Alignment=0x1000;Why='Raiz de paginacion'}
         @{Name='PDPT';Start=0x2000;End=0x3000;Alignment=0x1000;Why='Paginacion nivel 3'}

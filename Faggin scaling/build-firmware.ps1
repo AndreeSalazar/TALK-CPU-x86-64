@@ -56,7 +56,11 @@ if ($Stage -eq '64') {
         '64-bit\services\messages.hex','64-bit\services\cases.hex',
         '64-bit\services\state-init.hex','64-bit\services\latch-test.hex',
         '64-bit\services\latch-message.hex')
-    if ($Monitor) { $parts += '64-bit\monitor\console.hex' }
+    if ($Monitor) {
+        $parts += @('64-bit\monitor\console.hex', '64-bit\programs\loader.hex',
+            '64-bit\programs\hola-header.hex', '64-bit\programs\hola.hex',
+            '64-bit\programs\eco-header.hex', '64-bit\programs\eco.hex')
+    }
 }
 $parts += '16-bit\reset.hex'
 
@@ -94,6 +98,16 @@ try {
     $hexPath = "build\$buildName.hex"
     [IO.File]::WriteAllLines((Join-Path $projectRoot $hexPath), $combinedHex)
     & (Join-Path $projectRoot 'build.ps1') -In $hexPath -Out "build\$buildName.rom"
+    if ($Monitor) {
+        # Exportar paquetes exactos: no se generan instrucciones ni se cambian sus bytes.
+        $image = [IO.File]::ReadAllBytes((Join-Path $projectRoot "build\$buildName.rom"))
+        foreach ($program in @(@{Name='hola';Offset=0x4000},@{Name='eco';Offset=0x5000})) {
+            $size = [BitConverter]::ToUInt32($image, $program.Offset + 8)
+            if ($size -eq 0 -or $size -gt 0xFE8) { throw "Paquete $($program.Name): tamano fuera de ventana." }
+            $last = $program.Offset + 24 + $size - 1
+            [IO.File]::WriteAllBytes((Join-Path $projectRoot "build\$($program.Name).x86"), [byte[]]$image[$program.Offset..$last])
+        }
+    }
     $romBytes = (Get-Item "build\$buildName.rom").Length
     $totalAuthored = [int]($sourceSizes | Measure-Object AuthoredBytes -Sum).Sum
     [ordered]@{

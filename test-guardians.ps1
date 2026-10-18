@@ -23,7 +23,9 @@ $tests = @(
     @{Name='Politica de recursos recortada';Allowed=$false;Guard='Profile';Level='RED';Mutate={param($layout) $layout.RequiredMemory=@('ROM')}},
     @{Name='Limite no numerico';Allowed=$false;Guard='Budget';Level='RED';Mutate={param($layout) $layout.Sources['16-bit\message.hex'].End='grande'}},
     @{Name='Contrato obligatorio eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '16-bit\reset.hex')}},
-    @{Name='Contrato de reserva eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.MemoryContracts=@($layout.MemoryContracts | Where-Object Name -ne 'AllocatorState')}}
+    @{Name='Contrato de reserva eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.MemoryContracts=@($layout.MemoryContracts | Where-Object Name -ne 'AllocatorState')}},
+    @{Name='Pagina de programas movida';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'ProgramPage').Start=0x7F000}},
+    @{Name='Contrato de permisos eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\programs\loader.hex')}}
 )
 $results = @()
 foreach ($test in $tests) {

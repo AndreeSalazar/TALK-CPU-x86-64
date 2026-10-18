@@ -40,7 +40,12 @@ QEMU. Para usar la consola propia con entrada por puerto serie:
 .\run-firmware.ps1 -Monitor
 ```
 
-Teclas: `h` ayuda, `s` estado, `a` reservar 256 bytes, `q` detener; no hace falta Enter.
+Teclas: `h` ayuda, `s` estado, `a` reservar 256 bytes, `o` hola mundo,
+`e` eco, `q` detener; no hace falta Enter para elegir una orden.
+En el eco puedes escribir, usar Enter y borrar; Escape regresa al monitor.
+Los binarios propios se exportan como `build/hola.x86` y `build/eco.x86`.
+Sus fuentes estan en [programs](Faggin%20scaling/64-bit/programs/README.md).
+Los originales `src/hola.hex` y `src/eco.hex` se conservan como ejemplos UEFI.
 Consulta [el contrato de la consola](Faggin%20scaling/64-bit/monitor/README.md)
 y [las entregas pendientes](Faggin%20scaling/ENTREGAS.md).
 

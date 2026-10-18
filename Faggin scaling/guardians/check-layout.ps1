@@ -37,7 +37,7 @@ function Test-FirmwareLayout {
         & $add 'RED' 'Profile' 'global' 'Falta un campo obligatorio del esquema de guardianes.'
         return [pscustomobject]@{Status='RED';Allowed=$false;Findings=@($findings.ToArray());Usage=@()}
     }
-    foreach ($requiredName in @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','GuardMain','StackMain','ROM','WorkRAM')) {
+    foreach ($requiredName in @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')) {
         if ($Layout.RequiredMemory -notcontains $requiredName) { & $add 'RED' 'Profile' $requiredName 'Se elimino un recurso obligatorio de la politica.' }
     }
     if ($Layout.RomBytes -ne 65536 -or $Layout.MappedBytes -ne 0x200000 -or
@@ -99,12 +99,14 @@ function Test-FirmwareLayout {
             & $add 'RED' 'Contract' $contract.Name 'La reserva no coincide con las direcciones que usa el firmware raw.' ('[{0:X},{1:X})' -f $contract.Start,$contract.End) 'reserva modificada o ausente'
         }
     }
-    foreach ($criticalName in @('PT','TSS','IDT','AllocatorState','GuardMain','StackMain','ROM')) {
+    foreach ($criticalName in @('PT','TSS','IDT','AllocatorState','ProgramPage','GuardMain','StackMain','ROM')) {
         if (@($Layout.MemoryContracts | Where-Object Name -eq $criticalName).Count -ne 1) {
             & $add 'RED' 'Contract' $criticalName 'Debe conservarse exactamente un contrato para esta reserva critica.'
         }
     }
     foreach ($criticalAnchor in @(
+        @{Source='64-bit\programs\loader.hex';Offset=0x3CB7},
+        @{Source='64-bit\programs\loader.hex';Offset=0x3CE6},
         @{Source='16-bit\reset.hex';Offset=0xFFF0},
         @{Source='32-bit\to-64.hex';Offset=0x02DB},
         @{Source='32-bit\to-64.hex';Offset=0x02E5},
