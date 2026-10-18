@@ -1,0 +1,4 @@
+@22F0
+=22F0
+00 18 0F 00                    ; destino F1800: excepcion provocada
+=22F4

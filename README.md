@@ -29,6 +29,7 @@ Faggin scaling: 16 bits OK
 Faggin scaling: 32 bits OK
 Faggin scaling: 64 bits OK
 GREEN [CPU] guardians active
+GREEN [Memory] bounded allocator OK
 ```
 
 Ctrl+C para salir. El texto se transmite por el puerto de depuracion de
@@ -110,6 +111,14 @@ y datos no ejecutables. Puedes provocar un cruce real de pila dentro de la VM:
 
 Las reglas, sus motivos y limites estan en Faggin scaling/guardians/README.md.
 Los informes de cada construccion usan el sufijo -guardians.json.
+
+## Servicio de memoria de 64 bits
+
+Faggin scaling/64-bit/services/ implementa asignacion lineal de una arena de
+512 KiB, alineacion a 16 bytes, limites, comprobacion de overflow y rechazo
+sin alterar el estado. Una tabla propia versionada en ROM describe el ABI.
+Ocho autopruebas se ejecutan antes del destino final de cada perfil de 64 bits.
+El mensaje GREEN [Memory] confirma que pasaron y el estado quedo limpio.
 
 ## Experimentos anteriores
 

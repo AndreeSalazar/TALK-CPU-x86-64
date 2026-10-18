@@ -32,9 +32,7 @@ if ($Stage -ne '16') {
 }
 if ($Stage -eq '64') {
     $parts += '64-bit\entry.hex'
-    if ($Exception -ne 'None') { $parts += '64-bit\diagnostics\tests\transition.hex' }
-    elseif ($Stress) { $parts += '64-bit\stress\transition.hex' }
-    else { $parts += '64-bit\halt.hex' }
+    $parts += '64-bit\services\transition.hex'
     $parts += @('64-bit\failure.hex', '64-bit\message.hex')
     if ($Stress) {
         $parts += '64-bit\stress\fill.hex'
@@ -46,6 +44,12 @@ if ($Stage -eq '64') {
         '64-bit\diagnostics\handler.hex', '64-bit\diagnostics\output.hex')
     if ($Exception -ne 'None') { $parts += "64-bit\diagnostics\tests\$Exception.hex" }
     $parts += @('64-bit\diagnostics\messages.hex', '64-bit\diagnostics\pointers.hex')
+    $parts += '64-bit\services\self-test.hex'
+    if ($Exception -ne 'None') { $parts += '64-bit\services\target-exception.hex' }
+    elseif ($Stress) { $parts += '64-bit\services\target-stress.hex' }
+    else { $parts += '64-bit\services\target-normal.hex' }
+    $parts += @('64-bit\services\allocate.hex','64-bit\services\table.hex',
+        '64-bit\services\messages.hex','64-bit\services\cases.hex')
 }
 $parts += '16-bit\reset.hex'
 

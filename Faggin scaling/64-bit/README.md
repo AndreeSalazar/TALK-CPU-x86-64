@@ -11,11 +11,11 @@ datos NX y ROM RX; interrupciones enmascarables desactivadas.
 el resultado debe ser 11223344. Esta comprobacion usa un registro extendido
 y un operando de 64 bits; el mensaje OK se emite solo despues del calculo.
 
-Si coincide, emite `message.hex` por el puerto E9 y continua en `halt.hex`,
-que termina en HLT. Con -Stress se elige `stress/transition.hex` en su lugar
-y comienza la prueba sostenida de memoria de `stress/README.md`.
-Con -Exception se elige un disparador de `diagnostics/tests/` para verificar
-el diagnostico terminal. Ver `diagnostics/README.md`.
+Si coincide, emite `message.hex` por el puerto E9 y pasa por
+`services/transition.hex` a las autopruebas del servicio de memoria propio.
+Despues termina en HLT o va a -Stress/-Exception segun el perfil.
+Los contratos estan en `services/README.md`, `stress/README.md` y
+`diagnostics/README.md`.
 Si no coincide, emite `!` y se detiene; la comprobacion automatica falla.
 Todavia no hay programa externo, teclado o consola interactiva.
 

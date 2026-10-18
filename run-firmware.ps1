@@ -45,12 +45,12 @@ try {
         $debugLog = Join-Path $PSScriptRoot $debugLogRelative
         $expectedMessage = "Faggin scaling: 16 bits OK`r`n"
         if ($Stage -ne '16') { $expectedMessage += "Faggin scaling: 32 bits OK`r`n" }
-        if ($Stage -eq '64') { $expectedMessage += "Faggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`n" }
+        if ($Stage -eq '64') { $expectedMessage += "Faggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`nGREEN [Memory] bounded allocator OK`r`n" }
         if ($Stress) {
             if ($InjectFault) { $expectedMessage += "`r`nRED [RAM] Faggin scaling: RAM FAIL`r`n" }
             else { $expectedMessage += ('.' * 32) + "`r`nGREEN [RAM] Faggin scaling: RAM 1 MiB x 32 OK`r`n" }
         }
-        $haltAddress = @{ '16'='000f0024'; '32'='000f0225'; '64'='000f043d' }[$Stage]
+        $haltAddress = @{ '16'='000f0024'; '32'='000f0225'; '64'='000f22e0' }[$Stage]
         if ($Stress) { $haltAddress = '000f06d8' }
         if ($Exception -ne 'None') {
             $exceptionCases = Import-PowerShellDataFile "$PSScriptRoot\Faggin scaling\64-bit\diagnostics\tests\cases.psd1"
@@ -111,6 +111,7 @@ try {
                 if (-not $InjectFault -and $message.Contains('RAM FAIL')) {
                     throw "El firmware detecto un error de RAM. Revisa $debugLogRelative."
                 }
+                if ($message.Contains('allocator self-test FAIL')) { throw "RED: el servicio de memoria no paso su autoprueba. $message" }
                 if ($Exception -eq 'None' -and $message.Contains('CPU fault vector=')) {
                     throw "El firmware informo un fallo de CPU: $message"
                 }

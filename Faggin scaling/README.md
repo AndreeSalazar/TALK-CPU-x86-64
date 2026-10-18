@@ -37,6 +37,7 @@ Faggin scaling: 16 bits OK
 Faggin scaling: 32 bits OK
 Faggin scaling: 64 bits OK
 GREEN [CPU] guardians active
+GREEN [Memory] bounded allocator OK
 ```
 
 La CPU termina en HLT. Todavia no hay teclado ni comandos. Los mensajes
@@ -58,6 +59,10 @@ Bateria completa: `.\test-firmware.ps1`. Comprueba catorce casos en QEMU
 y ocho reglas de guardianes. Escribe `build/test-results.json` y
 `build/guardian-test-results.json`. Los limites y semaforos se explican en
 `guardians/README.md`.
+
+La carpeta `64-bit/services/` contiene el servicio de memoria propio:
+asignacion limitada a 512 KiB, tabla versionada y ocho autopruebas que
+comprueban punteros, carry, errores y estado antes de continuar.
 
 ## Construir y comprobar
 
@@ -109,6 +114,8 @@ Las direcciones de esta tabla estan en hexadecimal.
 | ROM baja | F0000-FFFFF |
 | GDT | F0100 inicialmente; copiada a RAM 6000 en 64 bits |
 | TSS e IDT | RAM 7000-7067 y 8000-8FFF |
+| Cursor del servicio de memoria | RAM 9000-9007 |
+| Arena de asignacion | 100000-17FFFF; parte de WorkRAM |
 | Entrada 32 bits | F0200, selector 08 |
 | Entrada 64 bits | F1000 instala diagnostico; luego F0400, selector 18 |
 | Vector de reset | FFFFFFF0, offset FFF0 de la ROM |

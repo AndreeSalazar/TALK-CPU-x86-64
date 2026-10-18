@@ -54,7 +54,7 @@ No se escribe en discos. Las variantes generan ROM y registros separados.
 
 ## Archivos y contrato
 
-- `transition.hex`: ocupa la salida 0x043D de la etapa larga y salta a 0xF0600.
+- `../services/target-stress.hex`: elige F0600 despues de las autopruebas de memoria.
 - `fill.hex`: selecciona 32 rondas y llena la region con datos.
 - `clean.hex`: camino de verificacion normal.
 - `corrupt.hex`: reemplazo exclusivo de clean.hex para la prueba negativa.

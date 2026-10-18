@@ -1,0 +1,4 @@
+@22F0
+=22F0
+E0 22 0F 00                    ; destino F22E0: HLT normal
+=22F4

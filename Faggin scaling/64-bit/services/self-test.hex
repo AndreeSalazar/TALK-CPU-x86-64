@@ -1,0 +1,52 @@
+; Autoprueba de asignacion. Casos de 32 bytes en F2800.
+; Cada caso contiene size, puntero esperado, error esperado, cursor esperado.
+@2000
+=2000
+48 C7 04 25 00 90 00 00 00 00 10 00  ; cursor=100000
+41 BC 00 28 0F 00              ; MOV R12D,F2800
+BB 07 00 00 00                 ; MOV EBX,7 casos secuenciales
+=2017
+49 8B 0C 24                    ; MOV RCX,[R12]: size
+E8 E0 03 00 00                 ; CALL F2400: allocate
+41 0F 92 C2                    ; SETC R10B: preservar estado antes de CMP
+49 3B 44 24 08                 ; CMP RAX,[R12+8]
+0F 85 91 02 00 00              ; JNE F22C0
+41 3B 54 24 10                 ; CMP EDX,[R12+10]
+0F 85 86 02 00 00
+85 D2                          ; TEST EDX,EDX
+41 0F 95 C3                    ; SETNZ R11B: error implica CF=1
+45 38 DA                       ; CMP R10B,R11B
+0F 85 77 02 00 00
+4C 8B 04 25 00 90 00 00        ; MOV R8,[9000]: cursor real
+4D 3B 44 24 18                 ; CMP R8,[R12+18]
+0F 85 64 02 00 00
+49 83 C4 20                    ; ADD R12,32
+FF CB                          ; DEC EBX
+75 B3                          ; JNZ F2017
+=2064
+48 C7 04 25 00 90 00 00 01 00 10 00  ; cursor desalineado a proposito
+B9 10 00 00 00                 ; MOV ECX,16
+E8 86 03 00 00                 ; CALL F2400
+0F 83 40 02 00 00              ; JNC F22C0: debe rechazar
+83 FA 04                       ; CMP EDX,4
+0F 85 37 02 00 00
+48 85 C0                       ; TEST RAX,RAX
+0F 85 2E 02 00 00
+48 81 3C 25 00 90 00 00 01 00 10 00  ; cursor debe seguir 100001
+0F 85 1C 02 00 00
+48 C7 04 25 00 90 00 00 00 00 10 00  ; restaurar cursor limpio
+BE 00 27 0F 00                 ; texto GREEN
+E8 46 F6 FF FF                 ; CALL F1700
+8B 04 25 F0 22 0F 00           ; MOV EAX,[F22F0]: destino del perfil
+FF E0                          ; JMP RAX
+=20C3
+@22C0
+=22C0
+BE 40 27 0F 00                 ; texto RED
+E8 36 F4 FF FF                 ; CALL F1700
+F4 EB FD                       ; no continuar si falla una autoprueba
+=22CD
+@22E0
+=22E0
+F4 EB FD                       ; salida del perfil normal
+=22E3

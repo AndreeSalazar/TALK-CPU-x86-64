@@ -1,0 +1,5 @@
+; Todos los perfiles de 64 bits comprueban servicios antes del destino final.
+@043D
+=043D
+E9 BE 1B 00 00                 ; JMP F2000
+=0442

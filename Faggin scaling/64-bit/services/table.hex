@@ -1,0 +1,11 @@
+; Tabla de servicio propia, 48 bytes. Direcciones absolutas de 64 bits.
+@2600
+=2600
+46 41 47 4D 45 4D 36 34        ; +00 firma ASCII FAGMEM64
+01 00 00 00                    ; +08 version 1
+30 00 00 00                    ; +0C tamano 48
+00 00 10 00 00 00 00 00        ; +10 inicio de arena 100000
+00 00 18 00 00 00 00 00        ; +18 fin exclusivo 180000
+00 24 0F 00 00 00 00 00        ; +20 funcion allocate F2400
+00 90 00 00 00 00 00 00        ; +28 estado 9000
+=2630
