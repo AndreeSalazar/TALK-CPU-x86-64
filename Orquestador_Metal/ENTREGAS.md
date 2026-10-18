@@ -1,37 +1,57 @@
-# Cierre de la primera version en QEMU
+# Entregas: QEMU terminado, un único perfil físico en desarrollo
 
-El objetivo es un firmware propio que arranca desde RESET, ejecuta sus bytes en
-16, 32 y 64 bits y permite cargar un binario propio. Implementar la especificacion
-UEFI completa o arrancar en cualquier placa no forma parte de esta primera version.
+Destino acordado: MSI A320M-A PRO MAX (MS-7C52) + Ryzen 5 5600X.
+El [perfil físico](../PERFIL-FISICO.md) es la referencia de alcance y cierre.
+No hay un objetivo de UEFI completo ni compatibilidad con otras placas.
 
-1. **Consola: implementada.** Controlador serie propio, consulta de estado,
-   reservas de memoria protegidas y parada. Pantalla VGA y teclado PS/2 propios,
-   con titulo Orquestador_Metal. Iniciar con `./run-firmware.ps1 -Monitor`.
-2. **Carga desde ROM: implementada.** Formato propio FAGRAW64, pagina dedicada,
-   comprobacion de tamano, punto de entrada, flags y checksum antes de ejecutar.
-   `o` ejecuta hola mundo; `e` permite escribir con eco y Escape retorna al monitor.
-   Se prueban ocho rechazos y la continuidad del monitor tras cada uno.
-3. **Entrada externa FAT32: implementada en QEMU.** `iniciar.ps1 -Disco` y `d`
-   leen `METAL/INICIO.X86` por ATA PIO. Se validan BPB, cadenas, dos copias de
-   FAT, longitud y paquete. Se descubre una partición primaria MBR o un volumen
-   directo; hay 26 pruebas de carga y rechazo.
-4. **GPT, geometría y arranque: implementados.** Se verifican dos cabeceras GPT,
-   CRC32 y las tablas principal/respaldo; se admiten clústeres FAT32 de 1..64
-   sectores en potencias de dos. El arranque automático vuelve al monitor si
-   falla o retorna el programa. Hay 24 pruebas GPT/geometría y 3 de arranque.
-5. **Cierre v1 QEMU: completado.** Cuatro capturas reales, informe de motivos,
-   paquete con ROM/disco/lanzador y limpieza de 739 bytes heredados sin uso.
-   Véase [CIERRE-v1](CIERRE-v1.md). La ROM sigue midiendo 64 KiB por su mapa.
+## Versión 1 para QEMU: terminada
 
-Los ejemplos `o` y `e` se exportan y se incluyen en la ROM. `d` lee un paquete
-externo desde el disco IDE virtual FAT32; aún no lee USB ni recibe por consola.
-La prueba de integridad es una suma de bytes; detecta las alteraciones probadas,
-no autentica programas ni detecta modificaciones que conserven la suma.
+| Parte | Implementación y evidencia |
+|---|---|
+| CPU y memoria | RESET → 16 → 32 → 64 bits, permisos de página, excepciones y asignador con bloqueo persistente |
+| Consola | UART, VGA y PS/2 propios; estado, reserva y parada |
+| Programas | FAGRAW64, hola mundo y eco desde ROM a RAM; validación antes de ejecutar |
+| Disco | ATA PIO, FAT32 directo/MBR/GPT y cadenas fragmentadas; paquete externo hasta 4096 bytes |
+| Arranque | Búsqueda automática METAL/INICIO.X86; motivo de rechazo y monitor cuando falla o retorna |
+| Tamaño | Retirados 739 bytes explícitos heredados sin uso; la ROM mantiene 64 KiB |
+| Evidencias | Cuatro capturas reales de QEMU, registros y paquete con manifiesto |
 
-La base existente ya incluye transiciones, permisos de paginas, diagnosticos de
-excepciones, prueba de RAM y asignador con bloqueo persistente por corrupcion.
-Los guardianes de construccion verifican limites y contratos concretos; no prueban
-automaticamente el significado de cualquier instruccion agregada.
+La batería tiene 15 casos base, 33 reglas de construcción, ocho rechazos de paquetes,
+dos recorridos de pantalla/teclado, 26 casos FAT32/MBR, 24 GPT/clústeres y tres de
+arranque. [Cierre y límites](CIERRE-v1.md), [fotos e informes](../EVIDENCIAS/LEEME.md).
+`./iniciar.ps1 -Disco` ejecuta la demostración; `./preparar.ps1` genera el paquete QEMU.
 
-El trabajo en placa fisica es otra entrega: necesita inicializacion de esa
-plataforma. Una ROM que funciona en QEMU no demuestra que funcione en Ryzen.
+## Investigación de la referencia MSI: implementada
+
+`./analizar-msi.ps1 -Descargar` obtiene la referencia oficial 2.C y ejecuta análisis
+sin modificar ROM. El inventario identifica tablas AMD y volúmenes; el trazado
+sigue enlaces con contexto de dominio y decodifica dependencias de 243 módulos PEI
+visibles. Hay 5 + 11 comprobaciones aprobadas del análisis, separadas de las pruebas
+QEMU y de cualquier prueba física.
+
+La [evidencia técnica](../EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md) identifica
+interfaces PCD, variables y SMBus y mantiene sin confirmar la selección física del
+5600X. Los nombres, checksums y dependencias no demuestran que los módulos puedan
+llamarse de forma independiente ni que hayamos inicializado DDR4.
+
+## Adaptación física de este PC: pendiente
+
+Se eligió conservar componentes AMD necesarios. Puede hacer falta conservar o
+proporcionar su entorno PI/UEFI y partes de AMI. Se mantiene el requisito de no
+usar una aplicación .efi del USB como entrada del proyecto.
+
+Falta implementar la entrega desde el inicio de plataforma a nuestro código,
+adaptar los dispositivos de este perfil y preparar el original/recuperación antes
+de una prueba física. No hay imagen modificada lista para grabar. El bloqueo
+FG-PLATFORM para MS-7C52 permanece activo y explica ese motivo.
+
+El cierre físico exige arranque repetible, pantalla, saludo/eco, carga FAT32
+mediante un transporte comprobado y evidencias del equipo real. No exige convertir
+el proyecto en firmware para todos los PC. Una demostración QEMU no cierra esa entrega.
+
+## Límites que se mantienen
+
+Los guardianes comprueban contratos concretos; no prueban el significado de cualquier
+instrucción nueva. Los programas cargados son privilegiados. La suma del paquete y
+los checksums de metadatos no autentican programas. El lector QEMU no proporciona
+un controlador NVMe, AHCI o USB a la placa física.

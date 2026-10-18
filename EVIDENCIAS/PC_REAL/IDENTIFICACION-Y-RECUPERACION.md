@@ -1,6 +1,6 @@
 # PC real: identificación y recuperación antes del primer RESET propio
 
-Estado: identificación por Windows completada; chip flash y recuperación pendientes.
+Estado: identificación por Windows completada; hay una candidata Winbond en fotos. La referencia completa, el acceso y la recuperación siguen pendientes.
 Se mantiene el objetivo de firmware propio desde RESET, sin entrada .efi.
 No se ha grabado firmware ni modificado el arranque o discos físicos.
 
@@ -15,7 +15,7 @@ Consulta de solo lectura del 18 de octubre de 2026, conservada en hardware.json:
 | CPU | AMD Ryzen 5 5600X, seis núcleos, 64 bits |
 | Vídeo | NVIDIA GeForce RTX 3060 |
 | Almacenamiento enumerado | SATA AHCI y NVMe |
-| Chip flash | Modelo, voltaje, capacidad y encapsulado aún sin identificar |
+| Chip flash | Candidata Winbond 25Q256JW… fotografiada; sufijo y acceso sin confirmar. Manual MSI: 256 Mbit (32 MiB) |
 | Recuperación externa | Usuario indica que aún no dispone de identificación/programador |
 
 La ROM actual inicializa la máquina pc de QEMU: IDE PIIX y VGA emulada. Esa
@@ -24,11 +24,13 @@ Ryzen/chipset/DDR4, un canal de diagnóstico, vídeo y el transporte de almacena
 El lector FAT32 y el formato FAGRAW64 pueden conservarse sobre un transporte nuevo;
 no solucionan por sí solos la inicialización física.
 
-## Primera información física necesaria
+## Información física necesaria para escribir (parte ya recibida)
 
 Apagar completamente, desconectar la alimentación de red y seguir las precauciones
 de manipulación del manual de la placa antes de inspeccionar. No conectar todavía
 un programador ni hacer puentes. No hace falta retirar el chip para identificarlo.
+
+Las fotos recibidas están documentadas en [OBSERVACIONES-FOTOS](OBSERVACIONES-FOTOS.md). La lista siguiente describe qué debe quedar confirmado antes de escribir, no pide repetir todas las tomas:
 
 Obtener fotografías nítidas de:
 

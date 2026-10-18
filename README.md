@@ -1,99 +1,87 @@
 # Orquestador del Metal
 
-El nombre visible del proyecto es **Orquestador del Metal** y su carpeta técnica
-es `Orquestador_Metal/`. «Faggin scaling» identifica las etapas de 16, 32 y 64 bits,
-en homenaje a Federico Faggin.
+Firmware propio x86-64 para aprender y controlar el arranque de **mi PC**, con
+instrucciones escritas a mano en `.hex`. «Faggin scaling» conserva el nombre de
+las etapas de 16, 32 y 64 bits, en homenaje a Federico Faggin.
 
-Para abrir la pantalla y escribir con eco:
+**Un único objetivo físico: MSI A320M-A PRO MAX (MS-7C52) + Ryzen 5 5600X.**
+Se investigará la integración conservando componentes AMD necesarios. No se
+pretende construir un UEFI universal ni mantener soporte para otras placas.
+El alcance y los criterios para terminar están en [PERFIL-FISICO](PERFIL-FISICO.md).
+
+## Estado real
+
+| Parte | Estado |
+|---|---|
+| Firmware desde RESET en QEMU | v1 terminada y probada: consola, pantalla, teclado, memoria, saludo/eco y carga FAT32 |
+| Análisis del firmware oficial MSI 2.C | Inventario y trazado AMD/PEI implementados; 16 comprobaciones aprobadas |
+| Firmware adaptado al PC físico | Pendiente: aún no hay imagen modificada para grabar |
+
+La ROM de QEMU sustituye el firmware de la VM; no carga SeaBIOS, OVMF ni una
+aplicación `.efi`. Para el equipo real se mantiene la decisión de no usar una
+entrada `.efi` en USB. Conservar componentes AMD puede requerir conservar o
+proporcionar fases internas PI/UEFI y partes de AMI: todavía no se ha completado
+esa integración. «Propio» no convierte los componentes conservados en código nuestro.
+
+## Ejecutar lo que ya funciona en QEMU
+
+Desde la raíz, con QEMU instalado:
 
 ```powershell
 .\iniciar.ps1
 ```
 
-Pulsa `o` para «Hola mundo», `e` para eco y Escape para volver al monitor.
-La guía de organización está en [LEEME](Orquestador_Metal/LEEME.md).
+| Tecla | Acción |
+|---|---|
+| `h` | Ayuda |
+| `s` | Estado de memoria |
+| `a` | Reserva de 256 bytes |
+| `o` | Hola mundo propio |
+| `e` | Eco; Escape vuelve al monitor |
+| `d` | Cargar METAL/INICIO.X86 del disco virtual adjunto |
+| `q` | Detener la CPU virtual |
 
-Para ejecutar un programa desde FAT32:
+No hace falta Enter para elegir una orden. En el eco, Enter cambia de línea y
+se puede borrar. `-SoloTerminal` usa UART sin ventana; `-Comprobar` ejecuta una
+comprobación y cierra su VM. `q` detiene la CPU, no cierra QEMU.
+
+Para ejecutar el programa externo automáticamente desde GPT/FAT32:
 
 ```powershell
 .\iniciar.ps1 -Disco
 ```
 
-El firmware busca y ejecuta `METAL\INICIO.X86` automáticamente en un disco
-GPT/FAT32 con clústeres de 4 KiB. Si falla o el programa retorna, queda el monitor.
-`d` vuelve a intentar la carga. `-Manual` desactiva el primer intento automático.
-Véanse [soporte y límites del lector](Orquestador_Metal/64-bit/storage/README.md).
-La imagen se genera dentro de `build/`; no se modifica el disco personal.
+El firmware busca `METAL/INICIO.X86`. Si falla o el programa retorna, queda el
+monitor; `d` reintenta. `-Manual` desactiva el intento automático. El lanzador
+regenera una imagen de disco en `build/`, sin escribir discos físicos. El lector
+admite MBR, GPT y FAT32 directo, con clústeres de 512 bytes a 32 KiB dentro de
+sus [límites documentados](Orquestador_Metal/64-bit/storage/README.md).
 
-La **versión 1.0 para QEMU está cerrada**: [resultados, capturas y razones del diseño](Orquestador_Metal/CIERRE-v1.md).
-`./preparar.ps1` genera el paquete ejecutable en `build/Orquestador_Metal/`.
+```powershell
+.\preparar.ps1
+.\build\Orquestador_Metal\INICIAR.ps1
+```
 
-Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.
-El desarrollo actual está organizado en `Orquestador_Metal/`:
+El paquete contiene ROM, disco GPT/FAT32, ejemplos, lanzador y manifiesto SHA-256.
+Es para QEMU; copiarlo a FAT32 no instala firmware desde RESET en la MSI.
+
+## Organización del código propio
 
 ```text
 Orquestador_Metal/
-  16-bit/              reset, entrada real, A20, GDT y transicion a 32
-  32-bit/              entrada protegida, paginacion y transicion a 64
-  64-bit/              diagnosticos, memoria, monitor, programas y pantalla
-  build-firmware.ps1   selecciona las etapas y une sus bytes
+  16-bit/              RESET, entrada real y transición a 32 bits
+  32-bit/              modo protegido, paginación y transición a 64 bits
+  64-bit/              diagnóstico, memoria, monitor, programas y dispositivos QEMU
+  guardians/           límites, reservas, contratos y motivos de rechazo
+  arranque/            contrato de arranque
+  build-firmware.ps1   selecciona fuentes .hex y comprueba la ROM
+EVIDENCIAS/
+  QEMU/                cuatro capturas y resultados de la batería
+  PC_REAL/             inventario, fotos y análisis offline de MSI
 ```
 
-Cada carpeta tiene su README, codigo y mensaje. Las etapas se ejecutan
-en orden; las variantes permiten detenerse en 16, 32 o 64 bits.
-
-## Ejecutar
-
-Desde esta carpeta, con QEMU instalado:
-
-```powershell
-.\run-firmware.ps1
-```
-
-Salida del firmware:
-
-```text
-Faggin scaling: 16 bits OK
-Faggin scaling: 32 bits OK
-Faggin scaling: 64 bits OK
-GREEN [CPU] guardians active
-GREEN [Memory] integrity latch OK
-GREEN [Memory] bounded allocator OK
-```
-
-Ctrl+C para salir. El perfil normal transmite por el puerto de depuracion de
-QEMU. Para abrir la pantalla propia de Orquestador del Metal:
-
-```powershell
-.\run-firmware.ps1 -Monitor
-```
-
-Teclas: `h` ayuda, `s` estado, `a` reservar 256 bytes, `o` hola mundo,
-`e` eco, `q` detener; no hace falta Enter para elegir una orden.
-En el eco puedes escribir, usar Enter y borrar; Escape regresa al monitor.
-La ventana usa VGA y teclado PS/2 inicializados por nuestros bytes. La terminal
-sigue operativa por UART. Para ejecutar solamente en terminal:
-`./run-firmware.ps1 -Monitor -Headless`. Las pruebas siempre ocultan la ventana.
-Los binarios propios se exportan como `build/hola.x86` y `build/eco.x86`.
-Sus fuentes estan en [programs](Orquestador_Metal/64-bit/programs/README.md).
-Los originales `src/hola.hex` y `src/eco.hex` se conservan como ejemplos UEFI.
-La implementacion de pantalla y sus limites estan en
-[screen](Orquestador_Metal/64-bit/screen/README.md).
-Consulta [el contrato de la consola](Orquestador_Metal/64-bit/monitor/README.md)
-y [las entregas pendientes](Orquestador_Metal/ENTREGAS.md).
-
-Nuestra ROM sustituye el firmware
-de la VM: no se carga SeaBIOS, OVMF ni un archivo .efi.
-
-Elegir donde detenerse:
-
-```powershell
-.\run-firmware.ps1 -Stage 16
-.\run-firmware.ps1 -Stage 32
-.\run-firmware.ps1 -Stage 64
-```
-
-Pruebas que comprueban el orden de los mensajes y cierran su propia VM:
+Las etapas están separadas por responsabilidad; comparten CPU y memoria y se
+necesitan en orden. No son procesos aislados por hardware.
 
 ```powershell
 .\run-firmware.ps1 -Stage 16 -Check
@@ -101,104 +89,73 @@ Pruebas que comprueban el orden de los mensajes y cierran su propia VM:
 .\run-firmware.ps1 -Stage 64 -Check
 ```
 
-El lanzador busca QEMU en PATH y en C:\Program Files\qemu.
-Tambien acepta -Qemu 'C:\otra ruta\qemu-system-x86_64.exe'.
-Los binarios y registros quedan en build/, excluido de Git.
+Cada ROM QEMU mide 65536 bytes por su mapa fijo. Los perfiles históricos siguen
+llamándose `faggin-*`. Sus mapas en `build/*-map.json` indican fuentes, bytes
+explícitos, relleno, plataforma y SHA-256. El constructor copia nuestros bytes;
+no ensambla ni genera instrucciones. [Guía técnica](Orquestador_Metal/README.md).
 
-## Prueba sostenida de RAM
+## Guardianes y comprobaciones
 
-```powershell
-.\run-firmware.ps1 -Stress
-.\run-firmware.ps1 -Stress -Check
-.\run-firmware.ps1 -Stress -InjectFault -Check
-```
-
-El firmware de 64 bits escribe y verifica 1 MiB durante 32 rondas. Cada
-punto confirma una ronda; termina con RAM 1 MiB x 32 OK. La ultima variante
-provoca una corrupcion en la RAM de la VM y exige RAM FAIL para comprobar
-que el firmware la detecta. Las pruebas con -Check cierran su propia VM.
-
-Los bytes y la explicacion estan en Orquestador_Metal/64-bit/stress/.
-La investigacion sobre las fases de UEFI y el orden de desarrollo propio
-esta en Orquestador_Metal/COMO-SE-CONSTRUYE-UN-FIRMWARE.md.
-
-## Solidez antes de optimizar
-
-La etapa de 64 bits instala IDT y TSS para informar excepciones con vector,
-RIP, error, CR2 y pila utilizada. Las explicaciones estan en
-Orquestador_Metal/64-bit/diagnostics/README.md.
+Rojo bloquea o rechaza con motivo; amarillo avisa de margen o cobertura; verde
+confirma una comprobación concreta. En 64 bits hay páginas de guarda, permisos
+RX/RW/NX, diagnóstico de excepciones y asignador acotado con bloqueo persistente
+ante corrupción. No se utiliza Rust. [Contratos y límites](Orquestador_Metal/guardians/README.md).
 
 ```powershell
 .\test-firmware.ps1
-# Para observar un fallo de pagina provocado dentro de la VM:
-.\run-firmware.ps1 -Exception page
 ```
 
-La bateria completa exige catorce casos aprobados en QEMU y diecinueve reglas del
-constructor, y escribe build/test-results.json y build/guardian-test-results.json.
-Incluye nueve casos de CPU intencionales y una corrupcion de RAM: esos casos
-deben ser detectados por el firmware, no son fallos de tu computadora.
-Cada -Check exige tambien alcanzar el HLT final; el lanzador cierra su VM.
-
-Cada ROM tiene un informe build/*-map.json con fuentes, SHA256 y conteo de
-bytes explicitos frente al relleno. Es la referencia para reducir tamano
-mas adelante, despues de comprobar el comportamiento.
-
-## Guardianes globales
-
-Cada archivo tiene un carril de ROM y cada recurso una reserva. Los cruces
-y excesos bloquean la construccion con RED; un margen reducido o cobertura
-pendiente avisa con YELLOW; las comprobaciones aprobadas muestran GREEN.
-El estado agregado conserva el color mas grave.
-
-En 64 bits, la CPU aplica paginas de guarda de pila, codigo de solo lectura
-y datos no ejecutables. Puedes provocar un cruce real de pila dentro de la VM:
+La batería QEMU incluye 15 casos base, 33 reglas del constructor, ocho rechazos
+de paquetes, dos recorridos de pantalla/teclado, 26 casos FAT32/MBR, 24 GPT/clústeres
+y tres de arranque. Los fallos provocados deben detectarse. Las pruebas cierran
+sus propias VM y escriben informes bajo `build/`.
 
 ```powershell
+.\run-firmware.ps1 -Stress -Check
+.\run-firmware.ps1 -Stress -InjectFault -Check
 .\run-firmware.ps1 -Exception stack -Check
 ```
 
-Las reglas, sus motivos y limites estan en Orquestador_Metal/guardians/README.md.
-Los informes de cada construccion usan el sufijo -guardians.json.
-Los bloqueos incluyen codigo, propietario, motivo y correccion sugerida;
-los contratos criticos tambien muestran bytes esperados y encontrados.
-build/guardian-example.json contiene un ejemplo rojo de una copia de prueba.
+La prueba de RAM hace 32 rondas sobre 1 MiB. Los otros comandos ejercitan detección
+de corrupción y un fallo de guarda de pila dentro de la VM.
 
-## Servicio de memoria de 64 bits
-
-Orquestador_Metal/64-bit/services/ implementa asignacion lineal de una arena de
-512 KiB, alineacion a 16 bytes, limites, comprobacion de overflow y rechazo
-sin consumir espacio ante rechazos normales. El ABI version 2 conserva una
-bandera persistente si detecta corrupcion del cursor o su complemento.
-Once autopruebas se ejecutan antes del destino final de cada perfil de 64 bits.
-El mensaje GREEN [Memory] confirma que pasaron y el estado quedo limpio.
-
-Se conservan los .hex manuales. La primera compactacion comprobada redujo
-los bytes explicitos del perfil normal de 2319 a 2248, sin cambiar el ABI
-ni quitar guardianes. Los detalles estan en Orquestador_Metal/COMPACTACION.md.
-Esas cifras son historicas: la version 2 agrega nuevas protecciones y su
-tamano actual se consulta en build/faggin-64-map.json.
-
-## Experimentos anteriores
-
-- src/hola.hex y src/eco.hex: aplicaciones UEFI; necesitan firmware UEFI.
-- src/reset.hex: primera ROM de 16 bits, que solo emite un mensaje desde reset.
-- build.ps1: conversor comun de hexadecimal comentado a bytes; no ensambla.
-
-Los experimentos anteriores se conservan como referencia. Para construir
-solamente la ROM original:
+Para conservar las fotos y los informes de una batería completada:
 
 ```powershell
-.\build.ps1 -In src\reset.hex -Out build\talk-reset.rom
+.\recopilar-evidencias.ps1
 ```
 
-Este proyecto utiliza la RAM y los dispositivos emulados de QEMU. Todavia
-no inicializa una placa fisica ni implementa la especificacion UEFI.
-Los contratos, mapa de memoria y limites estan en Orquestador_Metal/README.md.
+Véanse el [cierre QEMU](Orquestador_Metal/CIERRE-v1.md) y [EVIDENCIAS](EVIDENCIAS/LEEME.md).
+Las reducciones históricas y su método están en [COMPACTACION](Orquestador_Metal/COMPACTACION.md);
+la limpieza posterior quitó 739 bytes explícitos sin reducir el mapa de 64 KiB.
 
-## Evidencias y preparación de la placa real
+## Adaptación a este PC, conservando AMD
 
-Las cuatro fotos de QEMU y sus informes están en [EVIDENCIAS](EVIDENCIAS/LEEME.md).
-El inventario real confirma MS-7C52, Ryzen 5600X y RTX 3060. La siguiente etapa
-aceptada es [identificar el chip flash y preparar recuperación](EVIDENCIAS/PC_REAL/IDENTIFICACION-Y-RECUPERACION.md),
-antes de desarrollar y probar una imagen específica desde RESET para esa placa.
+Se descargó y analizó la referencia oficial MSI 2.C, nominalmente la versión
+reportada por Windows en el equipo. Se encontraron tablas AMD y módulos PEI,
+incluidos componentes de Zen 3. El [inventario y el trazado](EVIDENCIAS/PC_REAL/analisis-msi/LEEME.md)
+distinguen lo observado en el archivo de lo aún no confirmado en hardware.
+
+```powershell
+.\analizar-msi.ps1 -Descargar
+```
+
+Requiere Python 3; `-Python` permite indicar su ruta. Sin `-Descargar` reutiliza
+el ZIP local. Ejecuta cinco comprobaciones del inventario y once del trazado.
+No ejecuta componentes AMD, no parchea la ROM y no invoca un grabador. Estas
+herramientas del anfitrión no sustituyen las instrucciones .hex del firmware.
+
+El siguiente trabajo está limitado a resolver la ruta del 5600X, sus dependencias
+y la entrega al código propio. Antes de escribir físicamente hacen falta el
+original de esta unidad y una recuperación externa preparada. El constructor
+rechaza `-Platform MS-7C52` con un motivo hasta que exista ese port; por defecto
+solo genera `-Platform QEMU`.
+
+## Referencias y trabajo histórico
+
+- [Perfil físico único y criterio de cierre](PERFIL-FISICO.md).
+- [Guía de archivos y uso](Orquestador_Metal/LEEME.md).
+- [Estado de las entregas](Orquestador_Metal/ENTREGAS.md).
+- [Investigación de las fases de firmware](Orquestador_Metal/COMO-SE-CONSTRUYE-UN-FIRMWARE.md).
+- `src/hola.hex` y `src/eco.hex`: aplicaciones UEFI históricas; no son la ruta de entrada elegida.
+- `src/reset.hex`: primera ROM de 16 bits; `build.ps1` convierte hexadecimal comentado a bytes.

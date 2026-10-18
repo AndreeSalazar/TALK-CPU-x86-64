@@ -1,7 +1,10 @@
 # Llegar al metal: contrato de la siguiente entrega
 
 Decisión confirmada: firmware propio desde RESET, sin cargador .efi.
-El objetivo físico sigue pendiente; el resultado QEMU no se presenta como soporte MSI.
+El objetivo físico único es MS-7C52 + Ryzen 5 5600X; QEMU es el banco de pruebas.
+El [perfil acordado](../../PERFIL-FISICO.md) define el cierre. La estrategia actual
+es conservar componentes AMD y el entorno de inicio que requieran; el análisis
+está implementado, pero el port físico sigue pendiente.
 
 ## FAT32 y GOP cumplen funciones diferentes
 
@@ -35,7 +38,7 @@ la RTX 3060. La v1 configura VGA emulada; no incorpora un controlador RTX.
 | 6. Programa externo | Integrar lector FAT32 y cargador con el mapa físico nuevo | Saludo/eco, rechazos explicados y fotos reales dentro de EVIDENCIAS/PC_REAL |
 
 Un SSD SATA, un SSD NVMe y un USB son transportes distintos. La primera prueba no
-promete soportarlos todos a la vez. El destino físico concreto se elegirá después
+promete soportarlos todos a la vez. El primer transporte concreto se elegirá después
 de resolver identificación e inicio; no se formatea ningún disco para simular progreso.
 
 ## Guardián de plataforma
@@ -62,3 +65,12 @@ No se puede tomar desde Windows una fotografía de la inscripción física del c
 [TianoCore: QueryMode, SetMode y Blt](https://tianocore-docs.github.io/edk2-UefiDriverWritersGuide/draft/23_graphics_driver_design_guidelines/232_graphics_output_protocol_implementation/2324_querymode%2C_setmode%2C_and_blt_implementation.html)
 describe la configuración del framebuffer por el controlador y su uso directo
 posterior a ExitBootServices. Es referencia de interfaz, no soporte RTX en este proyecto.
+## Análisis ya disponible y siguiente límite
+
+El [trazado AMD/PEI](analisis-msi/TRAZADO-Y-ENTREGA.md) identifica dependencias
+concretas. Conservar esos módulos puede requerir conservar o proporcionar fases
+internas PI/UEFI y partes de AMI; no es una promesa de quitar todo UEFI de la imagen.
+No se añade una aplicación .efi al disco. El siguiente límite es la entrega a
+nuestro código después del inicio de plataforma, antes de adaptar el resto del
+perfil. Se investiga si podrá conservarse la inicialización de vídeo existente;
+no se obliga a escribir un controlador RTX desde cero si el estado heredado sirve.

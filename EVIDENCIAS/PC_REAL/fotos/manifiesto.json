@@ -58,5 +58,11 @@
     "SHA256": "48BB1A55EA985407A127918AE1C1C7A565557AF895B850E1A9E72DBBA93A4ACD",
     "Origen": "Fotografia aportada por el usuario",
     "DemuestraArranquePropio": false
+  },
+  {
+    "Archivo": "11-vista-general.png",
+    "SHA256": "397624F33CA91B613DE6877751E93E66342F9FCE29207FEDA019AC727498EB03",
+    "Origen": "Fotografia general aportada por el usuario; conservada al cerrar documentacion",
+    "DemuestraArranquePropio": false
   }
 ]

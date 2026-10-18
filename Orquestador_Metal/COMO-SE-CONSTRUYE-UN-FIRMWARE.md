@@ -1,5 +1,12 @@
 # Como se construye un firmware: referencia para Faggin scaling
 
+Esta explicación es una referencia de arquitectura. El proyecto tiene un único
+destino físico: MS-7C52 con Ryzen 5 5600X, según [PERFIL-FISICO](../PERFIL-FISICO.md).
+La v1 QEMU está terminada; la adaptación investiga conservar componentes AMD y el
+entorno de inicio que requieran. No se busca implementar toda la especificación
+UEFI ni soportar otras placas. El [trazado actual](../EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md)
+documenta las dependencias reales encontradas en la referencia MSI.
+
 ## De EFI a UEFI
 
 EFI fue desarrollado inicialmente por Intel. En 2005 se anuncio el UEFI
@@ -31,8 +38,8 @@ responsabilidades sin copiar esas fases ni declarar compatibilidad UEFI.
 | --- | --- | --- |
 | SEC | Primer estado de ejecucion, entorno temporal y entrega a la siguiente fase | Nuestro reset, segmentos, pilas y cambios de modo cubren parte del arranque temprano |
 | PEI | Preparar memoria permanente y describir recursos para la siguiente fase | QEMU ya ofrece RAM utilizable; probamos una region, sin inicializar DDR4 |
-| DXE | Inicializar componentes y ofrecer servicios mediante drivers y protocolos | Todavia faltan servicios de memoria y controladores de dispositivos |
-| BDS | Elegir el destino de arranque y preparar los dispositivos necesarios | Todavia no seleccionamos ni cargamos programas externos |
+| DXE | Inicializar componentes y ofrecer servicios mediante drivers y protocolos | QEMU ya tiene servicios de memoria y dispositivos propios; la integración física sigue pendiente |
+| BDS | Elegir el destino de arranque y preparar los dispositivos necesarios | QEMU ya busca y carga METAL/INICIO.X86 desde FAT32; falta el transporte físico |
 | Runtime | Servicios que siguen disponibles despues de la entrega del control | No implementado ni necesario para la prueba actual |
 
 Es una comparacion de responsabilidades, no una equivalencia funcional.

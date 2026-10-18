@@ -2,10 +2,14 @@
 
 Esta es la carpeta técnica `Orquestador_Metal`. La secuencia de arranque
 de 16, 32 y 64 bits conserva el nombre «Faggin scaling».
+El objetivo físico único es MSI A320M-A PRO MAX (MS-7C52) con Ryzen 5 5600X.
+QEMU es el banco de pruebas; no se busca implementar un UEFI universal.
+La adaptación conservará los componentes AMD que necesite, si su integración
+se demuestra viable. [Alcance y cierre físico](../PERFIL-FISICO.md).
 Consulta [LEEME](LEEME.md) para orientarte y [Arranque propio](arranque/LEEME.md)
 para distinguir el firmware desde RESET de un archivo de arranque en disco.
 
-Firmware propio desde cero, en homenaje a Federico Faggin. Las instrucciones
+La implementación QEMU es propia desde cero, en homenaje a Federico Faggin. Sus instrucciones
 estan escritas byte por byte en archivos .hex, sin ensamblador ni linker.
 QEMU ejecuta nuestra ROM desde el reset, sin cargar SeaBIOS, OVMF ni .efi.
 
@@ -63,8 +67,9 @@ La entrada de 64 bits instala diagnostico antes de emitir su mensaje:
 IDT, TSS y pilas IST. Las pruebas de errores reales y la interpretacion
 de sus campos estan en `64-bit/diagnostics/README.md`.
 
-Bateria completa: `.\test-firmware.ps1`. Comprueba catorce casos en QEMU
-y diecinueve reglas de guardianes. Escribe `build/test-results.json` y
+Bateria completa: `.\test-firmware.ps1`. Comprueba 15 casos base en QEMU
+y 33 reglas de guardianes, además de paquetes, pantalla/teclado, FAT32/MBR,
+GPT y arranque. El [cierre v1](CIERRE-v1.md) contiene el desglose. Escribe `build/test-results.json` y
 `build/guardian-test-results.json`. Los limites y semaforos se explican en
 `guardians/README.md`.
 
@@ -137,10 +142,20 @@ los archivos que los referencian. Las marcas comprueban los tamanos.
 Destino: maquina pc, CPU qemu64, TCG, 16 MiB y un procesador. QEMU ofrece
 RAM utilizable; este codigo no inicializa DDR4 ni el chipset de una placa
 fisica. Las interrupciones enmascarables siguen desactivadas. Hay diagnostico
-terminal de excepciones en 64 bits; faltan diagnostico temprano, recuperacion,
-otros procesadores y drivers. NMI y machine check tienen pila reservada,
+terminal de excepciones en 64 bits; faltan diagnostico temprano, recuperacion
+y la integración física del perfil elegido. NMI y machine check tienen pila reservada,
 pero no se han probado mediante inyeccion de eventos de hardware.
 No es una imagen para grabar en la MSI A320M-A PRO MAX.
+
+## Adaptación física: estado separado
+
+El [análisis oficial MSI](../EVIDENCIAS/PC_REAL/analisis-msi/LEEME.md) y el
+[trazado AMD/PEI](../EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md)
+son utilidades offline del anfitrión, con 16 comprobaciones aprobadas. No son
+instrucciones de firmware ni una imagen de placa. La ruta activa del 5600X,
+la entrega a código propio y los dispositivos físicos siguen pendientes.
+Conservar módulos AMD puede exigir conservar o proporcionar su entorno PI/UEFI
+y partes de AMI; no se añade por ello una aplicación .efi al USB.
 
 ## Referencia tecnica
 

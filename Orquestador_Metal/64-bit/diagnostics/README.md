@@ -99,8 +99,9 @@ del handler en F1597. Un mensaje parcial o un triple fallo no aprueban.
 Los casos provocados no se combinan con -Stress. Sin -Check se puede
 observar el diagnostico directamente y salir con Ctrl+C.
 
-La bateria completa se ejecuta con `.\test-firmware.ps1`: catorce casos
-en QEMU y diecinueve reglas del constructor. Incluye los cinco casos anteriores
+La bateria completa se ejecuta con `.\test-firmware.ps1`: 15 casos base
+en QEMU y 33 reglas del constructor, además de los grupos de programas,
+pantalla, disco y arranque del [cierre v1](../../CIERRE-v1.md). Incluye los cinco casos anteriores
 y cuatro violaciones de guardianes: escritura en ROM, ejecucion de datos,
 acceso a guarda y cruce real de pila. Ver `../../guardians/README.md`.
 El informe queda en build/test-results.json y las reglas del constructor

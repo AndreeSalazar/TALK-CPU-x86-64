@@ -129,8 +129,9 @@ Desde la raiz:
 .\test-firmware.ps1
 ```
 
-Ejecuta diecinueve pruebas de reglas del constructor y catorce pruebas reales en
-QEMU. Para ver solo las reglas estructurales: `.\test-guardians.ps1`.
+Ejecuta 33 pruebas de reglas del constructor y 15 casos base en QEMU, además de
+programas, pantalla, disco y arranque. El [cierre v1](../CIERRE-v1.md) desglosa
+los grupos. Para ver solo las reglas estructurales: `.\test-guardians.ps1`.
 Las pruebas estructurales alteran copias de metadatos y una copia aislada
 de los bytes de reset: no editan tus fuentes reales ni una ROM existente.
 Ademas se ejecutan once autopruebas del servicio en cada perfil de 64 bits.

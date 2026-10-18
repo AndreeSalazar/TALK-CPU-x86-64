@@ -4,6 +4,10 @@ Firmware propio para x86-64, escrito con instrucciones en `.hex` y probado
 desde RESET en QEMU. El nombre para leer es **Orquestador del Metal**;
 `Orquestador_Metal` es la forma de su carpeta, sin espacios ni ambigüedades.
 
+Se desarrolla para **un solo PC: MSI A320M-A PRO MAX / MS-7C52 + Ryzen 5 5600X**.
+El [perfil físico](../PERFIL-FISICO.md) define el alcance y qué falta para terminar.
+QEMU es el banco de pruebas; el soporte de otras placas queda fuera del objetivo.
+
 ## Empezar
 
 Desde la raíz del repositorio:
@@ -69,5 +73,11 @@ instala copiándola a una carpeta del disco.
 externo a la ROM. Soporta GPT, MBR y volúmenes directos, además de clústeres
 de 512 bytes a 32 KiB. `-Manual` conserva la selección por `d`.
 La versión QEMU está cerrada; la adaptación a placa física es otra entrega.
+Para esa adaptación se investigan componentes AMD conservados y sus dependencias
+PI/UEFI; no se afirma que todos los bytes de la imagen física futura sean nuestros.
+El [inventario y trazado](../EVIDENCIAS/PC_REAL/analisis-msi/LEEME.md) ya existen,
+con 16 comprobaciones aprobadas. Todavía no hay imagen modificada para MS-7C52
+ni prueba de nuestro firmware en el PC real. El [estado de entregas](ENTREGAS.md)
+mantiene ese cierre separado del de QEMU.
 Véanse [cierre con capturas](CIERRE-v1.md), [FAT32](64-bit/storage/README.md) y
 [Arranque propio](arranque/LEEME.md).

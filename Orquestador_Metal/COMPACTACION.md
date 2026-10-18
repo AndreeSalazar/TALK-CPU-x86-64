@@ -56,9 +56,11 @@ destinos de HLT y diagnosticos correctos para las excepciones provocadas.
 
 Los informes build/*-map.json registran bytes explicitos y SHA256.
 Los resultados quedan en build/test-results.json y guardian-test-results.json.
-La bateria actual conserva los catorce perfiles y amplia a diecinueve las
-reglas estructurales y a once las autopruebas del servicio de memoria.
-No se agregan esos productos al repositorio; se pueden regenerar.
+Esas cifras describen la comparación histórica. La batería actual tiene 15 casos
+base, 33 reglas y once autopruebas del servicio de memoria; añade comprobaciones
+de paquetes, pantalla, almacenamiento y arranque. El [cierre v1](CIERRE-v1.md)
+contiene el desglose. Los productos se regeneran bajo build/; las instantáneas
+de evidencia seleccionadas se conservan en EVIDENCIAS/.
 
 Las proximas reducciones deben mantener cada contrato y pasar la misma
 bateria. Antes de cambiar una direccion, tambien deben actualizarse sus

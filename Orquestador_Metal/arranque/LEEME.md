@@ -1,6 +1,9 @@
 # Arranque propio desde RESET
 
 Decisión del proyecto: conservar el firmware propio, sin una entrada `.efi`.
+Destino físico único: MS-7C52 con Ryzen 5 5600X, según el
+[perfil acordado](../../PERFIL-FISICO.md). Se investiga conservar componentes AMD
+y el entorno de inicio que requieran; no implementar UEFI para cualquier placa.
 Esta carpeta documenta el contrato de arranque. Ya existe lectura propia de
 disco IDE y búsqueda en FAT32 dentro de QEMU, con el alcance descrito en
 [storage](../64-bit/storage/README.md).
@@ -24,7 +27,7 @@ Tampoco Windows instala ese firmware por encontrar una carpeta con este nombre.
 
 ## Inspiración en UEFI
 
-Se adoptará la separación de responsabilidades: descubrimiento de medios,
+Se adopta la separación de responsabilidades: descubrimiento de medios,
 política de selección, validación de la imagen y entrega del control. El formato
 de programa sigue siendo FAGRAW64 y sus instrucciones siguen en `.hex`.
 
@@ -49,6 +52,11 @@ ambigua y se rechaza: la v1 requiere una única partición candidata.
 La entrega QEMU está cerrada con sus límites declarados y capturas en
 [CIERRE-v1](../CIERRE-v1.md). Soportar otros controladores y una placa física
 pertenece a otro objetivo, no a una instalación automática desde el disco.
+
+La adaptación física está acotada al perfil acordado, no a ampliar el catálogo
+de placas. El [trazado del firmware MSI](../../EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md)
+ya identifica tablas y dependencias PEI. Aún no hay una entrega implementada
+desde esos componentes al código propio ni imagen modificada lista para grabar.
 
 El transporte externo no cambia el privilegio de los programas actuales. La
 suma de bytes comprueba integridad básica; no aporta autenticación. El salto
