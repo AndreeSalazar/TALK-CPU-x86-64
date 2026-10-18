@@ -34,5 +34,17 @@
     "SHA256": "A348077843CDDEA58CDDD3649CDC4EF4B37FFEDFEF05414A9620E33BEA7B6268",
     "Origen": "Fotografia aportada por el usuario",
     "DemuestraArranquePropio": false
+  },
+  {
+    "Archivo": "07-controlador-rt8894a.png",
+    "SHA256": "597C762BE2A1BBB12665B64F130E74AE38282986D4D17039E99D9C22DE0065DF",
+    "Origen": "Fotografia aportada por el usuario",
+    "DemuestraArranquePropio": false
+  },
+  {
+    "Archivo": "08-controlador-rtl8111h.png",
+    "SHA256": "ECA92C65ED58C3DDD13BF576A7FA719CA80D4F81355687CBC7BFBC30D6AB33B3",
+    "Origen": "Fotografia aportada por el usuario",
+    "DemuestraArranquePropio": false
   }
 ]

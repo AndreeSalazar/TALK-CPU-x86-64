@@ -50,3 +50,12 @@ pero su variante no demuestra por sí sola el modelo exacto fotografiado.
 Los componentes centrales de 04 y 06 tampoco muestran una inscripción legible
 que permita identificarlos como memoria BIOS. Hace falta una vista de contexto
 más amplia para ubicar los candidatos antes de insistir con otro macro.
+
+## Tercera tanda: fotos 07..08
+
+En 07 se lee RT8894A: [Richtek lo identifica como controlador PWM de alimentación
+para CPU AMD SVI2](https://www.richtek.com/en/Products/Vcore/Vcore%20Controller/RT8894A).
+En 08 se lee RTL8111H: [Realtek lo identifica como controlador Ethernet
+10/100/1000](https://www.realtek.com/Product/Index?cate_id=786&id=3959&menu_id=1006).
+Ninguno es la memoria flash BIOS buscada. Ambas inscripciones son útiles para
+el inventario físico; la ubicación del chip flash sigue sin confirmarse.
