@@ -101,6 +101,11 @@ instalado. Es un primer arranque reportado, no una campaña de estabilidad repet
 
 ## Estado real
 
+**CASM, siguiente diseño:** lenguaje pequeño cercano a C, compilador previsto en C,
+guardianes semánticos y verificación de los bytes .hex emitidos. Ya hay una
+[propuesta concreta con ejemplo y dos controles](CASM/README.md); su compilador
+todavía no está implementado. El éxito físico anterior corresponde al .hex manual.
+
 | Parte | Estado |
 |---|---|
 | Firmware desde RESET en QEMU | v1 terminada y probada: consola, pantalla, teclado, memoria, saludo/eco y carga FAT32 |
