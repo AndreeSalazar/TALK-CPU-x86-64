@@ -3,6 +3,7 @@ param([string]$Qemu)
 
 $ErrorActionPreference = 'Stop'
 $cases = @(
+    @{ Name='Consola propia de 64 bits'; Profile='faggin-64-monitor'; Options=@{Monitor=$true} },
     @{ Name='Arranque hasta 16 bits'; Profile='faggin-16'; Options=@{Stage='16'} },
     @{ Name='Arranque hasta 32 bits'; Profile='faggin-32'; Options=@{Stage='32'} },
     @{ Name='Arranque hasta 64 bits'; Profile='faggin-64'; Options=@{Stage='64'} },

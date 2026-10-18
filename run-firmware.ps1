@@ -5,6 +5,7 @@ param(
     [string]$Stage = '64',
     [switch]$Stress,
     [switch]$InjectFault,
+    [switch]$Monitor,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
@@ -15,7 +16,9 @@ if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
     throw '-Exception requiere -Stage 64 y no se combina con -Stress.'
 }
+if ($Monitor -and ($Stage -ne '64' -or $Stress -or $Exception -ne 'None')) { throw '-Monitor requiere 64 bits sin Stress ni Exception.' }
 $buildName = "faggin-$Stage"
+if ($Monitor) { $buildName += '-monitor' }
 if ($Stress) { $buildName += '-stress' }
 if ($InjectFault) { $buildName += '-fault' }
 if ($Exception -ne 'None') { $buildName += "-exception-$Exception" }
@@ -33,11 +36,12 @@ if (-not $qemuCommand) {
 
 Push-Location $PSScriptRoot
 try {
-    & "$PSScriptRoot\Faggin scaling\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception
+    & "$PSScriptRoot\Faggin scaling\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception -Monitor:$Monitor
     $romPath = "build/$buildName.rom"
     if ((Get-Item $romPath).Length -ne 65536) {
         throw "La ROM debe medir exactamente 65536 bytes."
     }
+    if ($Monitor) { & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check; return }
     if ($Check) {
         $debugLogRelative = "build/$buildName-debug.log"
         $traceLogRelative = "build/$buildName-instructions.log"

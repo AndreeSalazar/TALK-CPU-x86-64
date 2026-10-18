@@ -41,7 +41,9 @@ GREEN [Memory] integrity latch OK
 GREEN [Memory] bounded allocator OK
 ```
 
-La CPU termina en HLT. Todavia no hay teclado ni comandos. Los mensajes
+El perfil normal termina en HLT. Con `./run-firmware.ps1 -Monitor` desde la raiz
+se abre la consola propia de 64 bits: `h` ayuda, `s` estado, `a` reserva, `q` parada.
+La entrada llega por COM1 de QEMU, sin servicios BIOS/UEFI. Los mensajes
 llegan a la terminal por el dispositivo debugcon de QEMU, puerto E9.
 
 Prueba mas exigente: `.\run-firmware.ps1 -Stress`. Ejecuta 32 rondas sobre

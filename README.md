@@ -33,8 +33,18 @@ GREEN [Memory] integrity latch OK
 GREEN [Memory] bounded allocator OK
 ```
 
-Ctrl+C para salir. El texto se transmite por el puerto de depuracion de
-QEMU; todavia no hay teclado ni comandos. Nuestra ROM sustituye el firmware
+Ctrl+C para salir. El perfil normal transmite por el puerto de depuracion de
+QEMU. Para usar la consola propia con entrada por puerto serie:
+
+```powershell
+.\run-firmware.ps1 -Monitor
+```
+
+Teclas: `h` ayuda, `s` estado, `a` reservar 256 bytes, `q` detener; no hace falta Enter.
+Consulta [el contrato de la consola](Faggin%20scaling/64-bit/monitor/README.md)
+y [las entregas pendientes](Faggin%20scaling/ENTREGAS.md).
+
+Nuestra ROM sustituye el firmware
 de la VM: no se carga SeaBIOS, OVMF ni un archivo .efi.
 
 Elegir donde detenerse:

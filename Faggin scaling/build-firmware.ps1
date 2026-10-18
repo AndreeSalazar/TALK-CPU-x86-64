@@ -5,6 +5,7 @@ param(
     [string]$Stage = '64',
     [switch]$Stress,
     [switch]$InjectFault,
+    [switch]$Monitor,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
@@ -15,7 +16,9 @@ if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
     throw '-Exception requiere -Stage 64 y no se combina con -Stress.'
 }
+if ($Monitor -and ($Stage -ne '64' -or $Stress -or $Exception -ne 'None')) { throw '-Monitor requiere 64 bits sin Stress ni Exception.' }
 $buildName = "faggin-$Stage"
+if ($Monitor) { $buildName += '-monitor' }
 if ($Stress) { $buildName += '-stress' }
 if ($InjectFault) { $buildName += '-fault' }
 if ($Exception -ne 'None') { $buildName += "-exception-$Exception" }
@@ -46,12 +49,14 @@ if ($Stage -eq '64') {
     $parts += @('64-bit\diagnostics\messages.hex', '64-bit\diagnostics\pointers.hex')
     $parts += '64-bit\services\self-test.hex'
     if ($Exception -ne 'None') { $parts += '64-bit\services\target-exception.hex' }
+    elseif ($Monitor) { $parts += '64-bit\services\target-monitor.hex' }
     elseif ($Stress) { $parts += '64-bit\services\target-stress.hex' }
     else { $parts += '64-bit\services\target-normal.hex' }
     $parts += @('64-bit\services\allocate.hex','64-bit\services\table.hex',
         '64-bit\services\messages.hex','64-bit\services\cases.hex',
         '64-bit\services\state-init.hex','64-bit\services\latch-test.hex',
         '64-bit\services\latch-message.hex')
+    if ($Monitor) { $parts += '64-bit\monitor\console.hex' }
 }
 $parts += '16-bit\reset.hex'
 
@@ -93,7 +98,7 @@ try {
     $totalAuthored = [int]($sourceSizes | Measure-Object AuthoredBytes -Sum).Sum
     [ordered]@{
         Name=$buildName; Stage=$Stage; Stress=[bool]$Stress; InjectFault=[bool]$InjectFault
-        Exception=$Exception; RomBytes=$romBytes; AuthoredBytes=$totalAuthored
+        Monitor=[bool]$Monitor; Exception=$Exception; RomBytes=$romBytes; AuthoredBytes=$totalAuthored
         GuardianStatus=$guardianReport.Status
         PaddingBytes=($romBytes - $totalAuthored)
         SHA256=(Get-FileHash "build\$buildName.rom" -Algorithm SHA256).Hash

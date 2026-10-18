@@ -1,0 +1,3 @@
+; Consola despues de autopruebas; puntero de 32 bits a F3000.
+@22F0
+00 30 0F 00

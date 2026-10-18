@@ -23,6 +23,8 @@
     )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\monitor\console.hex' = @{Start=0x3000;End=0x3C00;Why='Consola UART con transmision acotada y comandos fijos'}
+        '64-bit\services\target-monitor.hex' = @{Start=0x22F0;End=0x2300;Why='Destino exclusivo del monitor'}
         '64-bit\services\state-init.hex' = @{Start=0x2A00;End=0x2B00;Why='Inicializar cursor, espejo y bandera'}
         '64-bit\services\latch-test.hex' = @{Start=0x2B00;End=0x2C00;Why='Probar bloqueo persistente por corrupcion'}
         '64-bit\services\latch-message.hex' = @{Start=0x2C00;End=0x2D00;Why='Confirmacion del guardian de estado'}
