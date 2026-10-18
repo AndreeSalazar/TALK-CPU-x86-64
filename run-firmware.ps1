@@ -48,8 +48,8 @@ try {
     if ($Monitor) {
         $diskOptions=@{}
         if($Disk){
-            & "$PSScriptRoot/crear-disco.ps1"
-            $diskOptions.DiskImage='build/disco-fat32.img'
+            & "$PSScriptRoot/crear-disco.ps1" -MBR
+            $diskOptions.DiskImage='build/disco-fat32-mbr.img'
             if($Check){$diskOptions.DiskExpected=@('GREEN [FAT32] METAL/INICIO.X86','Hola desde mi disco FAT32!')}
         }
         & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless @diskOptions

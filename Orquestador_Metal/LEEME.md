@@ -66,6 +66,7 @@ instala copiándola a una carpeta del disco.
 
 `./iniciar.ps1 -Disco` crea y adjunta un volumen FAT32 de prueba. Al pulsar `d`,
 **nuestro firmware** encuentra y valida `METAL\INICIO.X86` en almacenamiento
-externo a la ROM. Es un lector de alcance acotado; no descubre particiones ni
-se instala en la placa física. Véanse [FAT32](64-bit/storage/README.md) y
+externo a la ROM. Descubre una única partición FAT32 primaria en MBR y conserva
+soporte para volúmenes directos. GPT y la adaptación a placa física quedan
+pendientes. Véanse [FAT32](64-bit/storage/README.md) y
 [Arranque propio](arranque/LEEME.md).

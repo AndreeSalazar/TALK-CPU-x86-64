@@ -40,7 +40,8 @@ El transporte es ATA PIO con esperas acotadas. La selección es una ruta fija
 geometría, cadenas y dos copias de FAT antes del cargador FAGRAW64. Hay pruebas
 de ausencia, fragmentación, daños y recuperación del monitor.
 
-La próxima ampliación deberá elegir una de estas entregas: particiones MBR/GPT,
+El selector ya reconoce particiones primarias MBR y valida sus límites y cruces.
+La próxima ampliación deberá elegir una de estas entregas: GPT,
 más tamaños de clúster o política de selección entre varios programas. No se
 implementará detección automática al encender hasta que sus fallos permitan
 volver al monitor con un motivo claro. Actualmente la búsqueda se pide con `d`.

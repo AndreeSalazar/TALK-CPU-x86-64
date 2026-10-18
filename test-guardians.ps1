@@ -31,7 +31,9 @@ $tests = @(
     @{Name='Paquete de disco cruza sector';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'DiskPacket').Start=0xA000}},
     @{Name='Sector de disco recortado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'SectorBuffer').End=0xA100}},
     @{Name='Limite ATA eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\ata.hex')}},
-    @{Name='Contrato de cluster eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\fat32.hex')}}
+    @{Name='Contrato de cluster eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\fat32.hex')}},
+    @{Name='Volumen cruza estado de disco';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'VolumeState').Start=0x9050}},
+    @{Name='Limite de particion eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\volumes.hex')}}
 )
 $results = @()
 foreach ($test in $tests) {

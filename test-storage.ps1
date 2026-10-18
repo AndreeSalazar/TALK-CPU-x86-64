@@ -17,6 +17,8 @@ try {
     # El relleno es cero: la suma del cuerpo no cambia y las instrucciones son identicas.
     [IO.File]::WriteAllBytes("$PSScriptRoot/build/disco-fragmentado.x86",$large)
     & "$PSScriptRoot/crear-disco.ps1" -Programa build/disco-fragmentado.x86 -Fragmentado
+    & "$PSScriptRoot/crear-disco.ps1" -MBR
+    & "$PSScriptRoot/crear-disco.ps1" -Programa build/disco-fragmentado.x86 -Fragmentado -MBR
     $green='GREEN [FAT32] METAL/INICIO.X86'
     $hello='Hola desde mi disco FAT32!'
     $data=2080*512
@@ -46,6 +48,36 @@ try {
         @{Name='length';Expected=@('RED [FAT32] packet length mismatch');Mutate={param($s) Write-Patch $s ($data+512+92) ([BitConverter]::GetBytes([uint32]66))}},
         @{Name='checksum';Expected=@($green,'RED [load] checksum');Mutate={param($s) Write-Patch $s ($file+24) ([byte[]]@(0))}}
     )
+    $mbrImage='build/disco-fat32-mbr.img'
+    $mbrCases=@(
+        @{Name='mbr-valid';Expected=@($green,$hello);Execute=$true;Mutate=$null},
+        @{Name='mbr-slot4';Expected=@($green,$hello);Execute=$true;Mutate={param($s)
+            Write-Patch $s 446 (New-Object byte[] 16)
+            Write-Patch $s 494 ([byte[]]@(0x80,0xFE,0xFF,0xFF,0x0C,0xFE,0xFF,0xFF,0,8,0,0,0,0,2,0))
+        }},
+        @{Name='mbr-fragmented';Image='build/disco-fat32-mbr-fragmentado.img';Expected=@($green,$hello);Execute=$true;Mutate=$null},
+        @{Name='mbr-missing';Expected=@('RED [MBR] FAT32 partition missing');Mutate={param($s) Write-Patch $s 446 (New-Object byte[] 64)}},
+        @{Name='mbr-zero-start';Expected=@('RED [MBR] invalid table/signature');Mutate={param($s) Write-Patch $s 454 ([BitConverter]::GetBytes([uint32]0))}},
+        @{Name='mbr-flag';Expected=@('RED [MBR] invalid table/signature');Mutate={param($s) Write-Patch $s 446 ([byte[]]@(1))}},
+        @{Name='mbr-overflow';Expected=@('RED [MBR] partition outside disk');Mutate={param($s) Write-Patch $s 454 ([BitConverter]::GetBytes([uint32]::MaxValue))}},
+        @{Name='mbr-overlap';Expected=@('RED [MBR] overlapping/ambiguous partitions');Mutate={param($s)
+            $entry=New-Object byte[] 16;$entry[4]=0x83
+            [Array]::Copy([BitConverter]::GetBytes([uint32]2049),0,$entry,8,4)
+            [Array]::Copy([BitConverter]::GetBytes([uint32]1),0,$entry,12,4)
+            Write-Patch $s 462 $entry
+        }},
+        @{Name='mbr-ambiguous';Expected=@('RED [MBR] overlapping/ambiguous partitions');Mutate={param($s)
+            Write-Patch $s 458 ([BitConverter]::GetBytes([uint32]65536))
+            $entry=New-Object byte[] 16;$entry[4]=0x0C
+            [Array]::Copy([BitConverter]::GetBytes([uint32]67584),0,$entry,8,4)
+            [Array]::Copy([BitConverter]::GetBytes([uint32]65536),0,$entry,12,4)
+            Write-Patch $s 462 $entry
+        }},
+        @{Name='mbr-gpt';Expected=@('RED [MBR] GPT not supported yet');Mutate={param($s) Write-Patch $s 450 ([byte[]]@(0xEE))}},
+        @{Name='mbr-short-volume';Expected=@('RED [FAT32] unsupported/invalid BPB');Mutate={param($s) Write-Patch $s 458 ([BitConverter]::GetBytes([uint32]131071))}},
+        @{Name='mbr-signature';Expected=@('RED [MBR] invalid table/signature');Mutate={param($s) Write-Patch $s 510 ([byte[]]@(0,0))}}
+    )
+    foreach($case in $mbrCases){if(-not $case.Image){$case.Image=$mbrImage};$cases+=$case}
     function Write-Patch($stream,[long]$offset,[byte[]]$value){$stream.Position=$offset;$stream.Write($value,0,$value.Length)}
     $results=@()
     foreach($case in $cases){

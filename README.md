@@ -19,8 +19,8 @@ Para ejecutar un programa desde FAT32:
 .\iniciar.ps1 -Disco
 ```
 
-Pulsa `d`: nuestro firmware busca `METAL\INICIO.X86` en un disco virtual de
-64 MiB y lo carga. Véanse [soporte y límites del lector FAT32](Orquestador_Metal/64-bit/storage/README.md).
+Pulsa `d`: nuestro firmware busca `METAL\INICIO.X86` en un disco virtual
+con una partición MBR de 64 MiB y lo carga. Véanse [soporte y límites del lector FAT32](Orquestador_Metal/64-bit/storage/README.md).
 La imagen se genera dentro de `build/`; no se modifica el disco personal.
 
 Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.

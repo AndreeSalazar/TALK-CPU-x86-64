@@ -1,5 +1,5 @@
 # Crea un volumen FAT32 de 64 MiB dentro de build/, sin acceder a discos fisicos.
-param([string]$Programa,[switch]$Fragmentado)
+param([string]$Programa,[switch]$Fragmentado,[switch]$MBR)
 $ErrorActionPreference='Stop'
 Push-Location $PSScriptRoot
 try {
@@ -11,6 +11,8 @@ try {
     if($packet.Length -lt 25 -or $packet.Length -gt 4096 -or [Text.Encoding]::ASCII.GetString($packet,0,8) -cne 'FAGRAW64' -or
        [BitConverter]::ToUInt32($packet,8)+24 -ne $packet.Length){throw 'Se requiere un paquete FAGRAW64 de 25..4096 bytes.'}
     $name=if($Fragmentado){'disco-fat32-fragmentado.img'}else{'disco-fat32.img'}
+    if($MBR){$name=if($Fragmentado){'disco-fat32-mbr-fragmentado.img'}else{'disco-fat32-mbr.img'}}
+    $volumeStart=if($MBR){2048}else{0}
     $path=Join-Path $PSScriptRoot "build/$name"
     $boot=New-Object byte[] 512
     function Put16($buffer,$offset,[uint16]$value){[Array]::Copy([BitConverter]::GetBytes($value),0,$buffer,$offset,2)}
@@ -19,6 +21,7 @@ try {
     [Array]::Copy([Text.Encoding]::ASCII.GetBytes('METAL   '),0,$boot,3,8)
     Put16 $boot 11 512;$boot[13]=1;Put16 $boot 14 32;$boot[16]=2;$boot[21]=0xF8
     Put16 $boot 24 63;Put16 $boot 26 255;Put32 $boot 32 131072;Put32 $boot 36 1024
+    Put32 $boot 28 $volumeStart
     Put32 $boot 44 2;Put16 $boot 48 1;Put16 $boot 50 6
     $boot[64]=0x80;$boot[66]=0x29;Put32 $boot 67 0x4D455441
     [Array]::Copy([Text.Encoding]::ASCII.GetBytes('METAL      FAT32   '),0,$boot,71,19)
@@ -46,8 +49,8 @@ try {
     $dir[75]=0x20;Put16 $dir 90 $clusters[0];Put32 $dir 92 $packet.Length
     $stream=[IO.File]::Open($path,'Create','Write','None')
     try {
-        $stream.SetLength(64MB)
-        function Write-At([long]$offset,[byte[]]$data){$stream.Position=$offset;$stream.Write($data,0,$data.Length)}
+        $stream.SetLength((131072L+$volumeStart)*512)
+        function Write-At([long]$offset,[byte[]]$data){$stream.Position=$offset+$volumeStart*512L;$stream.Write($data,0,$data.Length)}
         Write-At 0 $boot;Write-At 512 $info;Write-At (6*512) $boot;Write-At (7*512) $info
         Write-At (32*512) $fat;Write-At (1056*512) $fat
         if($Fragmentado){
@@ -60,6 +63,14 @@ try {
             $sector=New-Object byte[] 512
             [Array]::Copy($packet,$i*512,$sector,0,[Math]::Min(512,$packet.Length-$i*512))
             Write-At ((2080+$clusters[$i]-2)*512) $sector
+        }
+        if($MBR){
+            $mbrSector=New-Object byte[] 512
+            $mbrSector[446]=0x80;$mbrSector[450]=0x0C
+            foreach($offset in @(447,451)){$mbrSector[$offset]=0xFE;$mbrSector[$offset+1]=0xFF;$mbrSector[$offset+2]=0xFF}
+            Put32 $mbrSector 454 $volumeStart;Put32 $mbrSector 458 131072
+            $mbrSector[510]=0x55;$mbrSector[511]=0xAA
+            $stream.Position=0;$stream.Write($mbrSector,0,$mbrSector.Length)
         }
     }
     finally{$stream.Dispose()}

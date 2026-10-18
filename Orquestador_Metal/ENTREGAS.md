@@ -13,8 +13,9 @@ UEFI completa o arrancar en cualquier placa no forma parte de esta primera versi
    Se prueban ocho rechazos y la continuidad del monitor tras cada uno.
 3. **Entrada externa FAT32: implementada en QEMU.** `iniciar.ps1 -Disco` y `d`
    leen `METAL/INICIO.X86` por ATA PIO. Se validan BPB, cadenas, dos copias de
-   FAT, longitud y paquete; hay 14 pruebas de carga y rechazo.
-4. **Ampliación y compactación: pendiente.** Soportar más geometrías y particiones,
+   FAT, longitud y paquete. Se descubre una partición primaria MBR o un volumen
+   directo; hay 26 pruebas de carga y rechazo.
+4. **Ampliación y compactación: pendiente.** Soportar GPT y más tamaños de clúster,
    después reducir instrucciones conservando los `.hex` y los contratos funcionales.
 
 Los ejemplos `o` y `e` se exportan y se incluyen en la ROM. `d` lee un paquete
