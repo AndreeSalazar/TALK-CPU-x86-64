@@ -21,5 +21,9 @@ try {
     if($LASTEXITCODE -ne 0){throw 'Fallo el inventario de firmware.'}
     & $Python "$PSScriptRoot/test-analisis-msi.py" $archive
     if($LASTEXITCODE -ne 0){throw 'Fallo la comprobacion del analizador.'}
+    & $Python "$PSScriptRoot/trazar-inicio-msi.py" $archive --output 'build/analisis-msi/trazado.json'
+    if($LASTEXITCODE -ne 0){throw 'Fallo el trazado AMD/PEI.'}
+    & $Python "$PSScriptRoot/test-trazado-msi.py" $archive
+    if($LASTEXITCODE -ne 0){throw 'Fallo una comprobacion del trazado.'}
     Write-Host 'Informe: build/analisis-msi/inventario.json. No se ha generado una imagen modificada.'
 }finally{Pop-Location}

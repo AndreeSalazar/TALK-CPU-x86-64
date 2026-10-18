@@ -105,3 +105,10 @@ La documentación genérica no sustituye la selección específica de Vermeer.
 [UEFI PI: almacenamiento de firmware](https://uefi.org/specs/PI/1.8A/V3_Code_Definitions.html)
 describe FV, FFS y secciones. Es referencia de formato, no una aceptación de usar
 una aplicación .efi como vía de arranque de nuestro proyecto.
+
+## Segunda entrega del análisis
+
+El [trazado AMD y las dependencias PEI](TRAZADO-Y-ENTREGA.md) sigue los enlaces con
+contexto de dominio y reemplaza la resolución simplificada de direcciones de este
+primer inventario para cualquier decisión de integración. Incluye 11 comprobaciones
+nuevas y la identificación de PPIs de variables, configuración PCD y SMBus.

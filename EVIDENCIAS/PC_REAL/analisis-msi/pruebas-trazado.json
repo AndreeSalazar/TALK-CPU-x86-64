@@ -1,0 +1,17 @@
+{
+  "Passed": 11,
+  "Total": 11,
+  "Cases": [
+    "GUID truncado",
+    "AND sin operandos",
+    "Opcode DXE rechazado en PEI",
+    "Falta END",
+    "Bytes despues de END",
+    "Expresion valida sin asumir disponibilidad de PPI",
+    "Combo alterada",
+    "Enlace fuera del dominio con checksum correcto",
+    "ID desconocido no seleccionado como CPU instalada",
+    "Modo de directorio conserva el dominio correcto",
+    "Paquete original sin cambios"
+  ]
+}
