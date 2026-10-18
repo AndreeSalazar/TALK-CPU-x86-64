@@ -4,6 +4,7 @@ param(
     [switch]$Headless,
     [string]$DiskImage,
     [string[]]$DiskExpected,
+    [switch]$AutoStartup,
     [string]$RomPath='build/faggin-64-monitor.rom',
     [string]$LogName,
     [ValidateSet('','magic','size','entry','flags','checksum')]
@@ -75,9 +76,11 @@ try {
     }
     if($DiskExpected){
         $steps=@(@{Command='';Expected='Orquestador del Metal: listo (64 bits)'})
+        if($AutoStartup){$steps+=@{Command='';Expected='GREEN [BOOT] search METAL/INICIO.X86'}}
         for($i=0;$i -lt $DiskExpected.Count;$i++){
-            $steps+=@{Command=$(if($i -eq 0){'d'}else{''});Expected=$DiskExpected[$i]}
+            $steps+=@{Command=$(if($i -eq 0 -and -not $AutoStartup){'d'}else{''});Expected=$DiskExpected[$i]}
         }
+        if($AutoStartup){$steps+=@{Command='';Expected='GREEN [BOOT] monitor available'}}
         $steps+=@(
             @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
             @{Command='q';Expected='GREEN [halt] stopped'}

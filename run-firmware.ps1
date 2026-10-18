@@ -8,6 +8,7 @@ param(
     [switch]$Monitor,
     [switch]$Headless,
     [switch]$Disk,
+    [switch]$AutoBoot,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
@@ -15,6 +16,7 @@ param(
 $ErrorActionPreference = "Stop"
 if ($Headless -and -not $Monitor) { throw '-Headless requiere -Monitor.' }
 if ($Disk -and -not $Monitor) { throw '-Disk requiere -Monitor.' }
+if ($AutoBoot -and -not $Monitor) { throw '-AutoBoot requiere -Monitor.' }
 if ($Stress -and $Stage -ne '64') { throw '-Stress requiere -Stage 64.' }
 if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
@@ -40,7 +42,7 @@ if (-not $qemuCommand) {
 
 Push-Location $PSScriptRoot
 try {
-    & "$PSScriptRoot\Orquestador_Metal\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception -Monitor:$Monitor
+    & "$PSScriptRoot\Orquestador_Metal\build-firmware.ps1" -Stage $Stage -Stress:$Stress -InjectFault:$InjectFault -Exception $Exception -Monitor:$Monitor -AutoBoot:$AutoBoot
     $romPath = "build/$buildName.rom"
     if ((Get-Item $romPath).Length -ne 65536) {
         throw "La ROM debe medir exactamente 65536 bytes."
@@ -48,11 +50,12 @@ try {
     if ($Monitor) {
         $diskOptions=@{}
         if($Disk){
-            & "$PSScriptRoot/crear-disco.ps1" -MBR
-            $diskOptions.DiskImage='build/disco-fat32-mbr.img'
+            & "$PSScriptRoot/crear-disco.ps1" -GPT -SectoresPorCluster 8
+            $diskOptions.DiskImage='build/disco-fat32-gpt-c8.img'
             if($Check){$diskOptions.DiskExpected=@('GREEN [FAT32] METAL/INICIO.X86','Hola desde mi disco FAT32!')}
         }
-        & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless @diskOptions
+        elseif($AutoBoot -and $Check){$diskOptions.DiskExpected=@('RED [ATA] disk absent')}
+        & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless -AutoStartup:$AutoBoot @diskOptions
         return
     }
     if ($Check) {

@@ -31,8 +31,8 @@ recorrido del monitor y cierra su propia máquina virtual; no abre ventana.
 ## Organización
 
 `./preparar.ps1` desde la raíz deja un paquete en `build/Orquestador_Metal/`:
-`firmware.rom`, los programas `.x86`, un manifiesto de longitudes y SHA-256 y
-un `LEEME.txt`. El paquete es para QEMU; no es una imagen de disco instalable.
+`firmware.rom`, un disco GPT/FAT32, programas `.x86`, un manifiesto de longitudes
+y SHA-256, un `LEEME.txt` y `INICIAR.ps1`. El paquete es para QEMU.
 
 | Carpeta o archivo | Responsabilidad |
 |---|---|
@@ -64,9 +64,10 @@ incluidos en la ROM. QEMU ejecuta esa ROM como firmware de su máquina virtual.
 Todavía no es una imagen adaptada a la placa MSI A320M-A PRO MAX y no se
 instala copiándola a una carpeta del disco.
 
-`./iniciar.ps1 -Disco` crea y adjunta un volumen FAT32 de prueba. Al pulsar `d`,
+`./iniciar.ps1 -Disco` crea y adjunta un disco GPT/FAT32 de prueba. Al arrancar,
 **nuestro firmware** encuentra y valida `METAL\INICIO.X86` en almacenamiento
-externo a la ROM. Descubre una única partición FAT32 primaria en MBR y conserva
-soporte para volúmenes directos. GPT y la adaptación a placa física quedan
-pendientes. Véanse [FAT32](64-bit/storage/README.md) y
+externo a la ROM. Soporta GPT, MBR y volúmenes directos, además de clústeres
+de 512 bytes a 32 KiB. `-Manual` conserva la selección por `d`.
+La versión QEMU está cerrada; la adaptación a placa física es otra entrega.
+Véanse [cierre con capturas](CIERRE-v1.md), [FAT32](64-bit/storage/README.md) y
 [Arranque propio](arranque/LEEME.md).

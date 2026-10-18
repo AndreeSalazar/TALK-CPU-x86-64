@@ -69,6 +69,10 @@ try {
     $cursorTests=Get-Content 'build\screen-cursor-test-results.json' -Raw | ConvertFrom-Json
     & "$PSScriptRoot\test-storage.ps1" -Qemu $Qemu
     $storageTests=Get-Content 'build\storage-test-results.json' -Raw | ConvertFrom-Json
+    & "$PSScriptRoot\test-gpt.ps1" -Qemu $Qemu
+    $gptTests=Get-Content 'build\gpt-test-results.json' -Raw | ConvertFrom-Json
+    & "$PSScriptRoot\test-arranque.ps1" -Qemu $Qemu
+    $bootTests=Get-Content 'build\boot-test-results.json' -Raw | ConvertFrom-Json
     [ordered]@{
         Platform='QEMU pc / qemu64 / TCG / 16 MiB / 1 CPU'
         Passed=$passedCount; Total=$results.Count; Cases=$results
@@ -76,12 +80,15 @@ try {
         ProgramTests=@{Passed=$programTests.Passed;Total=$programTests.Total}
         ScreenTests=@{Passed=($screenTests.Passed+$cursorTests.Passed);Total=($screenTests.Total+$cursorTests.Total)}
         StorageTests=@{Passed=$storageTests.Passed;Total=$storageTests.Total}
+        GPTTests=@{Passed=$gptTests.Passed;Total=$gptTests.Total}
+        BootTests=@{Passed=$bootTests.Passed;Total=$bootTests.Total}
     } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\test-results.json' -Encoding utf8
     Write-Host "`nResultado: $passedCount de $($results.Count) pruebas aprobadas."
     Write-Host "Guardianes de construccion: $($guardianTests.Passed) de $($guardianTests.Total) reglas comprobadas."
     Write-Host "Paquetes invalidos: $($programTests.Passed) de $($programTests.Total) rechazos comprobados."
     Write-Host 'Pantalla y teclado: recorrido normal y recuperacion de cursor comprobados.'
     Write-Host "Disco FAT32: $($storageTests.Passed) de $($storageTests.Total) recorridos comprobados."
+    Write-Host "GPT y clusters: $($gptTests.Passed) de $($gptTests.Total). Arranque y capturas: $($bootTests.Passed) de $($bootTests.Total)."
     Write-Host 'Informe: build\test-results.json'
     if ($passedCount -ne $results.Count) { throw 'La bateria de pruebas no esta completa: revisar el informe.' }
 }

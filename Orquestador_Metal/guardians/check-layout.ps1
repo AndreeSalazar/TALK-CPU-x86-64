@@ -37,7 +37,7 @@ function Test-FirmwareLayout {
         & $add 'RED' 'Profile' 'global' 'Falta un campo obligatorio del esquema de guardianes.'
         return [pscustomobject]@{Status='RED';Allowed=$false;Findings=@($findings.ToArray());Usage=@()}
     }
-    foreach ($requiredName in @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')) {
+    foreach ($requiredName in @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','ClusterState','GPTBuffer','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')) {
         if ($Layout.RequiredMemory -notcontains $requiredName) { & $add 'RED' 'Profile' $requiredName 'Se elimino un recurso obligatorio de la politica.' }
     }
     if ($Layout.RomBytes -ne 65536 -or $Layout.MappedBytes -ne 0x200000 -or
@@ -99,12 +99,15 @@ function Test-FirmwareLayout {
             & $add 'RED' 'Contract' $contract.Name 'La reserva no coincide con las direcciones que usa el firmware raw.' ('[{0:X},{1:X})' -f $contract.Start,$contract.End) 'reserva modificada o ausente'
         }
     }
-    foreach ($criticalName in @('PT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM')) {
+    foreach ($criticalName in @('PT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','ClusterState','GPTBuffer','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM')) {
         if (@($Layout.MemoryContracts | Where-Object Name -eq $criticalName).Count -ne 1) {
             & $add 'RED' 'Contract' $criticalName 'Debe conservarse exactamente un contrato para esta reserva critica.'
         }
     }
     foreach ($criticalAnchor in @(
+        @{Source='64-bit\storage\fat32-clusters.hex';Offset=0xBC0B},
+        @{Source='64-bit\storage\gpt.hex';Offset=0xD81A},
+        @{Source='64-bit\monitor\startup.hex';Offset=0xDE00},
         @{Source='64-bit\storage\volumes.hex';Offset=0xA300},
         @{Source='64-bit\storage\ata.hex';Offset=0x8103},
         @{Source='64-bit\storage\fat32.hex';Offset=0x8D00},

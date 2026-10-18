@@ -46,3 +46,11 @@ Limites: una CPU, sin interrupciones de dispositivos, sin editor de linea ni
 control de flujo. Enviar una orden cada vez evita desbordar el FIFO de entrada.
 La prueba no simula una averia del transmisor; el timeout no implica cobertura
 de todos los fallos posibles del UART.
+
+## Arranque automático
+
+`./iniciar.ps1 -Disco` ejecuta el programa externo antes de ofrecer el monitor.
+`./iniciar.ps1 -Disco -Manual` conserva la carga únicamente con `d`.
+`startup.hex` consulta la bandera de ROM: el constructor selecciona
+`auto-enabled.hex` o `auto-disabled.hex`, nunca ambos. Un rechazo del disco
+retorna al monitor con el motivo; un programa que retorna también.

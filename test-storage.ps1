@@ -73,7 +73,7 @@ try {
             [Array]::Copy([BitConverter]::GetBytes([uint32]65536),0,$entry,12,4)
             Write-Patch $s 462 $entry
         }},
-        @{Name='mbr-gpt';Expected=@('RED [MBR] GPT not supported yet');Mutate={param($s) Write-Patch $s 450 ([byte[]]@(0xEE))}},
+        @{Name='mbr-gpt';Expected=@('RED [GPT] header/CRC invalid');Mutate={param($s) Write-Patch $s 450 ([byte[]]@(0xEE))}},
         @{Name='mbr-short-volume';Expected=@('RED [FAT32] unsupported/invalid BPB');Mutate={param($s) Write-Patch $s 458 ([BitConverter]::GetBytes([uint32]131071))}},
         @{Name='mbr-signature';Expected=@('RED [MBR] invalid table/signature');Mutate={param($s) Write-Patch $s 510 ([byte[]]@(0,0))}}
     )

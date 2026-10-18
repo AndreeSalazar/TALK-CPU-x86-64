@@ -7,7 +7,7 @@ BE 00 36 0F 00
 E8
 71 04 00 00
 E9
-EC 00 00 00
+EC AD 00 00
 
 @3100
 ; Ordenes de una tecla, CR/LF se ignoran.

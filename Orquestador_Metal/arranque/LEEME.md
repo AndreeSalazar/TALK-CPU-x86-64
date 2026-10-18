@@ -40,11 +40,15 @@ El transporte es ATA PIO con esperas acotadas. La selección es una ruta fija
 geometría, cadenas y dos copias de FAT antes del cargador FAGRAW64. Hay pruebas
 de ausencia, fragmentación, daños y recuperación del monitor.
 
-El selector ya reconoce particiones primarias MBR y valida sus límites y cruces.
-La próxima ampliación deberá elegir una de estas entregas: GPT,
-más tamaños de clúster o política de selección entre varios programas. No se
-implementará detección automática al encender hasta que sus fallos permitan
-volver al monitor con un motivo claro. Actualmente la búsqueda se pide con `d`.
+El selector reconoce MBR y GPT. GPT exige cabeceras, CRC y copias coherentes.
+FAT32 admite clústeres de 1..64 sectores en potencias de dos. El arranque
+automático ya carga la ruta fija y devuelve el monitor si falla o retorna.
+`d` permite reintentar. La selección entre varios candidatos sigue siendo
+ambigua y se rechaza: la v1 requiere una única partición candidata.
+
+La entrega QEMU está cerrada con sus límites declarados y capturas en
+[CIERRE-v1](../CIERRE-v1.md). Soportar otros controladores y una placa física
+pertenece a otro objetivo, no a una instalación automática desde el disco.
 
 El transporte externo no cambia el privilegio de los programas actuales. La
 suma de bytes comprueba integridad básica; no aporta autenticación. El salto

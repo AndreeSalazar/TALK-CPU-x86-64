@@ -6,6 +6,7 @@ param(
     [switch]$Stress,
     [switch]$InjectFault,
     [switch]$Monitor,
+    [switch]$AutoBoot,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
@@ -17,6 +18,7 @@ if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
     throw '-Exception requiere -Stage 64 y no se combina con -Stress.'
 }
 if ($Monitor -and ($Stage -ne '64' -or $Stress -or $Exception -ne 'None')) { throw '-Monitor requiere 64 bits sin Stress ni Exception.' }
+if ($AutoBoot -and -not $Monitor) { throw '-AutoBoot requiere -Monitor.' }
 $buildName = "faggin-$Stage"
 if ($Monitor) { $buildName += '-monitor' }
 if ($Stress) { $buildName += '-stress' }
@@ -62,7 +64,8 @@ if ($Stage -eq '64') {
             '64-bit\programs\eco-header.hex', '64-bit\programs\eco.hex',
             '64-bit\screen\video.hex', '64-bit\screen\keyboard.hex',
             '64-bit\screen\registers.hex', '64-bit\screen\messages.hex', '64-bit\screen\font.hex', '64-bit\screen\keymap.hex',
-            '64-bit\storage\ata.hex', '64-bit\storage\fat32.hex', '64-bit\storage\messages.hex', '64-bit\storage\volumes.hex', '64-bit\storage\volume-messages.hex')
+            '64-bit\storage\ata.hex', '64-bit\storage\fat32.hex', '64-bit\storage\messages.hex', '64-bit\storage\volumes.hex', '64-bit\storage\volume-messages.hex', '64-bit\storage\fat32-clusters.hex', '64-bit\storage\gpt.hex', '64-bit\storage\gpt-messages.hex', '64-bit\monitor\startup.hex')
+        $parts += $(if($AutoBoot){'64-bit\monitor\auto-enabled.hex'}else{'64-bit\monitor\auto-disabled.hex'})
     }
 }
 $parts += '16-bit\reset.hex'
@@ -115,7 +118,7 @@ try {
     $totalAuthored = [int]($sourceSizes | Measure-Object AuthoredBytes -Sum).Sum
     [ordered]@{
         Name=$buildName; Stage=$Stage; Stress=[bool]$Stress; InjectFault=[bool]$InjectFault
-        Monitor=[bool]$Monitor; Exception=$Exception; RomBytes=$romBytes; AuthoredBytes=$totalAuthored
+        AutoBoot=[bool]$AutoBoot; Monitor=[bool]$Monitor; Exception=$Exception; RomBytes=$romBytes; AuthoredBytes=$totalAuthored
         GuardianStatus=$guardianReport.Status
         PaddingBytes=($romBytes - $totalAuthored)
         SHA256=(Get-FileHash "build\$buildName.rom" -Algorithm SHA256).Hash

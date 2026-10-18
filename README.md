@@ -19,9 +19,14 @@ Para ejecutar un programa desde FAT32:
 .\iniciar.ps1 -Disco
 ```
 
-Pulsa `d`: nuestro firmware busca `METAL\INICIO.X86` en un disco virtual
-con una partición MBR de 64 MiB y lo carga. Véanse [soporte y límites del lector FAT32](Orquestador_Metal/64-bit/storage/README.md).
+El firmware busca y ejecuta `METAL\INICIO.X86` automáticamente en un disco
+GPT/FAT32 con clústeres de 4 KiB. Si falla o el programa retorna, queda el monitor.
+`d` vuelve a intentar la carga. `-Manual` desactiva el primer intento automático.
+Véanse [soporte y límites del lector](Orquestador_Metal/64-bit/storage/README.md).
 La imagen se genera dentro de `build/`; no se modifica el disco personal.
+
+La **versión 1.0 para QEMU está cerrada**: [resultados, capturas y razones del diseño](Orquestador_Metal/CIERRE-v1.md).
+`./preparar.ps1` genera el paquete ejecutable en `build/Orquestador_Metal/`.
 
 Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.
 El desarrollo actual está organizado en `Orquestador_Metal/`:

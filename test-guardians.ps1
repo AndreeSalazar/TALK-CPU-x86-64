@@ -33,7 +33,11 @@ $tests = @(
     @{Name='Limite ATA eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\ata.hex')}},
     @{Name='Contrato de cluster eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\fat32.hex')}},
     @{Name='Volumen cruza estado de disco';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'VolumeState').Start=0x9050}},
-    @{Name='Limite de particion eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\volumes.hex')}}
+    @{Name='Limite de particion eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\volumes.hex')}},
+    @{Name='Tabla GPT recortada';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'GPTBuffer').End=0x10000}},
+    @{Name='Contrato CRC eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\gpt.hex')}},
+    @{Name='Limite de sector eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\fat32-clusters.hex')}},
+    @{Name='Politica de arranque eliminada';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\monitor\startup.hex')}}
 )
 $results = @()
 foreach ($test in $tests) {

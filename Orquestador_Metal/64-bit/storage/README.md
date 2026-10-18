@@ -1,150 +1,86 @@
-# Lector FAT32 propio desde RESET
+# Almacenamiento propio desde RESET
 
-Desde la raíz:
+`./iniciar.ps1 -Disco` prepara GPT/FAT32, arranca la ROM propia y ejecuta
+`METAL/INICIO.X86`. El programa imprime `Hola desde mi disco FAT32!` y retorna
+al monitor. `-Manual` permite cargarlo solo al pulsar `d`. Un rechazo explica
+el motivo y conserva el monitor.
 
-```powershell
-.\iniciar.ps1 -Disco
-```
+Las instrucciones del firmware proceden de los `.hex`. La lectura ATA no usa
+servicios BIOS ni UEFI. Los scripts del anfitrión solo construyen archivos.
 
-Pulsa `d`. El firmware identifica el disco IDE emulado, lee el volumen FAT32,
-busca `METAL\INICIO.X86`, reúne el paquete completo, comprueba su longitud y
-lo entrega al cargador FAGRAW64. El ejemplo externo imprime:
+## Contrato de la versión 1
 
-```text
-GREEN [FAT32] METAL/INICIO.X86
-Hola desde mi disco FAT32!
-```
-
-`o` y `e` siguen usando los ejemplos de la ROM. El firmware no emplea INT 13h,
-UEFI ni funciones de archivos del anfitrión para leer el disco. Todas las
-instrucciones de lectura y búsqueda están escritas en `.hex`.
-
-## Alcance de esta versión
-
-| Componente | Soporte comprobado |
+| Componente | Alcance comprobado |
 |---|---|
-| Máquina | QEMU pc, controlador IDE PIIX, primario maestro |
-| Transporte | ATA PIO, LBA28, lectura de sectores de 512 bytes |
-| Volumen | FAT32 en LBA0 o dentro de una partición primaria MBR |
-| MBR | Cuatro entradas; seleccionar una única FAT32 de tipo 0B/0C |
-| Clúster | Un sector de 512 bytes |
-| FAT | Dos copias espejadas; flags y versión del BPB en cero |
-| Directorios | Nombres cortos 8.3, ruta fija `METAL\INICIO.X86` |
-| Fragmentación | Directorios y archivo pueden tener cadenas no contiguas |
-| Recursos | Hasta 64 clústeres por búsqueda de directorio; archivo de 25..4096 bytes |
+| Máquina | QEMU pc, IDE PIIX, primario maestro |
+| Transporte | ATA PIO, LBA28, sectores de 512 bytes |
+| Volumen | FAT32 directo, partición primaria MBR o GPT |
+| MBR | Una candidata 0B/0C; límites y cruces de las cuatro entradas |
+| GPT | Dos cabeceras de 92 bytes; tablas de 128 entradas de 128 bytes |
+| Selección GPT | Una candidata Basic Data o ESP con atributos cero |
+| Clúster FAT32 | 1, 2, 4, 8, 16, 32 o 64 sectores |
+| FAT | Dos copias espejadas; versión y flags BPB cero |
+| Ruta | Nombres cortos 8.3: METAL/INICIO.X86 |
+| Fragmentación | Directorios y archivo pueden usar cadenas no contiguas |
+| Presupuesto | 64 clústeres por búsqueda; paquete de 25..4096 bytes |
 
-Es un lector acotado de FAT32 estándar, no otro formato llamado FAT32. No
-admite todavía GPT, particiones lógicas/extendidas, FAT12/FAT16, clústeres mayores, nombres largos, escritura,
-AHCI, NVMe o USB. Un volumen no compatible se rechaza con una explicación.
-El firmware no se instala en una placa física mediante esta imagen de disco.
+GPT exige MBR protector, cabeceras y tablas consistentes, CRC32, GUID válidos,
+particiones sin cruces ni UUID duplicados. La tabla principal empieza en LBA2;
+el respaldo, 33 sectores antes del final. Se validan los rangos utilizables y
+los campos de 64 bits deben caber en el alcance ATA. Una copia dañada se rechaza;
+no hay reparación automática.
 
-FAT32 se eligió por compatibilidad y por permitir un lector inicial pequeño.
-No es el sistema de archivos más eficiente para todas las cargas. El rendimiento
-de esta implementación no se ha comparado con otros lectores o sistemas.
+No incluye escritura, menú de particiones, MBR extendido, FAT12/16, nombres
+largos, AHCI, NVMe ni USB. FAT32 se eligió por compatibilidad y sencillez; no
+se afirma que sea el formato más rápido o pequeño para cualquier uso.
 
-## Archivos
+## Organización y guardianes
 
-`ata.hex` contiene IDENTIFY, lectura y espera de DRQ. `volumes.hex` selecciona
-el volumen y convierte LBA relativos en absolutos sin cruzar sus límites.
-`volume-messages.hex` explica rechazos de particiones. `fat32.hex` valida el BPB,
-recorre directorios y FAT y carga el archivo. `messages.hex` conserva nombres
-8.3 y motivos de rechazo. `inicio.hex` es el paquete externo de demostración;
-se convierte a binario sin incluirlo en la ROM.
+`ata.hex` identifica y lee con esperas acotadas. `volumes.hex` selecciona el
+volumen y convierte LBA relativos comprobando límites. `gpt.hex` valida GPT e
+implementa CRC32 IEEE; `gpt-messages.hex` explica rechazos.
+`fat32-clusters.hex` monta FAT32, busca nombres y reúne el archivo por sectores.
+`fat32.hex` conserva la entrada estable, comprobaciones de cadenas y errores.
+`inicio.hex` es el programa externo y no se incorpora a la ROM.
 
-`crear-disco.ps1` crea **solo un archivo** `build/disco-fat32.img` de 64 MiB.
-Con `-MBR` crea `build/disco-fat32-mbr.img`: volumen de 64 MiB desde LBA2048,
-con 65 MiB de tamaño total. `iniciar.ps1 -Disco` utiliza ahora esa imagen MBR.
-Usa 32 sectores reservados, dos FAT de 1024 sectores, datos desde LBA2080,
-raíz en el clúster 2 y 128992 clústeres de datos. Incluye FSInfo y copias del
-sector de arranque. La clasificación FAT32 se calcula por cantidad de clústeres;
-el texto de etiqueta por sí solo no define el formato.
+En RAM: estado ATA/volumen/clúster 9040..907F; sector temporal A000..A1FF;
+paquete B000..BFFF; buffers GPT C000..10FFF. Son direcciones de RAM distintas
+de los offsets de las fuentes ROM. Los guardianes reservan esos rangos.
 
-El script genera su demostración por defecto. Para construir otra imagen:
+Cada lectura valida capacidad, partición, clúster y sector interno. Se comparan
+los enlaces de ambas FAT. La cadena de archivo debe terminar exactamente donde
+lo exige su longitud. El presupuesto de directorios evita esperas infinitas;
+`chain loop/length limit` no identifica toda causa posible. Las esperas ATA
+se acotan por consultas, no por segundos.
 
-```powershell
-.\crear-disco.ps1 -Programa build/hola.x86
-```
+El cargador valida FAGRAW64: página RW/NX durante copia, RX durante ejecución
+y RW/NX al retornar. CRC32 y la suma del paquete detectan errores concretos;
+no autentican programas. El programa sigue privilegiado y debe retornar según
+su contrato: los guardianes no impiden que cualquier programa válido se cuelgue.
 
-`crear-disco.ps1 -MBR -Programa build/hola.x86` prepara la variante particionada.
-`iniciar.ps1 -Disco` vuelve a generar la demostración MBR en cada ejecución. Para
-abrir una imagen personalizada sin regenerarla, desde la raíz:
+## Imágenes y pruebas
 
-```powershell
-.\Orquestador_Metal\build-firmware.ps1 -Monitor
-.\monitor-session.ps1 -Qemu 'C:\Program Files\qemu\qemu-system-x86_64.exe' -DiskImage build/disco-fat32.img
-```
+`./crear-disco.ps1` crea FAT32 directo. `-MBR` o `-GPT` seleccionan particionado;
+`-SectoresPorCluster 8` selecciona clústeres de 4096 bytes. `-Programa` acepta
+un paquete propio y `-Fragmentado` prepara cadenas no contiguas. Solo crea
+archivos en `build/`. `iniciar.ps1 -Disco` regenera la demostración GPT/SPC8.
 
-El controlador del firmware solo emite órdenes de lectura/identificación.
-Además, QEMU usa `snapshot=on`: cualquier escritura del dispositivo se dirigiría
-a una capa temporal, no a la imagen base. IDE no admite la conexión de esta
-imagen con `readonly=on` en esta configuración de QEMU. No se accede a discos
-físicos del anfitrión; las pruebas verifican SHA-256 antes y después.
+`herramientas-imagen.ps1` calcula CRC y permite archivos dispersos en Windows.
+Su utilidad C# se ejecuta en el anfitrión, no forma parte del firmware.
+QEMU usa `snapshot=on`; las pruebas comparan las huellas de las imágenes antes
+y después. Las copias alteradas se eliminan al pasar y se conservan si fallan.
 
-## Guardianes y motivos
+`test-storage.ps1` comprueba 26 recorridos FAT32/MBR y rechazo.
+`test-gpt.ps1` añade 24 casos: CRC, respaldo, rangos, cruces, selección ambigua,
+UUID duplicado, ESP, última entrada y todos los tamaños de clúster admitidos,
+incluyendo archivos de 4096 bytes y directorios fragmentados.
+`test-arranque.ps1` comprueba arranque correcto, cabecera dañada y disco ausente;
+captura pantalla y eco. La batería general incluye los tres scripts.
+Las salidas de timeout y error físico ATA existen, pero no se ha simulado una
+avería física del dispositivo. Véase el [cierre con fotos](../../CIERRE-v1.md).
 
-IDENTIFY determina la capacidad antes de leer. Cada LBA debe ser menor que esa
-capacidad y cada espera de estado está acotada a 1000000 consultas, no segundos.
-Se distinguen ausencia, timeout, error del dispositivo y LBA/capacidad inválidos.
+## Referencias de formato
 
-El BPB se comprueba antes de usar sus campos: firma, sector, clúster, FAT,
-versión, longitudes y operaciones aritméticas sin desbordamientos. El tamaño
-del volumen no puede superar el del dispositivo; la FAT debe tener capacidad
-para todos sus clústeres. Cada enlace se limita al rango de datos y se compara
-en ambas copias de la FAT.
-
-El selector distingue un sector con estructura FAT32 de un MBR. El primer
-caso pasa a la validación estricta del BPB; el segundo recorre cuatro entradas.
-Exige firma 55AA, indicadores de arranque 00/80 y que toda partición no vacía
-tenga inicio y longitud positivos. Comprueba sumas sin desbordamiento, capacidad
-del dispositivo y ausencia de cruces. Rechaza una selección FAT32 múltiple;
-no tiene todavía menú para elegir entre ellas. Una entrada protectora EE produce
-un rechazo explícito de GPT, sin interpretarla como FAT32.
-
-El estado del volumen usa 9060..906F: inicio absoluto y longitud. El BPB no
-puede anunciar más sectores que la partición. Cada lectura debe ser menor que
-su longitud; solo entonces se suma el inicio y se verifica también la capacidad
-ATA. El campo de sectores ocultos del BPB no se utiliza como dirección confiable.
-
-Una búsqueda no puede recorrer más de 64 clústeres. Ese presupuesto evita un
-bucle infinito, pero no identifica la causa exacta de toda cadena larga: el
-mensaje indica `chain loop/length limit`. Una cadena de archivo debe terminar
-exactamente donde lo exige su longitud. Se rechazan cadenas truncadas o sobrantes.
-
-El sector temporal está en A000..A1FF; el paquete completo en B000..BFFF y el
-estado en 9040..905F. Sus reservas no cruzan el asignador ni la página ejecutable.
-El cargador exige que longitud de cabecera +24 coincida con el archivo y luego
-valida firma, entrada, flags y suma. La página de ejecución conserva la política
-RW/NX durante copia y RX durante ejecución. Los programas siguen privilegiados;
-la suma de bytes no autentica contenido ni detecta todas las alteraciones.
-
-## Pruebas
-
-`./test-storage.ps1` ejecuta 26 casos con el lector real dentro de QEMU.
-Los 14 originales cubren:
-carga normal; directorios y archivo fragmentados; ausencia de disco; BPB
-inválido; clúster no compatible; archivo ausente; clúster reservado; ciclo de
-directorio; FAT divergentes; cadena truncada; cadena sobrante; tamaño excesivo;
-longitud del paquete distinta del archivo; y contenido alterado.
-
-Los otros 12 cubren MBR válido, FAT32 en la cuarta entrada, archivo y directorios
-fragmentados dentro de la partición, tabla sin FAT32, inicio cero, indicador
-inválido, suma de límites desbordada, cruce, selección ambigua, GPT protector,
-partición más pequeña que su BPB y firma MBR dañada.
-
-Cada rechazo comprueba que el monitor aún consulta estado y se detiene. Las
-cargas válidas deben ejecutar desde RAM; las rechazadas no deben hacerlo. Los
-casos de timeout y error físico ATA tienen salida definida, pero todavía no
-se ha simulado una avería del dispositivo para ejercitarlos.
-Las copias dañadas se eliminan cuando pasan su prueba; si una prueba falla,
-su imagen queda disponible para revisión. Se conservan cuatro imágenes base:
-directa y MBR, cada una en versión normal y fragmentada.
-
-La batería general incluye estas pruebas. `./iniciar.ps1 -Disco -Comprobar`
-verifica el recorrido del ejemplo externo sin abrir una ventana.
-
-## Referencias
-
-[Especificación UEFI, formato de sistema de archivos](https://uefi.org/specs/UEFI/2.11/13_Protocols_Media_Access.html#file-system-format)
-y [documentación de dispositivos de QEMU](https://www.qemu.org/docs/master/system/qemu-manpage.html).
-Para MBR se consultó [el formato de particiones de la especificación UEFI](https://uefi.org/specs/UEFI/2.11/05_GUID_Partition_Table_Format.html#legacy-master-boot-record-mbr).
-Son referencias de formato y configuración: el firmware no incorpora servicios UEFI.
+[GPT y MBR](https://uefi.org/specs/UEFI/2.11/05_GUID_Partition_Table_Format.html)
+y [formato FAT](https://uefi.org/specs/UEFI/2.11/13_Protocols_Media_Access.html#file-system-format).
+Usar esos formatos no requiere implementar los servicios UEFI.

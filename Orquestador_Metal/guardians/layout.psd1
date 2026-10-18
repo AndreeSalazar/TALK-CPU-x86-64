@@ -3,8 +3,10 @@
     RomBytes = 0x10000
     MappedBytes = 0x200000
     WarningPercent = 80
-    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
+    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','DiskState','VolumeState','ClusterState','GPTBuffer','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
     MemoryContracts = @(
+        @{Name='GPTBuffer';Start=0xC000;End=0x11000}
+        @{Name='ClusterState';Start=0x9070;End=0x9080}
         @{Name='VolumeState';Start=0x9060;End=0x9070}
         @{Name='DiskState';Start=0x9040;End=0x9060}
         @{Name='SectorBuffer';Start=0xA000;End=0xA200}
@@ -20,6 +22,9 @@
         @{Name='ROM';Start=0xF0000;End=0x100000}
     )
     Contracts = @(
+        @{Source='64-bit\storage\fat32-clusters.hex';Offset=0xBC0B;Bytes='3B 0C 25 70 90 00 00';Why='El sector pedido debe pertenecer al cluster actual.'}
+        @{Source='64-bit\storage\gpt.hex';Offset=0xD81A;Bytes='35 20 83 B8 ED';Why='El CRC32 de GPT usa el polinomio IEEE reflejado.'}
+        @{Source='64-bit\monitor\startup.hex';Offset=0xDE00;Bytes='80 3C 25 00 DF 0F 00 00';Why='El arranque automatico debe respetar la politica explicita del perfil.'}
         @{Source='64-bit\storage\volumes.hex';Offset=0xA300;Bytes='3B 04 25 64 90 00 00';Why='Toda lectura relativa debe quedar dentro del volumen seleccionado.'}
         @{Source='64-bit\storage\ata.hex';Offset=0x8103;Bytes='3B 04 25 40 90 00 00';Why='Ninguna lectura puede superar la capacidad identificada del disco.'}
         @{Source='64-bit\storage\fat32.hex';Offset=0x8D00;Bytes='83 F8 02';Why='Los clusters 0 y 1 estan reservados y no son datos.'}
@@ -35,6 +40,12 @@
     )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\monitor\startup.hex' = @{Start=0xDE00;End=0xDF00;Why='Arranque automatico y retorno explicito al monitor'}
+        '64-bit\monitor\auto-enabled.hex' = @{Start=0xDF00;End=0xDF10;Why='Politica automatica habilitada'}
+        '64-bit\monitor\auto-disabled.hex' = @{Start=0xDF00;End=0xDF10;Why='Politica manual habilitada'}
+        '64-bit\storage\gpt.hex' = @{Start=0xC000;End=0xDA00;Why='GPT principal/respaldo, CRC32 y limites de particiones'}
+        '64-bit\storage\gpt-messages.hex' = @{Start=0xDA00;End=0xDE00;Why='Motivos de rechazo de GPT'}
+        '64-bit\storage\fat32-clusters.hex' = @{Start=0xB000;End=0xC000;Why='Lectura de FAT32 con clusters de varios sectores'}
         '64-bit\storage\volumes.hex' = @{Start=0xA000;End=0xA800;Why='Seleccion MBR y traduccion de LBA dentro de la particion'}
         '64-bit\storage\volume-messages.hex' = @{Start=0xA800;End=0xAC00;Why='Motivos de rechazo de particiones'}
         '64-bit\storage\ata.hex' = @{Start=0x8000;End=0x8400;Why='IDE/ATA PIO de solo lectura y esperas acotadas'}
@@ -100,6 +111,8 @@
         '64-bit\diagnostics\tests\stack.hex' = @{Start=0x1800;End=0x1A00;Why='Cruce real de pila hacia guarda'}
     }
     Memory = @(
+        @{Name='GPTBuffer';Start=0xC000;End=0x11000;Alignment=4096;Why='Dos cabeceras GPT y tabla de 16 KiB'}
+        @{Name='ClusterState';Start=0x9070;End=0x9080;Alignment=16;Why='Geometria y sector de directorio actual'}
         @{Name='VolumeState';Start=0x9060;End=0x9070;Alignment=16;Why='Inicio y longitud del volumen seleccionado'}
         @{Name='DiskState';Start=0x9040;End=0x9060;Alignment=16;Why='Capacidad, geometria FAT32 y longitud del archivo'}
         @{Name='SectorBuffer';Start=0xA000;End=0xA200;Alignment=512;Why='Un sector para IDENTIFY, FAT y directorios'}

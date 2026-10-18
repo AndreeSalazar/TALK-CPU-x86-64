@@ -15,8 +15,13 @@ UEFI completa o arrancar en cualquier placa no forma parte de esta primera versi
    leen `METAL/INICIO.X86` por ATA PIO. Se validan BPB, cadenas, dos copias de
    FAT, longitud y paquete. Se descubre una partición primaria MBR o un volumen
    directo; hay 26 pruebas de carga y rechazo.
-4. **Ampliación y compactación: pendiente.** Soportar GPT y más tamaños de clúster,
-   después reducir instrucciones conservando los `.hex` y los contratos funcionales.
+4. **GPT, geometría y arranque: implementados.** Se verifican dos cabeceras GPT,
+   CRC32 y las tablas principal/respaldo; se admiten clústeres FAT32 de 1..64
+   sectores en potencias de dos. El arranque automático vuelve al monitor si
+   falla o retorna el programa. Hay 24 pruebas GPT/geometría y 3 de arranque.
+5. **Cierre v1 QEMU: completado.** Cuatro capturas reales, informe de motivos,
+   paquete con ROM/disco/lanzador y limpieza de 739 bytes heredados sin uso.
+   Véase [CIERRE-v1](CIERRE-v1.md). La ROM sigue midiendo 64 KiB por su mapa.
 
 Los ejemplos `o` y `e` se exportan y se incluyen en la ROM. `d` lee un paquete
 externo desde el disco IDE virtual FAT32; aún no lee USB ni recibe por consola.
