@@ -12,7 +12,7 @@ comercial. No se pretende implementar UEFI completo ni soportar todas las placas
 | Procesador | Ryzen 5 5600X; Family 25 Model 33 Stepping 2 reportado por Windows |
 | Ejecución propia inicial | x86-64 en el núcleo de arranque; sin objetivo de multiprocesamiento propio en esta entrega |
 | Memoria | DDR4 instalada en esta unidad; conservar la configuración e inicialización de plataforma que requiera |
-| Vídeo | GeForce RTX 3060 observada; salida real aún sin integrar |
+| Vídeo | GeForce RTX 3060 observada; saludo real fotografiado en framebuffer obtenido con GOP; sin driver NVIDIA propio |
 | Almacenamiento de referencia | Kingston NV2 NVMe de 1 TB fotografiado; controlador físico aún sin integrar |
 | Firmware usado para investigar | MSI 2.C, miembro E7C52AMS.2C0, 32 MiB; no es un volcado del chip instalado |
 | Flash física candidata | Winbond 25Q256JW…; falta confirmar sufijo, encapsulado y acceso compatible |
@@ -49,8 +49,9 @@ sale de los servicios de arranque y ejecuta el cuerpo propio con servicios de
 pantalla propios. Conserva el hardware ya inicializado y no depende de completar
 el port MSI desde RESET. No se afirma que elimine runtime, SMM o el PSP.
 
-El prototipo ya funciona en QEMU/OVMF y pasó siete casos. La primera entrega es
-el saludo y el retorno a HLT; teclado/eco y el monitor completo después de salir
+El prototipo funciona en QEMU/OVMF y pasó siete casos. El usuario reportó éxito
+en el primer intento físico y aportó [fotos](EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md).
+La primera entrega es el saludo y el retorno al bucle HLT; teclado/eco y el monitor completo después de salir
 siguen pendientes. [Guía y límites](Puente_Metal/LEEME.md).
 
 ## Qué significa terminar la adaptación desde RESET
@@ -75,13 +76,14 @@ ni promesas de arranque en cualquier SSD o USB.
 
 | Parte | Estado | Evidencia |
 |---|---|---|
-| Puente .efi hacia código propio | Implementado; siete casos QEMU/OVMF; prueba física pendiente | [Puente](Puente_Metal/LEEME.md) |
+| Puente .efi hacia código propio | Siete casos QEMU/OVMF; primer éxito físico reportado y fotografiado | [Fotos reales](EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md) |
 | Firmware propio QEMU | Terminado para su plataforma | [Cierre v1](Orquestador_Metal/CIERRE-v1.md) |
 | Fotografías e identificación de este PC | Recibidas; chip candidato localizado | [Observaciones](EVIDENCIAS/PC_REAL/OBSERVACIONES-FOTOS.md) |
 | Inventario MSI y trazado AMD/PEI | Implementados; 5 + 11 comprobaciones aprobadas | [Trazado](EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md) |
 | Ruta exacta activa del 5600X y entrega a código propio | Pendientes de demostrar | [Análisis](EVIDENCIAS/PC_REAL/analisis-msi/LEEME.md) |
 | Imagen física modificada, respaldo y restauración | Pendientes | [Identificación y recuperación](EVIDENCIAS/PC_REAL/IDENTIFICACION-Y-RECUPERACION.md) |
-| Arranque propio en esta placa, pantalla y FAT32 físicos | Pendientes | No se presentan capturas QEMU como prueba física |
+| Entrada EFI desde FAT32 físico y saludo propio en pantalla | Primer éxito reportado; no acredita transporte propio tras salir de BootServices | [Fotos reales](EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md) |
+| Arranque desde RESET con imagen adaptada a la placa | Pendiente | Investigación separada del puente |
 
 ## Trabajo que falta, acotado a este equipo
 

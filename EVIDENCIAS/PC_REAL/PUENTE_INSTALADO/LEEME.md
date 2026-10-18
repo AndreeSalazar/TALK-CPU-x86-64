@@ -16,7 +16,9 @@ La entrada y sus rutas se verificaron nuevamente por lectura tras la instalació
 
 Los registros [de archivos](instalacion.json), [de entrada](entrada.json) y del
 firmware [antes](firmware-antes.txt) / [después](firmware-despues.txt) documentan
-la instalación. **No se reinició ni se ha demostrado ejecución física todavía.**
+la instalación. El agente no reinició el equipo durante esa operación. Después,
+el usuario realizó el arranque manual y aportó [fotos del éxito físico](../PRIMER_ARRANQUE/LEEME.md)
+el mismo día; reporta que funcionó en el primer intento.
 
 ## Primera prueba manual
 

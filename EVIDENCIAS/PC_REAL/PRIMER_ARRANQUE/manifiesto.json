@@ -1,0 +1,26 @@
+{
+  "FechaRecepcion": "2026-10-18",
+  "Origen": "Fotografias aportadas por el usuario; originales sin editar",
+  "PrimerIntento": "Exito reportado por el usuario",
+  "Prueba": "Arranque fisico mediante puente EFI; no firmware propio desde RESET",
+  "Archivos": [
+    {
+      "Archivo": "01-menu-arranque.png",
+      "OrigenAdjunto": "codex-clipboard-61a16c33-08e1-4ba0-b5fe-afb2623eba4f.png",
+      "SHA256": "B4A843ED8C24E46A438ADFDBEE2761C60A8FFF76AED5F6CDE9D5E19415A52E80",
+      "Bytes": 1342200
+    },
+    {
+      "Archivo": "02-saludo-metal64.png",
+      "OrigenAdjunto": "codex-clipboard-f0738055-1e29-40f2-9719-f490a847a133.png",
+      "SHA256": "7BF72CD82A5B120447A5BCBC08EC11610A81EDF6CE2ABBED8FD28F782180CA4C",
+      "Bytes": 1226664
+    },
+    {
+      "Archivo": "03-vista-general.png",
+      "OrigenAdjunto": "codex-clipboard-d42b715b-376d-42b8-858e-86da5c05096d.png",
+      "SHA256": "062938F13BE96344FCA4FDFDDA6EEB453798FF6E70ABBD750C8114520C399B6C",
+      "Bytes": 792518
+    }
+  ]
+}

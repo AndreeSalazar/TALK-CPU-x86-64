@@ -24,9 +24,80 @@ tras salir de UEFI; tampoco reemplaza el firmware de la placa.
 
 Las siete comprobaciones QEMU/OVMF pasaron. El [puente y su contrato](Puente_Metal/LEEME.md),
 las [capturas](EVIDENCIAS/PUENTE_UEFI/LEEME.md) y los archivos en build/Puente_Metal
-permiten revisar el resultado. La prueba física y la instalación en un medio
-concreto siguen pendientes. La investigación MSI desde RESET se conserva como
+permiten revisar el resultado. Ya se instaló en A: BMO y el usuario aportó fotos
+del primer arranque real exitoso el 18 de octubre de 2026. La investigación MSI desde RESET se conserva como
 una vía separada; no es requisito para probar este saludo.
+
+## Primer arranque real: del .hex al Ryzen
+
+El 18 de octubre de 2026 el usuario reportó éxito en el primer intento físico del
+puente en su MSI A320M-A PRO MAX con Ryzen 5 5600X. La fotografía del menú muestra
+**Orquestador del Metal (prueba)** en el SSD Kingston SATA y la del resultado
+permite leer las tres líneas esperadas:
+
+![Saludo en el equipo real, fotografiado por el usuario](EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/02-saludo-metal64.png)
+
+```text
+METAL64: BootServices cerrados.
+Hola mundo desde mi .hex!
+Programa propio retorno. CPU detenida.
+```
+
+El recorrido implementado es:
+
+```text
+Firmware MSI → entrada EFI en FAT32 → validar INICIO.X86
+             → ExitBootServices → instrucciones x86-64 propias
+             → texto en framebuffer → retorno → HLT
+```
+
+Esto importa porque el ejemplo salió del emulador y alcanzó la pantalla del
+equipo objetivo. En el código probado, la primera línea solo se dibuja después
+de que ExitBootServices devuelve éxito; la segunda procede del programa externo
+y la tercera se dibuja después de su retorno. Las fotos son evidencia visual
+coherente con ese recorrido, no una traza de registros del Ryzen. «CPU detenida»
+es el mensaje previo al bucle HLT previsto; no es un informe de avería.
+
+### Por qué funcionó y qué impacto tiene
+
+- **Un contrato pequeño y comprobado.** El firmware carga un PE32+ x64 válido;
+  el puente lee y valida el paquete propio y le entrega una pila, un contexto y
+  servicios de texto definidos. El .x86 conserva su formato y no necesita ser .efi.
+- **Aprovechar la inicialización existente.** MSI/AMD y el firmware de vídeo ya
+  prepararon CPU, RAM y GPU. GOP entrega los datos del framebuffer antes de la
+  salida; después nuestras instrucciones escriben los píxeles directamente.
+  Este saludo no necesita implementar la inicialización DDR4 ni un driver NVIDIA.
+- **Guardianes en los puntos de entrega.** Se comprueban formato GOP, dimensiones,
+  memoria, firma, longitud, entrada y suma del paquete; la salida tiene reintentos
+  acotados. QEMU/OVMF aprobó siete casos antes de la prueba física. Las fotos
+  muestran el camino exitoso; no prueban los rechazos ni todas las posibles averías
+  en esta placa.
+- **Una base real para avanzar.** Ya hay una ruta de carga y salida a código
+  privilegiado en este PC, sin modificar su chip BIOS. Se pueden desarrollar
+  teclado/eco, excepciones y memoria propias sobre una entrega de control conocida.
+
+### Sin Rust: qué demuestra
+
+Las instrucciones del puente y del ejemplo están escritas a mano como bytes
+`.hex`; los scripts de construcción las colocan y comprueban. No se usó Rust,
+un ensamblador ni un linker para emitir esas instrucciones. La CPU ejecuta su
+codificación x86-64: no exige un lenguaje concreto para producirla.
+
+El primer intento exitoso que reporta el usuario demuestra que esta combinación
+concreta funciona; no establece que prescindir de Rust produzca mayor seguridad,
+velocidad o menos errores. Los guardianes aportan comprobaciones explícitas,
+pero no equivalen a un sistema de tipos, un borrow checker ni aislamiento de
+memoria. Una instrucción o dirección incorrecta todavía puede corromper memoria
+o detener el equipo. No se ha medido rendimiento frente a Rust, C o FASM.
+
+El hito alcanzado es **código propio ejecutándose después de BootServices en el
+PC real**. El firmware desde RESET sigue siendo el de MSI; se conservan el estado
+de plataforma y los componentes runtime/SMM/AMD. Todavía no hay teclado/eco real,
+GDT/IDT ni paginación propias en este puente, ni soporte demostrado en otras PCs.
+
+Las [tres fotos originales y su informe](EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md)
+quedan separadas de las capturas QEMU, con huellas SHA-256 y referencia al paquete
+instalado. Es un primer arranque reportado, no una campaña de estabilidad repetida.
 
 ## Estado real
 
@@ -34,7 +105,7 @@ una vía separada; no es requisito para probar este saludo.
 |---|---|
 | Firmware desde RESET en QEMU | v1 terminada y probada: consola, pantalla, teclado, memoria, saludo/eco y carga FAT32 |
 | Análisis del firmware oficial MSI 2.C | Inventario y trazado AMD/PEI implementados; 16 comprobaciones aprobadas |
-| Entrada .efi → código propio | Prototipo implementado y siete casos QEMU/OVMF aprobados; prueba física pendiente |
+| Entrada .efi → código propio | Siete casos QEMU/OVMF aprobados; primer arranque físico exitoso reportado y fotografiado |
 | Firmware MSI propio desde RESET | Investigación separada: aún no hay imagen modificada para grabar |
 
 La ROM de QEMU sustituye el firmware de la VM; no carga SeaBIOS, OVMF ni una

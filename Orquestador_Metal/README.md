@@ -4,8 +4,9 @@
 
 El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
 y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../Puente_Metal/LEEME.md)
-está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
-pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+está implementado y probado en QEMU/OVMF (siete casos); el usuario reportó éxito
+en el primer intento físico y aportó [fotografías](../EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md).
+No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
 desde RESET descrita más abajo se conserva como vía separada y su requisito de
 no usar .efi ya no rige para esta primera prueba.
 

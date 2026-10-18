@@ -56,8 +56,10 @@ No se eliminan los servicios runtime, SMM ni los componentes AMD de la plataform
 
 **Instalado en A: BMO el 18 de octubre de 2026**, con la entrada separada
 **Orquestador del Metal (prueba)** al final del orden previo. Las huellas de ambos
-archivos se verificaron. Aún falta el arranque físico y su foto: consulta el
-[registro de instalación y pasos](../EVIDENCIAS/PC_REAL/PUENTE_INSTALADO/LEEME.md).
+archivos se verificaron. El usuario reportó éxito en el primer intento físico y
+aportó [tres fotografías](../EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md) del menú
+y las tres líneas esperadas. El [registro de instalación y pasos](../EVIDENCIAS/PC_REAL/PUENTE_INSTALADO/LEEME.md)
+conserva las rutas y la entrada utilizada. No se ha hecho una campaña de estabilidad.
 
 `./construir-puente.ps1` genera:
 

@@ -19,7 +19,12 @@ Para actualizar después de otra batería completa: `./recopilar-evidencias.ps1`
 El recopilador copia los últimos informes y fotos locales; no vuelve a ejecutar
 las pruebas ni certifica que esos archivos no hayan sido editados después.
 
-## PC real — identificación iniciada, arranque propio pendiente
+## PC real — primer saludo mediante puente fotografiado
+
+El usuario reportó éxito en el primer intento físico del puente y aportó
+[tres fotos originales](PC_REAL/PRIMER_ARRANQUE/LEEME.md): entrada en el menú,
+saludo legible y vista general. El código propio se ejecuta después de
+BootServices, con firmware y hardware previamente inicializados por la placa.
 
 [hardware.json](PC_REAL/hardware.json) procede de consultas de solo lectura de
 Windows. Confirma la placa, CPU, BIOS, vídeo y controladores enumerados. No
@@ -45,4 +50,6 @@ El destino físico único y el criterio para terminar están en [PERFIL-FISICO](
 
 El usuario aceptó la entrada .efi mínima. Ya hay [capturas e informe de siete casos](PUENTE_UEFI/LEEME.md)
 QEMU/OVMF: salida de servicios de arranque, saludo propio en framebuffer y rechazos.
-La ejecución física aún no se ha observado; estas capturas siguen siendo virtuales.
+Las capturas de esa carpeta siguen siendo virtuales. La prueba física aportada
+por el usuario está en [PC_REAL/PRIMER_ARRANQUE](PC_REAL/PRIMER_ARRANQUE/LEEME.md),
+con alcance y huellas separados.
