@@ -5,7 +5,8 @@ El objetivo es un firmware propio que arranca desde RESET, ejecuta sus bytes en
 UEFI completa o arrancar en cualquier placa no forma parte de esta primera version.
 
 1. **Consola: implementada.** Controlador serie propio, consulta de estado,
-   reservas de memoria protegidas y parada. Iniciar con `./run-firmware.ps1 -Monitor`.
+   reservas de memoria protegidas y parada. Pantalla VGA y teclado PS/2 propios,
+   con titulo Orquestador_Metal. Iniciar con `./run-firmware.ps1 -Monitor`.
 2. **Carga desde ROM: implementada.** Formato propio FAGRAW64, pagina dedicada,
    comprobacion de tamano, punto de entrada, flags y checksum antes de ejecutar.
    `o` ejecuta hola mundo; `e` permite escribir con eco y Escape retorna al monitor.

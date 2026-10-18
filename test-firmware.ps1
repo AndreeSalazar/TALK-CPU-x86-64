@@ -63,15 +63,21 @@ try {
     $passedCount = @($results | Where-Object Passed).Count
     & "$PSScriptRoot\test-programs.ps1" -Qemu $Qemu
     $programTests=Get-Content 'build\program-test-results.json' -Raw | ConvertFrom-Json
+    & "$PSScriptRoot\test-screen.ps1" -Qemu $Qemu
+    $screenTests=Get-Content 'build\screen-test-results.json' -Raw | ConvertFrom-Json
+    & "$PSScriptRoot\test-screen.ps1" -Qemu $Qemu -InjectCursorFault
+    $cursorTests=Get-Content 'build\screen-cursor-test-results.json' -Raw | ConvertFrom-Json
     [ordered]@{
         Platform='QEMU pc / qemu64 / TCG / 16 MiB / 1 CPU'
         Passed=$passedCount; Total=$results.Count; Cases=$results
         GuardianTests=@{Passed=$guardianTests.Passed;Total=$guardianTests.Total}
         ProgramTests=@{Passed=$programTests.Passed;Total=$programTests.Total}
+        ScreenTests=@{Passed=($screenTests.Passed+$cursorTests.Passed);Total=($screenTests.Total+$cursorTests.Total)}
     } | ConvertTo-Json -Depth 4 | Set-Content -LiteralPath 'build\test-results.json' -Encoding utf8
     Write-Host "`nResultado: $passedCount de $($results.Count) pruebas aprobadas."
     Write-Host "Guardianes de construccion: $($guardianTests.Passed) de $($guardianTests.Total) reglas comprobadas."
     Write-Host "Paquetes invalidos: $($programTests.Passed) de $($programTests.Total) rechazos comprobados."
+    Write-Host 'Pantalla y teclado: recorrido normal y recuperacion de cursor comprobados.'
     Write-Host 'Informe: build\test-results.json'
     if ($passedCount -ne $results.Count) { throw 'La bateria de pruebas no esta completa: revisar el informe.' }
 }

@@ -59,7 +59,9 @@ if ($Stage -eq '64') {
     if ($Monitor) {
         $parts += @('64-bit\monitor\console.hex', '64-bit\programs\loader.hex',
             '64-bit\programs\hola-header.hex', '64-bit\programs\hola.hex',
-            '64-bit\programs\eco-header.hex', '64-bit\programs\eco.hex')
+            '64-bit\programs\eco-header.hex', '64-bit\programs\eco.hex',
+            '64-bit\screen\video.hex', '64-bit\screen\keyboard.hex',
+            '64-bit\screen\registers.hex', '64-bit\screen\messages.hex', '64-bit\screen\font.hex', '64-bit\screen\keymap.hex')
     }
 }
 $parts += '16-bit\reset.hex'

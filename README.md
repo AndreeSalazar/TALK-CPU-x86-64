@@ -1,4 +1,4 @@
-# TALK / Faggin scaling
+# Orquestador_Metal / Faggin scaling
 
 Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.
 El desarrollo actual esta organizado en Faggin scaling/:
@@ -7,7 +7,7 @@ El desarrollo actual esta organizado en Faggin scaling/:
 Faggin scaling/
   16-bit/              reset, entrada real, A20, GDT y transicion a 32
   32-bit/              entrada protegida, paginacion y transicion a 64
-  64-bit/              entrada larga, comprobacion con R8 y mensaje final
+  64-bit/              diagnosticos, memoria, monitor, programas y pantalla
   build-firmware.ps1   selecciona las etapas y une sus bytes
 ```
 
@@ -34,7 +34,7 @@ GREEN [Memory] bounded allocator OK
 ```
 
 Ctrl+C para salir. El perfil normal transmite por el puerto de depuracion de
-QEMU. Para usar la consola propia con entrada por puerto serie:
+QEMU. Para abrir la pantalla propia de Orquestador_Metal:
 
 ```powershell
 .\run-firmware.ps1 -Monitor
@@ -43,9 +43,14 @@ QEMU. Para usar la consola propia con entrada por puerto serie:
 Teclas: `h` ayuda, `s` estado, `a` reservar 256 bytes, `o` hola mundo,
 `e` eco, `q` detener; no hace falta Enter para elegir una orden.
 En el eco puedes escribir, usar Enter y borrar; Escape regresa al monitor.
+La ventana usa VGA y teclado PS/2 inicializados por nuestros bytes. La terminal
+sigue operativa por UART. Para ejecutar solamente en terminal:
+`./run-firmware.ps1 -Monitor -Headless`. Las pruebas siempre ocultan la ventana.
 Los binarios propios se exportan como `build/hola.x86` y `build/eco.x86`.
 Sus fuentes estan en [programs](Faggin%20scaling/64-bit/programs/README.md).
 Los originales `src/hola.hex` y `src/eco.hex` se conservan como ejemplos UEFI.
+La implementacion de pantalla y sus limites estan en
+[screen](Faggin%20scaling/64-bit/screen/README.md).
 Consulta [el contrato de la consola](Faggin%20scaling/64-bit/monitor/README.md)
 y [las entregas pendientes](Faggin%20scaling/ENTREGAS.md).
 

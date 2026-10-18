@@ -3,8 +3,9 @@
     RomBytes = 0x10000
     MappedBytes = 0x200000
     WarningPercent = 80
-    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
+    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
     MemoryContracts = @(
+        @{Name='ConsoleState';Start=0x9020;End=0x9030}
         @{Name='ProgramPage';Start=0x80000;End=0x81000}
         @{Name='PT';Start=0x4000;End=0x5000}
         @{Name='TSS';Start=0x7000;End=0x7068}
@@ -15,6 +16,7 @@
         @{Name='ROM';Start=0xF0000;End=0x100000}
     )
     Contracts = @(
+        @{Source='64-bit\screen\video.hex';Offset=0x620F;Bytes='81 FF D0 07 00 00';Why='El cursor debe comprobarse contra las 2000 celdas antes de escribir VGA.'}
         @{Source='64-bit\programs\loader.hex';Offset=0x3CB7;Bytes='C7 04 25 00 44 00 00 01 00 08 00';Why='Quitar escritura antes de permitir ejecutar la pagina del programa.'}
         @{Source='64-bit\programs\loader.hex';Offset=0x3CE6;Bytes='C7 04 25 04 44 00 00 00 00 00 80';Why='Restaurar NX antes de devolver escritura al regresar del programa.'}
         @{Source='16-bit\reset.hex';Offset=0xFFF0;Bytes='EA 00 00 00 F0';Why='La CPU debe saltar a nuestra entrada de reset.'}
@@ -26,6 +28,12 @@
     )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\screen\video.hex' = @{Start=0x6000;End=0x6600;Why='Inicializacion de VGA y salida con limites'}
+        '64-bit\screen\keyboard.hex' = @{Start=0x6600;End=0x6E00;Why='Entrada UART/PS2, inicializacion acotada y decodificacion'}
+        '64-bit\screen\registers.hex' = @{Start=0x6E00;End=0x6F00;Why='Datos de registros VGA separados del codigo'}
+        '64-bit\screen\messages.hex' = @{Start=0x6F00;End=0x7000;Why='Titulo y motivos de los guardianes de pantalla'}
+        '64-bit\screen\font.hex' = @{Start=0x7000;End=0x7800;Fixed=$true;Why='128 letras de 16 filas'}
+        '64-bit\screen\keymap.hex' = @{Start=0x7800;End=0x7900;Fixed=$true;Why='Traducciones de teclado set1 US'}
         '64-bit\programs\loader.hex' = @{Start=0x3C00;End=0x4000;Why='Validacion, copia y permisos del binario crudo'}
         '64-bit\programs\hola-header.hex' = @{Start=0x4000;End=0x4018;Fixed=$true;Why='Cabecera del hola mundo'}
         '64-bit\programs\hola.hex' = @{Start=0x4018;End=0x5000;Why='Binario propio hola mundo'}
@@ -80,6 +88,7 @@
         '64-bit\diagnostics\tests\stack.hex' = @{Start=0x1800;End=0x1A00;Why='Cruce real de pila hacia guarda'}
     }
     Memory = @(
+        @{Name='ConsoleState';Start=0x9020;End=0x9030;Alignment=16;Why='Cursor VGA y estado del teclado sin cruzar el asignador'}
         @{Name='ProgramPage';Start=0x80000;End=0x81000;Alignment=0x1000;Why='Pagina dedicada: RW/NX durante copia, RX durante ejecucion'}
         @{Name='NullGuard';Start=0;End=0x1000;Alignment=0x1000;Why='Atrapar punteros nulos'}
         @{Name='PML4';Start=0x1000;End=0x2000;Alignment=0x1000;Why='Raiz de paginacion'}

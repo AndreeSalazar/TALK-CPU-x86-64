@@ -25,7 +25,9 @@ $tests = @(
     @{Name='Contrato obligatorio eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '16-bit\reset.hex')}},
     @{Name='Contrato de reserva eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.MemoryContracts=@($layout.MemoryContracts | Where-Object Name -ne 'AllocatorState')}},
     @{Name='Pagina de programas movida';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'ProgramPage').Start=0x7F000}},
-    @{Name='Contrato de permisos eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\programs\loader.hex')}}
+    @{Name='Contrato de permisos eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\programs\loader.hex')}},
+    @{Name='Estado de consola cruza asignador';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'ConsoleState').Start=0x9010}},
+    @{Name='Limite de cursor eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\screen\video.hex')}}
 )
 $results = @()
 foreach ($test in $tests) {

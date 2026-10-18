@@ -2,7 +2,7 @@
 @3000
 ; Consola propia: COM1, 115200 8N1. Sin servicios BIOS/UEFI.
 E8
-FB 03 00 00
+FB 2F 00 00
 BE 00 36 0F 00
 E8
 71 04 00 00
@@ -142,15 +142,8 @@ F1 FD FF FF
 C3
 
 @3440
-; putc(AL), conserva RAX/RCX/RDX. Espera acotada de TX.
-50 51 52 88 C4 66 BA FD 03 B9 40 42 0F 00
-EC A8 20
-0F 85
-07 00 00 00
-E2 F5
-E9
-22 01 00 00
-88 E0 66 BA F8 03 EE 5A 59 58 C3
+; ABI estable: UART y pantalla.
+E9 BB 2F 00 00
 
 @3480
 ; puts(RSI), texto de ROM terminado en cero.
@@ -164,12 +157,8 @@ ED FF FF FF
 C3
 
 @34C0
-; getc -> AL. Esperar una orden es el estado ocioso intencional.
-66 BA FD 03
-EC A8 01
-0F 84
-F7 FF FF FF
-66 BA F8 03 EC C3
+; ABI estable: UART o teclado PS/2.
+E9 3B 31 00 00
 
 @3500
 ; hex64(RAX): 16 digitos, preserva RBX.

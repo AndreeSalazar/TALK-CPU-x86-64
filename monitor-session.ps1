@@ -1,6 +1,7 @@
 param(
     [string]$Qemu,
     [switch]$Check,
+    [switch]$Headless,
     [string]$RomPath='build/faggin-64-monitor.rom',
     [string]$LogName,
     [ValidateSet('','magic','size','entry','flags','checksum')]
@@ -9,12 +10,13 @@ param(
 $ErrorActionPreference='Stop'
 if (-not $LogName) { $LogName=if ($Check) { 'faggin-64-monitor-check' } else { 'faggin-64-monitor-live' } }
 $base="build/$LogName"
+$display=if($Check -or $Headless){'none'}else{'gtk'}
 $arguments=@('-machine','pc','-cpu','qemu64','-accel','tcg','-m','16M','-smp','1',
-    '-bios',$RomPath,'-nodefaults','-display','none','-monitor','none',
+    '-name','Orquestador_Metal','-bios',$RomPath,'-nodefaults','-device','VGA,addr=2','-display',$display,'-monitor','none',
     '-serial','stdio','-chardev',"file,id=debug,path=$base-debug.log",
     '-device','isa-debugcon,iobase=0xe9,chardev=debug','-no-reboot')
 if (-not $Check) {
-    Write-Host 'Monitor: h ayuda, s estado, a reservar, o hola, e eco (ESC vuelve), q detener. Ctrl+C sale de QEMU.'
+    Write-Host 'Orquestador_Metal: escribe en la ventana o en esta terminal. h ayuda, o hola, e eco, ESC vuelve, q detiene. Ctrl+C sale de QEMU.'
     & $Qemu @arguments
     if ($LASTEXITCODE -ne 0) { throw "QEMU termino con codigo $LASTEXITCODE" }
     return

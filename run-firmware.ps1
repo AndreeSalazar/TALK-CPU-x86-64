@@ -6,11 +6,13 @@ param(
     [switch]$Stress,
     [switch]$InjectFault,
     [switch]$Monitor,
+    [switch]$Headless,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
 
 $ErrorActionPreference = "Stop"
+if ($Headless -and -not $Monitor) { throw '-Headless requiere -Monitor.' }
 if ($Stress -and $Stage -ne '64') { throw '-Stress requiere -Stage 64.' }
 if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
@@ -41,7 +43,7 @@ try {
     if ((Get-Item $romPath).Length -ne 65536) {
         throw "La ROM debe medir exactamente 65536 bytes."
     }
-    if ($Monitor) { & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check; return }
+    if ($Monitor) { & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless; return }
     if ($Check) {
         $debugLogRelative = "build/$buildName-debug.log"
         $traceLogRelative = "build/$buildName-instructions.log"
