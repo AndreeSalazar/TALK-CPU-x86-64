@@ -1,0 +1,30 @@
+# Evidencias de Orquestador del Metal
+
+## QEMU — comprobado
+
+Las cuatro capturas originales están en [QEMU](QEMU/). Se trasladaron sin cambiar
+sus bytes desde Orquestador_Metal/documentacion/capturas; el informe de cierre
+apunta ahora aquí. Son pantallas de la máquina virtual, no de la placa física.
+
+| Captura | Qué muestra |
+|---|---|
+| [01-arranque-gpt.png](QEMU/01-arranque-gpt.png) | Carga automática y saludo desde GPT/FAT32 |
+| [02-guardian-gpt.png](QEMU/02-guardian-gpt.png) | Rechazo de cabecera GPT dañada y monitor disponible |
+| [03-eco-propio.png](QEMU/03-eco-propio.png) | Escritura con teclado PS/2 y eco propio |
+| [04-sin-disco.png](QEMU/04-sin-disco.png) | Motivo de ausencia de disco y retorno al monitor |
+
+[informes](QEMU/informes/) conserva la batería aprobada, fuera de build/.
+[manifiesto.json](QEMU/manifiesto.json) registra las huellas SHA-256 de fotos e informes.
+Para actualizar después de otra batería completa: `./recopilar-evidencias.ps1`.
+El recopilador copia los últimos informes y fotos locales; no vuelve a ejecutar
+las pruebas ni certifica que esos archivos no hayan sido editados después.
+
+## PC real — identificación iniciada, arranque propio pendiente
+
+[hardware.json](PC_REAL/hardware.json) procede de consultas de solo lectura de
+Windows. Confirma la placa, CPU, BIOS, vídeo y controladores enumerados. No
+incluye números de serie ni demuestra ejecución del firmware propio en la placa.
+
+La guía [IDENTIFICACION-Y-RECUPERACION](PC_REAL/IDENTIFICACION-Y-RECUPERACION.md)
+explica el siguiente paso aceptado: identificar el chip flash y preparar recuperación.
+No hay todavía fotografías físicas ni evidencia de arranque desde RESET en Ryzen.

@@ -50,19 +50,19 @@ El propio QEMU captura su pantalla VGA; no son imágenes recreadas.
 
 Arranque: búsqueda automática en GPT/FAT32, ejecución del saludo externo y retorno.
 
-![Arranque desde GPT](documentacion/capturas/01-arranque-gpt.png)
+![Arranque desde GPT](../EVIDENCIAS/QEMU/01-arranque-gpt.png)
 
 Guardián: una cabecera GPT dañada se rechaza y deja disponible el monitor.
 
-![Rechazo explicado](documentacion/capturas/02-guardian-gpt.png)
+![Rechazo explicado](../EVIDENCIAS/QEMU/02-guardian-gpt.png)
 
 Teclado y eco: el programa propio recibe `Metal64` mediante PS/2 y muestra el texto.
 
-![Eco propio](documentacion/capturas/03-eco-propio.png)
+![Eco propio](../EVIDENCIAS/QEMU/03-eco-propio.png)
 
 Recuperación: sin disco se explica la ausencia y se conserva el monitor.
 
-![Sin disco](documentacion/capturas/04-sin-disco.png)
+![Sin disco](../EVIDENCIAS/QEMU/04-sin-disco.png)
 
 ## Usarlo
 

@@ -1,0 +1,136 @@
+{
+  "Platform": "QEMU pc / qemu64 / TCG / 16 MiB / 1 CPU",
+  "Passed": 15,
+  "Total": 15,
+  "Cases": [
+    {
+      "Name": "Consola propia de 64 bits",
+      "Profile": "faggin-64-monitor",
+      "Passed": true,
+      "Seconds": 3.531,
+      "Error": null
+    },
+    {
+      "Name": "Arranque hasta 16 bits",
+      "Profile": "faggin-16",
+      "Passed": true,
+      "Seconds": 0.953,
+      "Error": null
+    },
+    {
+      "Name": "Arranque hasta 32 bits",
+      "Profile": "faggin-32",
+      "Passed": true,
+      "Seconds": 0.991,
+      "Error": null
+    },
+    {
+      "Name": "Arranque hasta 64 bits",
+      "Profile": "faggin-64",
+      "Passed": true,
+      "Seconds": 1.227,
+      "Error": null
+    },
+    {
+      "Name": "RAM: 32 rondas",
+      "Profile": "faggin-64-stress",
+      "Passed": true,
+      "Seconds": 1.221,
+      "Error": null
+    },
+    {
+      "Name": "RAM: corrupcion esperada",
+      "Profile": "faggin-64-stress-fault",
+      "Passed": true,
+      "Seconds": 1.04,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: divide",
+      "Profile": "faggin-64-exception-divide",
+      "Passed": true,
+      "Seconds": 1.06,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: invalid",
+      "Profile": "faggin-64-exception-invalid",
+      "Passed": true,
+      "Seconds": 1.009,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: page",
+      "Profile": "faggin-64-exception-page",
+      "Passed": true,
+      "Seconds": 0.99,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: general",
+      "Profile": "faggin-64-exception-general",
+      "Passed": true,
+      "Seconds": 0.965,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: double",
+      "Profile": "faggin-64-exception-double",
+      "Passed": true,
+      "Seconds": 0.968,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: write",
+      "Profile": "faggin-64-exception-write",
+      "Passed": true,
+      "Seconds": 0.962,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: execute",
+      "Profile": "faggin-64-exception-execute",
+      "Passed": true,
+      "Seconds": 0.949,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: guard",
+      "Profile": "faggin-64-exception-guard",
+      "Passed": true,
+      "Seconds": 0.946,
+      "Error": null
+    },
+    {
+      "Name": "Excepcion esperada: stack",
+      "Profile": "faggin-64-exception-stack",
+      "Passed": true,
+      "Seconds": 0.965,
+      "Error": null
+    }
+  ],
+  "GuardianTests": {
+    "Passed": 33,
+    "Total": 33
+  },
+  "ProgramTests": {
+    "Passed": 8,
+    "Total": 8
+  },
+  "ScreenTests": {
+    "Passed": 2,
+    "Total": 2
+  },
+  "StorageTests": {
+    "Passed": 26,
+    "Total": 26
+  },
+  "GPTTests": {
+    "Passed": 24,
+    "Total": 24
+  },
+  "BootTests": {
+    "Passed": 3,
+    "Total": 3
+  }
+}

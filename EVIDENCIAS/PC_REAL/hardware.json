@@ -1,0 +1,50 @@
+{
+  "Fecha": "2026-10-18T04:53:24.6156600-05:00",
+  "Placa": [
+    {
+      "Manufacturer": "Micro-Star International Co., Ltd.",
+      "Product": "A320M-A PRO MAX (MS-7C52)",
+      "Version": "1.0"
+    }
+  ],
+  "BIOS": [
+    {
+      "Manufacturer": "American Megatrends International, LLC.",
+      "SMBIOSBIOSVersion": "2.C0",
+      "ReleaseDate": "2022-07-22T19:00:00-05:00"
+    }
+  ],
+  "CPU": [
+    {
+      "Name": "AMD Ryzen 5 5600X 6-Core Processor             ",
+      "AddressWidth": 64,
+      "NumberOfCores": 6
+    }
+  ],
+  "Video": [
+    {
+      "Name": "NVIDIA GeForce RTX 3060",
+      "PNPDeviceID": "PCI\\VEN_10DE&DEV_2504&SUBSYS_397D1462&REV_A1\\4&1FC990D7&0&0019"
+    }
+  ],
+  "IDE": [
+    {
+      "Name": "Controladora SATA AHCI estándar",
+      "PNPDeviceID": "PCI\\VEN_1022&DEV_43B8&SUBSYS_10621B21&REV_02\\4&2C18E2E3&0&010B"
+    }
+  ],
+  "Almacenamiento": [
+    {
+      "Name": "Controladora de espacios de almacenamiento de Microsoft",
+      "PNPDeviceID": "ROOT\\SPACEPORT\\0000"
+    },
+    {
+      "Name": "Controladora NVM Express estándar",
+      "PNPDeviceID": "PCI\\VEN_2646&DEV_5017&SUBSYS_50172646&REV_03\\4&2B5FE750&0&0009"
+    },
+    {
+      "Name": "Xvdd SCSI Miniport",
+      "PNPDeviceID": "SWD\\XVDDENUM\\XVDDROOTDEVICE_INSTANCE"
+    }
+  ]
+}

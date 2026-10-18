@@ -1,0 +1,126 @@
+{
+  "Cases": [
+    {
+      "Name": "valid",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "header-crc",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "backup-crc",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "table-crc",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "backup-table",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "backup-guid",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "table-shape",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "large-lba",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "missing",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "unused-dirty",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "overlap",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "ambiguous",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "duplicate-guid",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "esp",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "last-entry",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "protective",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-2",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-4",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-8",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-16",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-32",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster-64",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "fragmented-c2",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "second-directory-sector",
+      "Passed": true,
+      "Error": null
+    }
+  ],
+  "Total": 24,
+  "Passed": 24
+}

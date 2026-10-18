@@ -1,0 +1,6 @@
+{
+  "Capture": "orquestador-metal.ppm",
+  "Checks": "PS2 Shift, texto, borrado, Enter, Escape, VGA, scroll, cursor y CPU",
+  "Total": 1,
+  "Passed": 1
+}

@@ -195,3 +195,10 @@ solamente la ROM original:
 Este proyecto utiliza la RAM y los dispositivos emulados de QEMU. Todavia
 no inicializa una placa fisica ni implementa la especificacion UEFI.
 Los contratos, mapa de memoria y limites estan en Orquestador_Metal/README.md.
+
+## Evidencias y preparación de la placa real
+
+Las cuatro fotos de QEMU y sus informes están en [EVIDENCIAS](EVIDENCIAS/LEEME.md).
+El inventario real confirma MS-7C52, Ryzen 5600X y RTX 3060. La siguiente etapa
+aceptada es [identificar el chip flash y preparar recuperación](EVIDENCIAS/PC_REAL/IDENTIFICACION-Y-RECUPERACION.md),
+antes de desarrollar y probar una imagen específica desde RESET para esa placa.

@@ -1,0 +1,66 @@
+{
+  "Recopilado": "2026-10-18T04:55:09.2512182-05:00",
+  "Origen": "QEMU: ultima bateria local completada; no prueba de placa fisica",
+  "Archivos": [
+    {
+      "Ruta": "01-arranque-gpt.png",
+      "Bytes": 9634,
+      "SHA256": "FCFD8979F5D2ABC8BC335F19A3621396EC794362A0BB624C5B35BC4F02E7E787"
+    },
+    {
+      "Ruta": "02-guardian-gpt.png",
+      "Bytes": 8736,
+      "SHA256": "3AC4DC9E98910A00503BD4AE8CFDA83227B18DDD214AA9D27E4A702E1D1BFC3F"
+    },
+    {
+      "Ruta": "03-eco-propio.png",
+      "Bytes": 10650,
+      "SHA256": "4FAE3337C40BE03A8B7E0ECBE810C785696DF55C1F9CC78F605AB265C3F2B86C"
+    },
+    {
+      "Ruta": "04-sin-disco.png",
+      "Bytes": 8565,
+      "SHA256": "2ADF6B37E89156B7C560D32657A139064A5C3F422F49F2CD03C61C5C68480E7D"
+    },
+    {
+      "Ruta": "informes/test-results.json",
+      "Bytes": 3027,
+      "SHA256": "7F05FA3A53C8223D435B032577322F6656D33273267F4ECD3C0E3E91CDCCCC3A"
+    },
+    {
+      "Ruta": "informes/guardian-test-results.json",
+      "Bytes": 4469,
+      "SHA256": "6AE136CAE0814E31C1F89F646DB993CD8F792C9480D94685E716DD21A7ECAF62"
+    },
+    {
+      "Ruta": "informes/program-test-results.json",
+      "Bytes": 727,
+      "SHA256": "69435981A5AEE90C7E74E6EBCEF83BFC3E0FD25669BDB82D909DDB08EBBB9B0E"
+    },
+    {
+      "Ruta": "informes/screen-test-results.json",
+      "Bytes": 159,
+      "SHA256": "873BF0E1B8DAAB9BEAAE77C425AC2256EBA3E09EB02C5BE3B2CCEEF15CD2E031"
+    },
+    {
+      "Ruta": "informes/screen-cursor-test-results.json",
+      "Bytes": 159,
+      "SHA256": "873BF0E1B8DAAB9BEAAE77C425AC2256EBA3E09EB02C5BE3B2CCEEF15CD2E031"
+    },
+    {
+      "Ruta": "informes/storage-test-results.json",
+      "Bytes": 2311,
+      "SHA256": "9A1541AA192B772170DE67D4A8A9423050380B92CEBB0BC60D5394E782702CF8"
+    },
+    {
+      "Ruta": "informes/gpt-test-results.json",
+      "Bytes": 2171,
+      "SHA256": "D4AE9A27C028E804F78662B9884FFE73422DD6FC994D6DF03C46421216ED403B"
+    },
+    {
+      "Ruta": "informes/boot-test-results.json",
+      "Bytes": 432,
+      "SHA256": "332DBCE9E87F67B69C35377ECF98A2864FFEB4C746846B690DB40EC7163074E1"
+    }
+  ]
+}

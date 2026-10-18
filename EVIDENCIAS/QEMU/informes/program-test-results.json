@@ -1,0 +1,46 @@
+{
+  "Cases": [
+    {
+      "Name": "magic",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "empty",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "oversize",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "overflow",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "entry",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "flags",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "checksum",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "body",
+      "Passed": true,
+      "Error": null
+    }
+  ],
+  "Total": 8,
+  "Passed": 8
+}

@@ -1,0 +1,136 @@
+{
+  "Cases": [
+    {
+      "Name": "valid",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "fragmented",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "absent",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "bpb",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "spc",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "missing",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cluster",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "cycle",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mirrors",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "truncated",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "longchain",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "size",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "length",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "checksum",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-valid",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-slot4",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-fragmented",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-missing",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-zero-start",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-flag",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-overflow",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-overlap",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-ambiguous",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-gpt",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-short-volume",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "mbr-signature",
+      "Passed": true,
+      "Error": null
+    }
+  ],
+  "Total": 26,
+  "Passed": 26
+}

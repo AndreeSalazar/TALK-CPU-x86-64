@@ -1,0 +1,204 @@
+{
+  "Passed": 33,
+  "Total": 33,
+  "Cases": [
+    {
+      "Name": "Distribucion valida",
+      "Passed": true,
+      "Expected": "GREEN",
+      "Observed": "YELLOW"
+    },
+    {
+      "Name": "Cruce de carriles ROM",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Cruce de reservas RAM",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Bytes exceden su presupuesto",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Fuente sin propietario",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Reserva desalineada",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Imagen incompatible",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Margen reducido avisa sin bloquear",
+      "Passed": true,
+      "Expected": "YELLOW",
+      "Observed": "YELLOW"
+    },
+    {
+      "Name": "Esquema incompleto bloquea",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Reserva critica ausente",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Reserva duplicada",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Alineacion no potencia de dos",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Reserva movida rompe contrato",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato de reset roto",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato mal formado bloquea",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Politica de recursos recortada",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Limite no numerico",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato obligatorio eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato de reserva eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Pagina de programas movida",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato de permisos eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Estado de consola cruza asignador",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Limite de cursor eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Paquete de disco cruza sector",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Sector de disco recortado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Limite ATA eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato de cluster eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Volumen cruza estado de disco",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Limite de particion eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Tabla GPT recortada",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Contrato CRC eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Limite de sector eliminado",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    },
+    {
+      "Name": "Politica de arranque eliminada",
+      "Passed": true,
+      "Expected": "RED",
+      "Observed": "RED"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "Cases": [
+    {
+      "Name": "correcto",
+      "Passed": true,
+      "Error": null,
+      "Capture": "01-arranque-gpt.png"
+    },
+    {
+      "Name": "danado",
+      "Passed": true,
+      "Error": null,
+      "Capture": "02-guardian-gpt.png"
+    },
+    {
+      "Name": "sin-disco",
+      "Passed": true,
+      "Error": null,
+      "Capture": "04-sin-disco.png"
+    }
+  ],
+  "Total": 3,
+  "Passed": 3
+}
