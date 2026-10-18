@@ -49,7 +49,7 @@ version 1. La version 2 posterior amplia el contrato con un bloqueo persistente.
 
 ## Verificacion y criterio para continuar
 
-En esa comparacion se ejecuto `.\test-firmware.ps1`: catorce perfiles QEMU,
+En esa comparacion se ejecuto `.\tools/tests/test-firmware.ps1`: catorce perfiles QEMU,
 ocho pruebas estructurales y las ocho autopruebas del asignador de entonces,
 en cada perfil de 64 bits. Se exige el texto exacto, estado esperado de CPU,
 destinos de HLT y diagnosticos correctos para las excepciones provocadas.

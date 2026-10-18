@@ -1,0 +1,49 @@
+{
+  "Scope": "Regression after moving project tools; no physical disk changed",
+  "ROM": {
+    "Passed": 15,
+    "Total": 15
+  },
+  "Bridge": {
+    "Passed": 7,
+    "Total": 7
+  },
+  "CASM": {
+    "Passed": 39,
+    "Total": 39
+  },
+  "MSIAnalysis": {
+    "Passed": 16,
+    "Total": 16
+  },
+  "MovedFiles": 26,
+  "MergedDocuments": [
+    "Orquestador_Metal/LEEME.md",
+    "Orquestador_Metal/ENTREGAS.md"
+  ],
+  "MergeDestination": "Orquestador_Metal/README.md",
+  "GuardianTests": {
+    "Total": 33,
+    "Passed": 33
+  },
+  "ProgramTests": {
+    "Total": 8,
+    "Passed": 8
+  },
+  "ScreenTests": {
+    "Total": 2,
+    "Passed": 2
+  },
+  "StorageTests": {
+    "Total": 26,
+    "Passed": 26
+  },
+  "GPTTests": {
+    "Total": 24,
+    "Passed": 24
+  },
+  "BootTests": {
+    "Total": 3,
+    "Passed": 3
+  }
+}

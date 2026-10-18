@@ -12,7 +12,7 @@ no usar .efi ya no rige para esta primera prueba.
 
 Vía de investigación desde RESET: conservar el firmware propio, sin una entrada `.efi`; la primera prueba física actual usa el puente autorizado arriba.
 Destino físico único: MS-7C52 con Ryzen 5 5600X, según el
-[perfil acordado](../../PERFIL-FISICO.md). Se investiga conservar componentes AMD
+[perfil acordado](../../docs/PERFIL-FISICO.md). Se investiga conservar componentes AMD
 y el entorno de inicio que requieran; no implementar UEFI para cualquier placa.
 Esta carpeta documenta el contrato de arranque. Ya existe lectura propia de
 disco IDE y búsqueda en FAT32 dentro de QEMU, con el alcance descrito en

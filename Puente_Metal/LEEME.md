@@ -61,7 +61,7 @@ aportó [tres fotografías](../EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md) del 
 y las tres líneas esperadas. El [registro de instalación y pasos](../EVIDENCIAS/PC_REAL/PUENTE_INSTALADO/LEEME.md)
 conserva las rutas y la entrada utilizada. No se ha hecho una campaña de estabilidad.
 
-`./construir-puente.ps1` genera:
+`./tools/build/construir-puente.ps1` genera:
 
 ```text
 build/Puente_Metal/
@@ -79,8 +79,8 @@ copias con huellas si ya hay archivos en las rutas destino. No formatea ni cambi
 el tipo GPT. En PowerShell con permisos suficientes, una vez elegido el volumen:
 
 ```powershell
-.\copiar-puente.ps1 -Destino A:\
-.\registrar-puente.ps1 -Destino A:\
+.\tools/install/copiar-puente.ps1 -Destino A:\
+.\tools/install/registrar-puente.ps1 -Destino A:\
 ```
 
 La segunda utilidad crea una entrada separada Orquestador del Metal (prueba), la
@@ -134,7 +134,7 @@ consola/archivos UEFI. No se promete recuperar un fallo de hardware o del payloa
 
 ## Qué contiene un .efi y qué se extrajo
 
-`inspeccionar-efi.py` comprueba las cabeceras y extrae sus secciones para análisis.
+`tools/analysis/inspeccionar-efi.py` comprueba las cabeceras y extrae sus secciones para análisis.
 Se inspeccionaron los originales hola/eco y la entrada nueva. Sus informes están
 en EVIDENCIAS/PUENTE_UEFI; las secciones binarias están en build/inspeccion-efi.
 

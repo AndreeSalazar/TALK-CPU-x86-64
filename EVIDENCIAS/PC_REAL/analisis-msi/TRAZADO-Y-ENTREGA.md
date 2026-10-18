@@ -1,6 +1,6 @@
 # Trazado AMD y dependencias PEI: resultado de la segunda investigación
 
-La utilidad nueva trazar-inicio-msi.py sigue enlaces del archivo oficial y decodifica
+La utilidad nueva tools/analysis/trazar-inicio-msi.py sigue enlaces del archivo oficial y decodifica
 expresiones de dependencia PEI. No ejecuta los módulos ni modifica el firmware.
 
 ## Hallazgo que determina la estrategia
@@ -91,7 +91,7 @@ no grabar la ROM de QEMU ni renombrar un archivo en FAT32.
 
 ## Comprobaciones y reproducción
 
-`./analizar-msi.ps1` ahora ejecuta inventario, trazado y ambos grupos de pruebas:
+`./tools/analysis/analizar-msi.ps1` ahora ejecuta inventario, trazado y ambos grupos de pruebas:
 5 comprobaciones previas y 11 nuevas. [pruebas-trazado.json](pruebas-trazado.json)
 registra los rechazos de GUID truncado, pila inválida, opcode DXE en PEI, falta de END,
 datos sobrantes, checksum combo alterado y enlaces fuera de dominio incluso con

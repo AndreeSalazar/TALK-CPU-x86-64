@@ -1,6 +1,6 @@
 # Pantalla de Orquestador del Metal
 
-Desde la raiz: `./run-firmware.ps1 -Monitor`. La ventana de QEMU muestra texto
+Desde la raiz: `./tools/qemu/run-firmware.ps1 -Monitor`. La ventana de QEMU muestra texto
 80x25 y recibe teclado PS/2. `-Headless` deja solo la terminal; `-Check` no abre
 ventana. `q` detiene la CPU virtual y conserva la pantalla; cerrar la ventana
 termina QEMU. La terminal tambien admite Ctrl+C.
@@ -43,13 +43,13 @@ la GPU ni un teclado USB de una placa Ryzen.
 
 ## Pruebas
 
-`./test-screen.ps1` envia teclas mediante el controlador de QEMU, verifica
+`./tools/tests/test-screen.ps1` envia teclas mediante el controlador de QEMU, verifica
 mayusculas, escritura, borrado, Enter y Escape, lee los caracteres reales de
 VGA y captura su imagen. Llena mas de 25 filas y comprueba desplazamiento y
 cursor <2000. La captura revisable queda en `build/orquestador-metal.png`.
 Comprueba tambien que no aparezcan excepciones de CPU ni un triple fallo.
 
-`./test-screen.ps1 -InjectCursorFault` altera solo una copia de la ROM: coloca
+`./tools/tests/test-screen.ps1 -InjectCursorFault` altera solo una copia de la ROM: coloca
 el cursor fuera de rango y exige la explicacion YELLOW, la recuperacion y el
 mismo recorrido funcional. La bateria general incluye ambos recorridos.
 No se ha simulado todavia una averia del controlador PS/2.

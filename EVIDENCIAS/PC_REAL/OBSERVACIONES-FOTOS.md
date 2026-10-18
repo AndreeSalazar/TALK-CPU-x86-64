@@ -1,7 +1,7 @@
 # Primeras fotografías físicas recibidas
 
 Recibidas el 18 de octubre de 2026. Los tres originales y sus huellas están en
-[fotos](fotos/). Son evidencias de identificación visual del equipo; no de ejecución
+[fotos](fotos). Son evidencias de identificación visual del equipo; no de ejecución
 del firmware propio. No se han editado ni recortado.
 
 ## Observaciones que sí permiten

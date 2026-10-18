@@ -1,0 +1,9 @@
+{
+  "Case": "normal",
+  "Bytes": 1300,
+  "BodyBytes": 1276,
+  "Rectangles": 38,
+  "SHA256": "10780153b26f7518d905fa75641d21a5c1606b80fc4d1e8b23bc1da263ae7f25",
+  "InstructionSource": "Games/Flappy_Metal/scene.hex",
+  "PhysicalTest": false
+}

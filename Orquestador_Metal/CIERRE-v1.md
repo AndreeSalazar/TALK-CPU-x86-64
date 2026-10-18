@@ -36,7 +36,7 @@ y particiones. No demuestran por sí solos la corrección de cualquier código f
 | Arranque automático y recuperación | 3/3 |
 | Paquete final copiado | Arranque y siete respuestas exactas aprobados |
 
-`./test-firmware.ps1` reproduce la batería. Los resultados detallados quedan en
+`./tools/tests/test-firmware.ps1` reproduce la batería. Los resultados detallados quedan en
 `build/test-results.json` y los informes de cada grupo. Se comprueba que las
 imágenes conservan sus huellas y que los rechazos no ejecutan el programa en RAM.
 

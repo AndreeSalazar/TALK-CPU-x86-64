@@ -3,7 +3,7 @@ $ErrorActionPreference='Stop'
 Push-Location $PSScriptRoot
 try {
     & "$PSScriptRoot/Orquestador_Metal/build-firmware.ps1" -Monitor -AutoBoot
-    & "$PSScriptRoot/crear-disco.ps1" -GPT -SectoresPorCluster 8
+    & "$PSScriptRoot/tools/build/crear-disco.ps1" -GPT -SectoresPorCluster 8
     $destination=Join-Path $PSScriptRoot 'build/Orquestador_Metal'
     New-Item -ItemType Directory -Force "$destination/programas" | Out-Null
     $files=@(

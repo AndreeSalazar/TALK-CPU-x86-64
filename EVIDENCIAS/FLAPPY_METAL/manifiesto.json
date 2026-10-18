@@ -1,0 +1,41 @@
+{
+  "RecordedDate": "2026-10-18",
+  "Scope": "Static CPU-rendered scene in QEMU; not a playable or physically tested game",
+  "Files": [
+    {
+      "File": "01-scene.png",
+      "SHA256": "3E6BD707F6351E570001909C14D8B0ACC8C51AE06A0B06099AB38A81AC11FE20",
+      "Bytes": 5572
+    },
+    {
+      "File": "LEEME.md",
+      "SHA256": "E03C9F9EC25A6C0CE4C5655B3D7342B01DC84BE23D074C0CA7AC256B1B183A2A",
+      "Bytes": 2455
+    },
+    {
+      "File": "regression-layout.json",
+      "SHA256": "1FD0E1AEDDD3410937B2E1CDD647B81BA8A5A837D918D3C7EC238F639158C9E0",
+      "Bytes": 803
+    },
+    {
+      "File": "scene-normal.json",
+      "SHA256": "2949DF8CE92B6276D95E8C5813AE5F37308CFACC6985F421EF0A79105FBA7F85",
+      "Bytes": 241
+    },
+    {
+      "File": "test-empty.json",
+      "SHA256": "360EC41C6F476328FFE810ADFD3A968CA9B77CADC198484418EA883713E0E46B",
+      "Bytes": 435
+    },
+    {
+      "File": "test-normal.json",
+      "SHA256": "3EDDCBB65FD747BC4FD71CEA113303EAD74984570383D1B6CAA785F7860B70AF",
+      "Bytes": 436
+    },
+    {
+      "File": "test-outside.json",
+      "SHA256": "CB948415D0343C5C1EF89C50A871F8F956525285732773B4004CEABE9CAE78B0",
+      "Bytes": 437
+    }
+  ]
+}

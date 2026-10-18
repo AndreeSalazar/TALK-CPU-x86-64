@@ -20,6 +20,6 @@ Contrato de salida: GDT instalada, CR0.PE=1, CR0.PG=0,
 CS=08 con base cero y D=1, IF=0, A20 activa. La siguiente etapa debe
 recargar los segmentos de datos; no debe asumir que DS ya es plano.
 
-Probar desde la raiz: `.\run-firmware.ps1 -Stage 16 -Check`.
+Probar desde la raiz: `.\tools/qemu/run-firmware.ps1 -Stage 16 -Check`.
 Esta variante excluye los archivos de las carpetas de 32 y 64 bits.
 Las direcciones y selectores de este documento estan en hexadecimal.

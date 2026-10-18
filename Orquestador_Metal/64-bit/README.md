@@ -23,7 +23,7 @@ MOV ESP,90000 establece RSP completo porque escribir un registro de 32 bits
 en modo de 64 bits pone a cero su mitad alta. MOV ESI,F0500 prepara RSI
 del mismo modo para recorrer el mensaje con LODSB.
 
-Probar desde la raiz: `.\run-firmware.ps1 -Stage 64 -Check`.
+Probar desde la raiz: `.\tools/qemu/run-firmware.ps1 -Stage 64 -Check`.
 Necesita las etapas de 16 y 32 bits; esta carpeta solo contiene el codigo
 que se ejecuta una vez alcanzado el modo de 64 bits.
 Las direcciones y valores de registros indicados estan en hexadecimal.

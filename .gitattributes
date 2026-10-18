@@ -1,3 +1,4 @@
 # Keep CASM evidence hashes and its recorded source snapshot stable across checkouts.
 CASM/examples/*.casm text eol=lf
 EVIDENCIAS/CASM/** -text
+EVIDENCIAS/FLAPPY_METAL/** -text

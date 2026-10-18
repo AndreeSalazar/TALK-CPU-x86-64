@@ -7,12 +7,34 @@ las etapas de 16, 32 y 64 bits, en homenaje a Federico Faggin.
 **Un único objetivo físico: MSI A320M-A PRO MAX (MS-7C52) + Ryzen 5 5600X.**
 Se investigará la integración conservando componentes AMD necesarios. No se
 pretende construir un UEFI universal ni mantener soporte para otras placas.
-El alcance y los criterios para terminar están en [PERFIL-FISICO](PERFIL-FISICO.md).
+El alcance y los criterios para terminar están en [PERFIL-FISICO](docs/PERFIL-FISICO.md).
 
-El [plan del orquestador y primer juego](PLAN-ORQUESTADOR.md) ordena el siguiente
+El [plan del orquestador y primer juego](docs/PLAN-ORQUESTADOR.md) ordena el siguiente
 trabajo: contratos, CASM numérico, dibujo, tiempo, entrada y juego tipo Flappy Bird.
 Es un plan, no un juego ya implementado. La limpieza conservadora se previsualiza
 con `./clean-workspace.ps1` y se aplica con `-Apply`.
+
+## Primer dibujo de Flappy Metal
+
+Ya hay una escena propia con pájaro, tuberías, nubes y suelo, dibujada por CPU
+después de BootServices. Es una vista estática: aún faltan movimiento y controles.
+
+```powershell
+.\jugar.ps1
+.\jugar.ps1 -Comprobar
+```
+
+![Primera escena real en QEMU](EVIDENCIAS/FLAPPY_METAL/01-scene.png)
+
+[Código y contrato gráfico](Games/Flappy_Metal/README.md). El paquete mide 1300
+bytes y las tres comprobaciones QEMU verifican píxeles, desbordamiento de
+coordenadas y ancho cero. La escena usa instrucciones .hex manuales; CASM todavía
+no emite gráficos. El SSD real conserva el saludo instalado.
+
+La raíz se ha reducido a entradas de uso y este README. Las utilidades y pruebas
+están agrupadas en [tools](tools/README.md), el perfil y plan en `docs/`. Se
+fusionaron las guías duplicadas de Orquestador_Metal en su README; se conservaron
+documentos técnicos y evidencias con contenido único.
 
 ## Ruta actual: .efi mínimo y después código propio
 
@@ -191,9 +213,9 @@ Las etapas están separadas por responsabilidad; comparten CPU y memoria y se
 necesitan en orden. No son procesos aislados por hardware.
 
 ```powershell
-.\run-firmware.ps1 -Stage 16 -Check
-.\run-firmware.ps1 -Stage 32 -Check
-.\run-firmware.ps1 -Stage 64 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 16 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 32 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 64 -Check
 ```
 
 Cada ROM QEMU mide 65536 bytes por su mapa fijo. Los perfiles históricos siguen
@@ -209,7 +231,7 @@ RX/RW/NX, diagnóstico de excepciones y asignador acotado con bloqueo persistent
 ante corrupción. No se utiliza Rust. [Contratos y límites](Orquestador_Metal/guardians/README.md).
 
 ```powershell
-.\test-firmware.ps1
+.\tools/tests/test-firmware.ps1
 ```
 
 La batería QEMU incluye 15 casos base, 33 reglas del constructor, ocho rechazos
@@ -218,9 +240,9 @@ y tres de arranque. Los fallos provocados deben detectarse. Las pruebas cierran
 sus propias VM y escriben informes bajo `build/`.
 
 ```powershell
-.\run-firmware.ps1 -Stress -Check
-.\run-firmware.ps1 -Stress -InjectFault -Check
-.\run-firmware.ps1 -Exception stack -Check
+.\tools/qemu/run-firmware.ps1 -Stress -Check
+.\tools/qemu/run-firmware.ps1 -Stress -InjectFault -Check
+.\tools/qemu/run-firmware.ps1 -Exception stack -Check
 ```
 
 La prueba de RAM hace 32 rondas sobre 1 MiB. Los otros comandos ejercitan detección
@@ -229,7 +251,7 @@ de corrupción y un fallo de guarda de pila dentro de la VM.
 Para conservar las fotos y los informes de una batería completada:
 
 ```powershell
-.\recopilar-evidencias.ps1
+.\tools/evidence/recopilar-evidencias.ps1
 ```
 
 Véanse el [cierre QEMU](Orquestador_Metal/CIERRE-v1.md) y [EVIDENCIAS](EVIDENCIAS/LEEME.md).
@@ -244,7 +266,7 @@ incluidos componentes de Zen 3. El [inventario y el trazado](EVIDENCIAS/PC_REAL/
 distinguen lo observado en el archivo de lo aún no confirmado en hardware.
 
 ```powershell
-.\analizar-msi.ps1 -Descargar
+.\tools/analysis/analizar-msi.ps1 -Descargar
 ```
 
 Requiere Python 3; `-Python` permite indicar su ruta. Sin `-Descargar` reutiliza
@@ -252,17 +274,16 @@ el ZIP local. Ejecuta cinco comprobaciones del inventario y once del trazado.
 No ejecuta componentes AMD, no parchea la ROM y no invoca un grabador. Estas
 herramientas del anfitrión no sustituyen las instrucciones .hex del firmware.
 
-El siguiente trabajo está limitado a resolver la ruta del 5600X, sus dependencias
-y la entrega al código propio. Antes de escribir físicamente hacen falta el
+Para esa investigación desde RESET falta resolver la ruta del 5600X, sus dependencias
+y la entrega al código propio. Antes de escribir la flash física hacen falta el
 original de esta unidad y una recuperación externa preparada. El constructor
 rechaza `-Platform MS-7C52` con un motivo hasta que exista ese port; por defecto
 solo genera `-Platform QEMU`.
 
 ## Referencias y trabajo histórico
 
-- [Perfil físico único y criterio de cierre](PERFIL-FISICO.md).
-- [Guía de archivos y uso](Orquestador_Metal/LEEME.md).
-- [Estado de las entregas](Orquestador_Metal/ENTREGAS.md).
+- [Perfil físico único y criterio de cierre](docs/PERFIL-FISICO.md).
+- [Guía técnica, uso y estado de la ROM QEMU](Orquestador_Metal/README.md).
 - [Investigación de las fases de firmware](Orquestador_Metal/COMO-SE-CONSTRUYE-UN-FIRMWARE.md).
 - `src/hola.hex` y `src/eco.hex`: aplicaciones UEFI históricas; no son la ruta de entrada elegida.
-- `src/reset.hex`: primera ROM de 16 bits; `build.ps1` convierte hexadecimal comentado a bytes.
+- `src/reset.hex`: primera ROM de 16 bits; `tools/build/build.ps1` convierte hexadecimal comentado a bytes.

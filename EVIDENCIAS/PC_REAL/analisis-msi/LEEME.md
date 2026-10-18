@@ -80,7 +80,7 @@ presente en una integración que sustituya ese entorno.
 Desde la raíz, con Python 3 disponible:
 
 ```powershell
-.\analizar-msi.ps1 -Descargar
+.\tools/analysis/analizar-msi.ps1 -Descargar
 ```
 
 Para repetir sobre el ZIP local, omitir -Descargar. Se admite -Python con la ruta

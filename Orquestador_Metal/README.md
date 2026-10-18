@@ -16,9 +16,30 @@ de 16, 32 y 64 bits conserva el nombre «Faggin scaling».
 El objetivo físico único es MSI A320M-A PRO MAX (MS-7C52) con Ryzen 5 5600X.
 QEMU es el banco de pruebas; no se busca implementar un UEFI universal.
 La adaptación conservará los componentes AMD que necesite, si su integración
-se demuestra viable. [Alcance y cierre físico](../PERFIL-FISICO.md).
-Consulta [LEEME](LEEME.md) para orientarte y [Arranque propio](arranque/LEEME.md)
+se demuestra viable. [Alcance y cierre físico](../docs/PERFIL-FISICO.md).
+Consulta el uso resumido de esta guía y [Arranque propio](arranque/LEEME.md)
 para distinguir el firmware desde RESET de un archivo de arranque en disco.
+
+## Uso resumido y estado de entregas
+
+Desde la raíz, `./iniciar.ps1` abre el monitor. `h` muestra ayuda, `s` consulta
+memoria, `a` reserva 256 bytes, `o` ejecuta el saludo, `e` abre eco, Escape regresa,
+`d` carga METAL/INICIO.X86 y `q` detiene la CPU virtual. No se necesita Enter
+para elegir una orden. `-SoloTerminal` usa la terminal; `-Comprobar` verifica y
+cierra su VM. `-Disco` carga automáticamente el programa FAT32; `-Manual` conserva
+la selección con `d`.
+
+`./preparar.ps1` construye el paquete QEMU en build/Orquestador_Metal: ROM, disco
+GPT/FAT32, ejemplos .x86, manifiesto, LEEME.txt e INICIAR.ps1. La ROM desde RESET
+es para QEMU; no se instala copiándola al SSD real.
+
+La v1 QEMU está cerrada: [desglose y pruebas](CIERRE-v1.md). El análisis MSI tiene
+16 comprobaciones: [inventario y trazado](../EVIDENCIAS/PC_REAL/analisis-msi/LEEME.md).
+La integración MSI desde RESET sigue sin imagen modificada ni recuperación
+preparada. El puente EFI es otra vía y ya tiene [fotos reales](../EVIDENCIAS/PC_REAL/PRIMER_ARRANQUE/LEEME.md).
+El nuevo [primer dibujo del juego](../Games/Flappy_Metal/README.md) está probado
+solo en QEMU. Se fusionaron aquí las antiguas guías LEEME y ENTREGAS para evitar
+duplicación y estados contradictorios.
 
 La implementación QEMU es propia desde cero, en homenaje a Federico Faggin. Sus instrucciones
 estan escritas byte por byte en archivos .hex, sin ensamblador ni linker.
@@ -44,9 +65,9 @@ y salida se explican en cada carpeta.
 ## Ejecutar desde la raiz del repositorio
 
 ```powershell
-.\run-firmware.ps1 -Stage 16
-.\run-firmware.ps1 -Stage 32
-.\run-firmware.ps1 -Stage 64
+.\tools/qemu/run-firmware.ps1 -Stage 16
+.\tools/qemu/run-firmware.ps1 -Stage 32
+.\tools/qemu/run-firmware.ps1 -Stage 64
 ```
 
 Salir con Ctrl+C antes de ejecutar el siguiente comando. Sin -Stage,
@@ -61,12 +82,12 @@ GREEN [Memory] integrity latch OK
 GREEN [Memory] bounded allocator OK
 ```
 
-El perfil normal termina en HLT. Con `./run-firmware.ps1 -Monitor` desde la raiz
+El perfil normal termina en HLT. Con `./tools/qemu/run-firmware.ps1 -Monitor` desde la raiz
 se abre la consola propia de 64 bits: `h` ayuda, `s` estado, `a` reserva, `q` parada.
 La entrada llega por COM1 de QEMU, sin servicios BIOS/UEFI. Los mensajes
 llegan a la terminal por el dispositivo debugcon de QEMU, puerto E9.
 
-Prueba mas exigente: `.\run-firmware.ps1 -Stress`. Ejecuta 32 rondas sobre
+Prueba mas exigente: `.\tools/qemu/run-firmware.ps1 -Stress`. Ejecuta 32 rondas sobre
 1 MiB de RAM en 64 bits. Los bytes y las pruebas de deteccion de fallos
 estan en `64-bit/stress/README.md`. La opcion -Stress se puede combinar
 con -Check; -Stress -InjectFault -Check exige detectar la corrupcion provocada.
@@ -78,7 +99,7 @@ La entrada de 64 bits instala diagnostico antes de emitir su mensaje:
 IDT, TSS y pilas IST. Las pruebas de errores reales y la interpretacion
 de sus campos estan en `64-bit/diagnostics/README.md`.
 
-Bateria completa: `.\test-firmware.ps1`. Comprueba 15 casos base en QEMU
+Bateria completa: `.\tools/tests/test-firmware.ps1`. Comprueba 15 casos base en QEMU
 y 33 reglas de guardianes, además de paquetes, pantalla/teclado, FAT32/MBR,
 GPT y arranque. El [cierre v1](CIERRE-v1.md) contiene el desglose. Escribe `build/test-results.json` y
 `build/guardian-test-results.json`. Los limites y semaforos se explican en
@@ -97,7 +118,7 @@ Solo construir, sin ejecutar:
 ```
 
 El constructor selecciona y concatena los archivos respetando sus offsets,
-y llama a ../build.ps1 para convertir los bytes y comprobar las marcas
+y llama a ../tools/build/build.ps1 para convertir los bytes y comprobar las marcas
 =offset. No genera instrucciones automaticamente. Cada ROM mide 65536 bytes.
 Las salidas son build/faggin-16.rom, build/faggin-32.rom y build/faggin-64.rom.
 El hexadecimal combinado queda junto a cada ROM.
@@ -109,9 +130,9 @@ de ROM incluyen el relleno necesario para este formato de imagen de PC.
 Pruebas reales en QEMU que cierran su propia VM:
 
 ```powershell
-.\run-firmware.ps1 -Stage 16 -Check
-.\run-firmware.ps1 -Stage 32 -Check
-.\run-firmware.ps1 -Stage 64 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 16 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 32 -Check
+.\tools/qemu/run-firmware.ps1 -Stage 64 -Check
 ```
 
 Cada prueba exige los mensajes exactos y en orden, sin etapas posteriores

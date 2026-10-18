@@ -6,7 +6,7 @@ Las instrucciones siguen escritas byte por byte, sin servicios BIOS/UEFI.
 Desde la raiz del proyecto:
 
 ```powershell
-.\run-firmware.ps1 -Stress
+.\tools/qemu/run-firmware.ps1 -Stress
 ```
 
 Cada punto confirma una ronda completa. Tras 32 puntos debe aparecer:
@@ -18,7 +18,7 @@ GREEN [RAM] Faggin scaling: RAM 1 MiB x 32 OK
 La CPU queda en HLT; salir con Ctrl+C. Para comprobar y cerrar automaticamente:
 
 ```powershell
-.\run-firmware.ps1 -Stress -Check
+.\tools/qemu/run-firmware.ps1 -Stress -Check
 ```
 
 ## Que comprueba
@@ -40,7 +40,7 @@ El destino es QEMU con CPU qemu64, una CPU virtual y 16 MiB de RAM.
 ## Verificar que detecta errores
 
 ```powershell
-.\run-firmware.ps1 -Stress -InjectFault -Check
+.\tools/qemu/run-firmware.ps1 -Stress -InjectFault -Check
 ```
 
 En esta variante el firmware pone a cero el primer valor despues del llenado,

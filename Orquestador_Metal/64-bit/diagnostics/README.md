@@ -74,11 +74,11 @@ no presente. El valor CR2 identifica esa direccion; no es el RIP.
 Desde la raiz del proyecto:
 
 ```powershell
-.\run-firmware.ps1 -Exception divide -Check
-.\run-firmware.ps1 -Exception invalid -Check
-.\run-firmware.ps1 -Exception page -Check
-.\run-firmware.ps1 -Exception general -Check
-.\run-firmware.ps1 -Exception double -Check
+.\tools/qemu/run-firmware.ps1 -Exception divide -Check
+.\tools/qemu/run-firmware.ps1 -Exception invalid -Check
+.\tools/qemu/run-firmware.ps1 -Exception page -Check
+.\tools/qemu/run-firmware.ps1 -Exception general -Check
+.\tools/qemu/run-firmware.ps1 -Exception double -Check
 ```
 
 | Caso | Accion del firmware | Resultado exigido |
@@ -99,7 +99,7 @@ del handler en F1597. Un mensaje parcial o un triple fallo no aprueban.
 Los casos provocados no se combinan con -Stress. Sin -Check se puede
 observar el diagnostico directamente y salir con Ctrl+C.
 
-La bateria completa se ejecuta con `.\test-firmware.ps1`: 15 casos base
+La bateria completa se ejecuta con `.\tools/tests/test-firmware.ps1`: 15 casos base
 en QEMU y 33 reglas del constructor, además de los grupos de programas,
 pantalla, disco y arranque del [cierre v1](../../CIERRE-v1.md). Incluye los cinco casos anteriores
 y cuatro violaciones de guardianes: escritura en ROM, ejecucion de datos,

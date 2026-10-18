@@ -1,0 +1,16 @@
+{
+  "Case": "empty",
+  "Passed": true,
+  "BootServicesExited": true,
+  "Ring": 0,
+  "SceneReady": false,
+  "BoundsRejected": true,
+  "Width": 1280,
+  "Height": 800,
+  "Stride": 1280,
+  "PixelFormat": 1,
+  "FramebufferSHA256": "0daec1d61201cd21d49bc70e3b5bb442d0c2b4b440c37ec22179bdb2f39b443f",
+  "PacketSHA256": "002278a2458382d84759966986a3576cb3f01fcc7e84fa09c19bf55f3fc4a89f",
+  "PixelsCompared": 1024000,
+  "PhysicalTest": false
+}

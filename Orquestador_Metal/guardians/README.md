@@ -126,12 +126,12 @@ Un fallo detectado por la prueba de RAM aparece con RED [RAM].
 Desde la raiz:
 
 ```powershell
-.\test-firmware.ps1
+.\tools/tests/test-firmware.ps1
 ```
 
 Ejecuta 33 pruebas de reglas del constructor y 15 casos base en QEMU, además de
 programas, pantalla, disco y arranque. El [cierre v1](../CIERRE-v1.md) desglosa
-los grupos. Para ver solo las reglas estructurales: `.\test-guardians.ps1`.
+los grupos. Para ver solo las reglas estructurales: `.\tools/tests/test-guardians.ps1`.
 Las pruebas estructurales alteran copias de metadatos y una copia aislada
 de los bytes de reset: no editan tus fuentes reales ni una ROM existente.
 Ademas se ejecutan once autopruebas del servicio en cada perfil de 64 bits.
@@ -139,10 +139,10 @@ Ademas se ejecutan once autopruebas del servicio en cada perfil de 64 bits.
 Para observar las violaciones hardware individualmente:
 
 ```powershell
-.\run-firmware.ps1 -Exception write -Check
-.\run-firmware.ps1 -Exception execute -Check
-.\run-firmware.ps1 -Exception guard -Check
-.\run-firmware.ps1 -Exception stack -Check
+.\tools/qemu/run-firmware.ps1 -Exception write -Check
+.\tools/qemu/run-firmware.ps1 -Exception execute -Check
+.\tools/qemu/run-firmware.ps1 -Exception guard -Check
+.\tools/qemu/run-firmware.ps1 -Exception stack -Check
 ```
 
 Se comprueba que escribir en ROM da error de pagina 3, ejecutar datos da

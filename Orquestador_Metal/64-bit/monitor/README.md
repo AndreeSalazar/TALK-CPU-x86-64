@@ -1,6 +1,6 @@
 # Consola propia de 64 bits
 
-Desde la raiz: `./run-firmware.ps1 -Monitor`. Abre la ventana Orquestador del Metal.
+Desde la raiz: `./tools/qemu/run-firmware.ps1 -Monitor`. Abre la ventana Orquestador del Metal.
 Pulsa dentro de ella para escribir con su teclado PS/2; no requiere Enter para
 elegir una orden. `-Headless` conserva solo la terminal. UART y VGA reciben la
 misma salida; se acepta entrada por UART o PS/2, con prioridad a UART.
@@ -33,11 +33,11 @@ CF indica rechazo y EDX explica el motivo. Nunca interpreta una reserva rechazad
 como direccion. No libera ni borra bloques; una reserva no significa que contenga ceros.
 La consola conserva las protecciones de memoria y las pilas de excepciones existentes.
 
-`./run-firmware.ps1 -Monitor -Check` verifica 19 intercambios exactos, incluyendo
+`./tools/qemu/run-firmware.ps1 -Monitor -Check` verifica 19 intercambios exactos, incluyendo
 hola mundo desde RAM, eco caracter a caracter, borrado, salto de linea y regreso.
 Tambien comprueba las autopruebas anteriores, HLT y ausencia de excepciones.
 El registro queda en `build/faggin-64-monitor-check-console.log`.
-`./test-screen.ps1` verifica por separado la entrada PS/2, el texto en memoria
+`./tools/tests/test-screen.ps1` verifica por separado la entrada PS/2, el texto en memoria
 VGA, el desplazamiento de filas y una captura real de la pantalla.
 La ejecucion interactiva usa registros separados con sufijo `-live`, para que
 las pruebas no colisionen con una consola abierta.

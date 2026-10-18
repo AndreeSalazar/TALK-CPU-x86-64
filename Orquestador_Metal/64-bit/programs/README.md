@@ -1,6 +1,6 @@
 # Hola mundo y eco con bytes propios
 
-`./run-firmware.ps1 -Monitor` desde la raiz construye la ROM y exporta
+`./tools/qemu/run-firmware.ps1 -Monitor` desde la raiz construye la ROM y exporta
 `build/hola.x86` y `build/eco.x86`. Pulsa `o` o `e`; Escape sale del eco.
 Los archivos UEFI originales de `src/` permanecen intactos.
 
@@ -68,11 +68,11 @@ cadenas. No se reciben paquetes por UART.
 
 ## Comprobacion
 
-`./test-firmware.ps1` incluye el recorrido normal: hola, eco, borrado, Enter,
+`./tools/tests/test-firmware.ps1` incluye el recorrido normal: hola, eco, borrado, Enter,
 Escape y hola otra vez. La traza confirma ejecucion en RAM. La entrada de la
 prueba de eco se envia caracter a caracter para respetar el FIFO del UART.
 
-`./test-programs.ps1` modifica copias de la ROM y comprueba ocho rechazos:
+`./tools/tests/test-programs.ps1` modifica copias de la ROM y comprueba ocho rechazos:
 firma, longitud cero, exceso de ventana, longitud maxima uint32, entrada igual
 al extremo, flags, checksum y cuerpo alterado. Cada caso verifica que el monitor
 siga operativo y que el cuerpo no llegue a ejecutarse.

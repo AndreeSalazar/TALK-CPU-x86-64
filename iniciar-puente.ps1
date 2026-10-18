@@ -5,15 +5,15 @@ try {
     if(-not $Qemu){$Qemu=Join-Path $env:ProgramFiles 'qemu/qemu-system-x86_64.exe'}
     if(-not $Python){$Python=Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'}
     if(-not(Test-Path $Qemu) -or -not(Test-Path $Python)){throw 'Indica -Qemu y -Python con las rutas instaladas.'}
-    & "$PSScriptRoot/construir-puente.ps1"
-    & "$PSScriptRoot/crear-disco.ps1" -GPT -Programa build/Puente_Metal/METAL/INICIO.X86
+    & "$PSScriptRoot/tools/build/construir-puente.ps1"
+    & "$PSScriptRoot/tools/build/crear-disco.ps1" -GPT -Programa build/Puente_Metal/METAL/INICIO.X86
     $cases=if($Comprobar){@('normal','firma','suma','ausente','excesivo','entrada','salida')}else{@('normal')}
     foreach($case in $cases){
-        & $Python "$PSScriptRoot/preparar-imagen-puente.py" --caso $case
+        & $Python "$PSScriptRoot/tools/build/preparar-imagen-puente.py" --caso $case
         if($LASTEXITCODE -ne 0){throw "Fallo la imagen virtual: $case"}
     }
     if($Comprobar){
-        & $Python -u "$PSScriptRoot/test-puente.py" --qemu $Qemu --casos @cases
+        & $Python -u "$PSScriptRoot/tools/tests/test-puente.py" --qemu $Qemu --casos @cases
         if($LASTEXITCODE -ne 0){throw 'Fallo una comprobacion del puente.'}
     }else{
         $share=Join-Path (Split-Path $Qemu) 'share'

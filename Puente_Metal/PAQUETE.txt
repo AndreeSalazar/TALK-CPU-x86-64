@@ -9,7 +9,7 @@ La prueba termina en CPU detenida. No hay teclado/eco tras salir de UEFI.
 
 No es una ROM para grabar en la placa. No formatear discos para copiar esto.
 La ruta del SSD interno se instala separada de Windows con las utilidades
-copiar-puente.ps1 y registrar-puente.ps1 de la raiz del proyecto.
+tools/install/copiar-puente.ps1 y tools/install/registrar-puente.ps1 de la raiz del proyecto.
 En USB extraible: ruta EFI/BOOT; elegir arranque UEFI desde F11.
 Guardar el trabajo antes de reiniciar. Tras fotografiar el saludo, reiniciar
 manualmente para volver al sistema habitual.

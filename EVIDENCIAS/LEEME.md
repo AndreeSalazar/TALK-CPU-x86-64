@@ -1,5 +1,11 @@
 # Evidencias de Orquestador del Metal
 
+## Flappy Metal — primer dibujo
+
+[Escena y tres comprobaciones QEMU](FLAPPY_METAL/LEEME.md): pájaro, tuberías,
+fondo y suelo, con comparación de píxeles y rechazo de coordenadas/rectángulos
+inválidos. Es una vista estática, todavía sin controles ni física del juego.
+
 ## CASM — primera base ejecutable
 
 [Informe CASM](CASM/LEEME.md): compilador escrito en C, verificador de emisión,
@@ -8,7 +14,7 @@ la distinción con las fotos del saludo manual en el PC real.
 
 ## QEMU — comprobado
 
-Las cuatro capturas originales están en [QEMU](QEMU/). Se trasladaron sin cambiar
+Las cuatro capturas originales están en [QEMU](QEMU). Se trasladaron sin cambiar
 sus bytes desde Orquestador_Metal/documentacion/capturas; el informe de cierre
 apunta ahora aquí. Son pantallas de la máquina virtual, no de la placa física.
 
@@ -19,9 +25,9 @@ apunta ahora aquí. Son pantallas de la máquina virtual, no de la placa física
 | [03-eco-propio.png](QEMU/03-eco-propio.png) | Escritura con teclado PS/2 y eco propio |
 | [04-sin-disco.png](QEMU/04-sin-disco.png) | Motivo de ausencia de disco y retorno al monitor |
 
-[informes](QEMU/informes/) conserva la batería aprobada, fuera de build/.
+[informes](QEMU/informes) conserva la batería aprobada, fuera de build/.
 [manifiesto.json](QEMU/manifiesto.json) registra las huellas SHA-256 de fotos e informes.
-Para actualizar después de otra batería completa: `./recopilar-evidencias.ps1`.
+Para actualizar después de otra batería completa: `./tools/evidence/recopilar-evidencias.ps1`.
 El recopilador copia los últimos informes y fotos locales; no vuelve a ejecutar
 las pruebas ni certifica que esos archivos no hayan sido editados después.
 
@@ -50,7 +56,7 @@ Ya existe un [primer inventario del firmware MSI 2.C](PC_REAL/analisis-msi/LEEME
 para investigar la integración conservando componentes AMD. Es análisis de un
 archivo oficial, no una lectura del chip físico ni una modificación instalada.
 
-El destino físico único y el criterio para terminar están en [PERFIL-FISICO](../PERFIL-FISICO.md). QEMU es el banco de pruebas para ese proyecto.
+El destino físico único y el criterio para terminar están en [PERFIL-FISICO](../docs/PERFIL-FISICO.md). QEMU es el banco de pruebas para ese proyecto.
 
 ## Puente UEFI → código propio: vía actual de la primera prueba
 

@@ -12,7 +12,7 @@ no usar .efi ya no rige para esta primera prueba.
 
 Decisión confirmada: firmware propio desde RESET, sin cargador .efi.
 El objetivo físico único es MS-7C52 + Ryzen 5 5600X; QEMU es el banco de pruebas.
-El [perfil acordado](../../PERFIL-FISICO.md) define el cierre. La estrategia actual
+El [perfil acordado](../../docs/PERFIL-FISICO.md) define el cierre. La estrategia actual
 es conservar componentes AMD y el entorno de inicio que requieran; el análisis
 está implementado, pero el port físico sigue pendiente.
 

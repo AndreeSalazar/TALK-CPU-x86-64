@@ -4,7 +4,7 @@ param([switch]$Apply)
 $ErrorActionPreference='Stop'
 $root=[IO.Path]::GetFullPath($PSScriptRoot).TrimEnd('\')+'\'
 $targets=[Collections.Generic.List[string]]::new()
-foreach($relative in @('__pycache__','CASM/__pycache__')){
+foreach($relative in @('__pycache__','CASM/__pycache__','tools/analysis/__pycache__','tools/build/__pycache__','Games/Flappy_Metal/__pycache__')){
     $candidate=Join-Path $root $relative
     if(Test-Path -LiteralPath $candidate){$targets.Add($candidate)}
 }

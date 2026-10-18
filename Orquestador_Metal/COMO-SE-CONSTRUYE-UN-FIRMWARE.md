@@ -1,7 +1,7 @@
 # Como se construye un firmware: referencia para Faggin scaling
 
 Esta explicación es una referencia de arquitectura. El proyecto tiene un único
-destino físico: MS-7C52 con Ryzen 5 5600X, según [PERFIL-FISICO](../PERFIL-FISICO.md).
+destino físico: MS-7C52 con Ryzen 5 5600X, según [PERFIL-FISICO](../docs/PERFIL-FISICO.md).
 La v1 QEMU está terminada; la adaptación investiga conservar componentes AMD y el
 entorno de inicio que requieran. No se busca implementar toda la especificación
 UEFI ni soportar otras placas. El [trazado actual](../EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md)

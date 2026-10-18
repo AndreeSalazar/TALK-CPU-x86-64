@@ -27,6 +27,6 @@ tramo de 2 MiB. Las guardas y la pagina nula no estan presentes. La entrada larg
 vuelve a fijar RSP antes de usar su pila.
 La GDT y los destinos inmediatos siguen en regiones mapeadas.
 
-Probar desde la raiz: `.\run-firmware.ps1 -Stage 32 -Check`.
+Probar desde la raiz: `.\tools/qemu/run-firmware.ps1 -Stage 32 -Check`.
 Incluye la preparacion de 16 bits y excluye la carpeta de 64 bits.
 Las direcciones, valores de registros y selectores estan en hexadecimal.

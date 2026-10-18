@@ -108,7 +108,7 @@ try {
     }
     $hexPath = "build\$buildName.hex"
     [IO.File]::WriteAllLines((Join-Path $projectRoot $hexPath), $combinedHex)
-    & (Join-Path $projectRoot 'build.ps1') -In $hexPath -Out "build\$buildName.rom"
+    & (Join-Path $projectRoot 'tools/build/build.ps1') -In $hexPath -Out "build\$buildName.rom"
     if ($Monitor) {
         # Exportar paquetes exactos: no se generan instrucciones ni se cambian sus bytes.
         $image = [IO.File]::ReadAllBytes((Join-Path $projectRoot "build\$buildName.rom"))

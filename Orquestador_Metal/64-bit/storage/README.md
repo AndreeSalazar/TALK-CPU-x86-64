@@ -60,21 +60,21 @@ su contrato: los guardianes no impiden que cualquier programa válido se cuelgue
 
 ## Imágenes y pruebas
 
-`./crear-disco.ps1` crea FAT32 directo. `-MBR` o `-GPT` seleccionan particionado;
+`./tools/build/crear-disco.ps1` crea FAT32 directo. `-MBR` o `-GPT` seleccionan particionado;
 `-SectoresPorCluster 8` selecciona clústeres de 4096 bytes. `-Programa` acepta
 un paquete propio y `-Fragmentado` prepara cadenas no contiguas. Solo crea
 archivos en `build/`. `iniciar.ps1 -Disco` regenera la demostración GPT/SPC8.
 
-`herramientas-imagen.ps1` calcula CRC y permite archivos dispersos en Windows.
+`tools/build/herramientas-imagen.ps1` calcula CRC y permite archivos dispersos en Windows.
 Su utilidad C# se ejecuta en el anfitrión, no forma parte del firmware.
 QEMU usa `snapshot=on`; las pruebas comparan las huellas de las imágenes antes
 y después. Las copias alteradas se eliminan al pasar y se conservan si fallan.
 
-`test-storage.ps1` comprueba 26 recorridos FAT32/MBR y rechazo.
-`test-gpt.ps1` añade 24 casos: CRC, respaldo, rangos, cruces, selección ambigua,
+`tools/tests/test-storage.ps1` comprueba 26 recorridos FAT32/MBR y rechazo.
+`tools/tests/test-gpt.ps1` añade 24 casos: CRC, respaldo, rangos, cruces, selección ambigua,
 UUID duplicado, ESP, última entrada y todos los tamaños de clúster admitidos,
 incluyendo archivos de 4096 bytes y directorios fragmentados.
-`test-arranque.ps1` comprueba arranque correcto, cabecera dañada y disco ausente;
+`tools/tests/test-arranque.ps1` comprueba arranque correcto, cabecera dañada y disco ausente;
 captura pantalla y eco. La batería general incluye los tres scripts.
 Las salidas de timeout y error físico ATA existen, pero no se ha simulado una
 avería física del dispositivo. Véase el [cierre con fotos](../../CIERRE-v1.md).

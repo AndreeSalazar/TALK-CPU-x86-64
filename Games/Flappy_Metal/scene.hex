@@ -1,0 +1,42 @@
+; Original static scene, x86-64 / inherited metal64 framebuffer context.
+; No firmware calls. Descriptor data starts at body offset 0x200.
+@0
+FC
+44 8B 6D 20 41 81 ED 80 02 00 00 41 D1 ED
+44 8B 75 24 41 81 EE 68 01 00 00 41 D1 EE
+31 C9 31 D2 44 8B 45 20 44 8B 4D 24
+B8 23 14 0B 00 E8 CD 00 00 00 85 C0 75 69
+4C 8D 25 C2 01 00 00 41 8B 1C 24 49 83 C4 04
+=46
+; Reject unsigned overflow when centering descriptor coordinates.
+41 8B 0C 24 44 01 E9 72 71 41 8B 54 24 04 44 01 F2 72 65
+45 8B 44 24 08 45 8B 4C 24 0C 41 8B 44 24 10
+E8 93 00 00 00 85 C0 75 4F 49 83 C4 14 FF CB 75 CD
+C7 85 B0 00 00 00 01 00 00 00 FA F4 EB FD
+=87
+@C0
+; Scene rejection marker; no return into the bridge's text renderer.
+C7 85 B0 00 00 00 02 00 00 00 FA F4 EB FD
+=CE
+@100
+; fill_rect: ECX=x EDX=y R8D=width R9D=height EAX=0xRRGGBB.
+; Reject empty/overflow/out-of-bounds rectangles before any store.
+; Returns EAX=0 success, 1 rejection. Preserves RDI and nonvolatile registers.
+57 45 85 C0 0F 84 B6 00 00 00
+45 85 C9 0F 84 AD 00 00 00
+44 8B 55 20 41 29 CA 0F 82 A0 00 00 00
+45 39 D0 0F 87 97 00 00 00
+44 8B 55 24 41 29 D2 0F 82 8A 00 00 00
+45 39 D1 0F 87 81 00 00 00
+83 7D 2C 00 75 05 0F C8 C1 E8 08
+89 D7 44 8B 55 28 49 0F AF FA 48 01 CF 48 C1 E7 02
+48 03 7D 10 49 C1 E2 02 44 89 C1 48 C1 E1 02 49 29 CA
+45 89 CB
+=170
+44 89 C1 F3 AB 4C 01 D7 41 FF CB 75 F3
+31 C0 5F C3
+=181
+@1C0
+B8 01 00 00 00 5F C3
+=1C7
+@200
