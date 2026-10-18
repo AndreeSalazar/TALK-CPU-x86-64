@@ -1,0 +1,20 @@
+[
+  {
+    "Archivo": "01-vista-interior.png",
+    "SHA256": "FCCADF911CA599196FE87C711F254660ED9E33C53CD7DB4FD34D7B1D52090ED9",
+    "Origen": "Fotografia aportada por el usuario",
+    "DemuestraArranquePropio": false
+  },
+  {
+    "Archivo": "02-serigrafia-y-ssd.png",
+    "SHA256": "412EB317A70BD8E6BF727CD0C0533AF199A8BBB9A2FA14285BF74963579B8938",
+    "Origen": "Fotografia aportada por el usuario",
+    "DemuestraArranquePropio": false
+  },
+  {
+    "Archivo": "03-vista-puertos.png",
+    "SHA256": "951880C959D2CB43999013599003F3CF614E278AE37E43EC34A8842B228B5FC5",
+    "Origen": "Fotografia aportada por el usuario",
+    "DemuestraArranquePropio": false
+  }
+]
