@@ -14,22 +14,28 @@ trabajo: contratos, CASM numérico, dibujo, tiempo, entrada y juego tipo Flappy 
 Es un plan, no un juego ya implementado. La limpieza conservadora se previsualiza
 con `./clean-workspace.ps1` y se aplica con `-Apply`.
 
-## Primer dibujo de Flappy Metal
+## Flappy Metal: prototipo jugable en QEMU
 
-Ya hay una escena propia con pájaro, tuberías, nubes y suelo, dibujada por CPU
-después de BootServices. Es una vista estática: aún faltan movimiento y controles.
+Ya hay salto, gravedad, tuberías móviles, colisiones, puntuación y reinicio,
+dibujados por CPU después de BootServices. El teclado y temporizador son los de
+QEMU PC, consultados directamente sin servicios UEFI.
 
 ```powershell
 .\jugar.ps1
 .\jugar.ps1 -Comprobar
+.\jugar.ps1 -Estatico
 ```
 
-![Primera escena real en QEMU](EVIDENCIAS/FLAPPY_METAL/01-scene.png)
+Espacio inicia y da impulso; Enter reinicia; Escape detiene la CPU invitada.
+F12 pausa/reanuda. Cierra la ventana para salir de QEMU.
 
-[Código y contrato gráfico](Games/Flappy_Metal/README.md). El paquete mide 1300
-bytes y las tres comprobaciones QEMU verifican píxeles, desbordamiento de
-coordenadas y ancho cero. La escena usa instrucciones .hex manuales; CASM todavía
-no emite gráficos. El SSD real conserva el saludo instalado.
+![Juego en vuelo, captura QEMU](EVIDENCIAS/FLAPPY_METAL/04-game-flight.png)
+
+[Código y contrato](Games/Flappy_Metal/README.md). El juego ocupa 4088 bytes de
+paquete: quedan ocho bytes de margen en el cuerpo. Hay siete comprobaciones
+interactivas, siete casos aislados de límites/fallos y tres de la escena estática.
+Las instrucciones siguen en .hex manual; CASM todavía no emite el juego.
+El SSD real conserva el saludo instalado y el teclado USB real sigue pendiente.
 
 La raíz se ha reducido a entradas de uso y este README. Las utilidades y pruebas
 están agrupadas en [tools](tools/README.md), el perfil y plan en `docs/`. Se

@@ -1,0 +1,11 @@
+; Test-only initializer. Not included in the normal playable packet.
+@500
+E8 7B 02 00 00
+C7 85 B4 00 00 00 01 00 00 00
+C7 85 C0 00 00 00 00 00 00 00
+C7 85 C4 00 00 00 00 00 00 00
+C7 85 C8 00 00 00 00 00 00 00
+C7 85 D0 00 00 00 00 00 00 00
+E8 C4 04 00 00 E8 BF 06 00 00
+C7 85 E8 00 00 00 01 00 00 00 C3
+=54C

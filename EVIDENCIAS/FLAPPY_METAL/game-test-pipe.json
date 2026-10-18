@@ -1,0 +1,27 @@
+{
+  "Case": "pipe",
+  "Passed": true,
+  "State": {
+    "Mode": 2,
+    "Frames": 0,
+    "Held": 0,
+    "Y": 25664,
+    "Velocity": 64,
+    "Pipe1": 148,
+    "Pipe2": 542,
+    "Score": 0,
+    "Restarts": 0,
+    "Flaps": 0,
+    "Cause": 3,
+    "TimerFault": 0,
+    "KeyboardFault": 0,
+    "Pause": 2,
+    "LastScan": 250,
+    "ScanCount": 1,
+    "LogicTicks": 1
+  },
+  "PixelsCompared": 1024000,
+  "PacketSHA256": "d8e16e97494286050bee4228c439fbe37ee3248fe5c92d29dfd7911ef5f0c56c",
+  "PhysicalTest": false,
+  "TestFixture": true
+}

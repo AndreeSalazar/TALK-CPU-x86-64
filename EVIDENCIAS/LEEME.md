@@ -1,10 +1,11 @@
 # Evidencias de Orquestador del Metal
 
-## Flappy Metal — primer dibujo
+## Flappy Metal — juego QEMU y dibujo
 
-[Escena y tres comprobaciones QEMU](FLAPPY_METAL/LEEME.md): pájaro, tuberías,
-fondo y suelo, con comparación de píxeles y rechazo de coordenadas/rectángulos
-inválidos. Es una vista estática, todavía sin controles ni física del juego.
+[Informes y capturas](FLAPPY_METAL/LEEME.md): escena estática y prototipo jugable
+con salto, gravedad, colisiones, puntuación y reinicio. Hay siete comprobaciones
+interactivas, siete casos aislados, dos de operandos relativos y tres estáticos.
+No se presenta como juego instalado o probado en el hardware real.
 
 ## CASM — primera base ejecutable
 

@@ -1,0 +1,12 @@
+{
+  "Case": "normal",
+  "Playable": true,
+  "EntryOffset": 1536,
+  "Bytes": 4088,
+  "BodyBytes": 4064,
+  "Rectangles": 38,
+  "SHA256": "d9463428d7f9d1c0dd378cca48f92632c09e78268e408af005de5abd0994d15f",
+  "InstructionSource": "Games/Flappy_Metal/scene.hex + game.hex",
+  "TestFixture": false,
+  "PhysicalTest": false
+}

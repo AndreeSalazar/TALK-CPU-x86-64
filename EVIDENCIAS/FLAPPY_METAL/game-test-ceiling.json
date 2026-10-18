@@ -1,0 +1,27 @@
+{
+  "Case": "ceiling",
+  "Passed": true,
+  "State": {
+    "Mode": 2,
+    "Frames": 0,
+    "Held": 0,
+    "Y": 0,
+    "Velocity": -1088,
+    "Pipe1": 324,
+    "Pipe2": 544,
+    "Score": 0,
+    "Restarts": 0,
+    "Flaps": 0,
+    "Cause": 2,
+    "TimerFault": 0,
+    "KeyboardFault": 0,
+    "Pause": 2,
+    "LastScan": 250,
+    "ScanCount": 1,
+    "LogicTicks": 1
+  },
+  "PixelsCompared": 1024000,
+  "PacketSHA256": "f119b5b1c8b5c2decf284dd0b94c8949337c230c29d4c5c65e28789a6734570b",
+  "PhysicalTest": false,
+  "TestFixture": true
+}

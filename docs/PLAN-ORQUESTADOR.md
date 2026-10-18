@@ -19,11 +19,13 @@ enseña nuevas capacidades físicas a la CPU.
   retorno, emisión HEX, verificación estructural y paquete FAGRAW64.
 - 39 casos CASM aprobados y saludo generado ejecutado en QEMU/OVMF.
 
-Ya hay [una primera escena estática](../Games/Flappy_Metal/README.md) con 38
-rectángulos y tres pruebas QEMU aprobadas. El dibujador está escrito en .hex y
-todavía no es una operación de CASM. No hay aritmética CASM, reloj, teclado real después
-de BootServices ni soporte multiprocesador propio. El cuerpo cargable actual
-está limitado a 4072 bytes. El juego no se presenta como implementado.
+Ya hay [un prototipo jugable QEMU](../Games/Flappy_Metal/README.md): movimiento,
+gravedad, teclado PS/2 consultado, pasos regulados por PIT, colisiones, puntuación
+y reinicio. Hay 7 comprobaciones interactivas, 7 casos aislados de límites/fallos
+y 3 de dibujo estático. Sigue escrito en .hex; CASM no emite el juego todavía.
+No hay aritmética CASM, teclado USB real, excepciones propias del puente ni SMP.
+El cuerpo del juego ocupa 4064 de 4072 bytes; queda pendiente una revisión conjunta
+del contrato o compactación antes de añadir más código.
 
 ## Etapas con criterio de aceptación
 
@@ -32,9 +34,9 @@ está limitado a 4072 bytes. El juego no se presenta como implementado.
 | 1. Contrato propio | Versionar el ABI; documentar registros, memoria, pila y servicios permitidos; instalar excepciones propias antes de habilitar eventos | Error intencional muestra motivo y se detiene de forma definida en QEMU |
 | 2. CASM numérico | Enteros, locales, asignación, comparaciones, if y bucles; reglas explícitas de inicialización, overflow y límites | Casos válidos ejecutados y casos inválidos rechazados por ambos controles cuando corresponda |
 | 3. Dibujo CPU | Primera escena .hex lista y probada; falta exponer un ABI gráfico versionado a CASM | Ya hay píxeles exactos y rechazos de overflow/ancho cero; falta integración con el lenguaje |
-| 4. Tiempo | Detectar un reloj disponible; definir unidades, calibración y avance de simulación a paso fijo | La velocidad del juego no depende del número de iteraciones por segundo |
-| 5. Entrada | QEMU primero; después identificar y soportar el controlador del teclado real | Una pulsación cambia el estado; pulsar/mantener/soltar tiene comportamiento definido |
-| 6. Juego | Personaje rectangular, gravedad, impulso, obstáculos, colisión, puntuación y reinicio | Sesión QEMU jugable y repetible con pruebas de colisiones y límites |
+| 4. Tiempo | QEMU usa PIT con espera acotada y pasos nominales de 1/60 s; bajo carga se ralentiza | Regulación y timeout comprobados; faltan calibración física y recuperación de retrasos |
+| 5. Entrada | PS/2 QEMU probado, incluido mantener/soltar; USB real pendiente | Salto, reinicio, pausa y parada probados por eventos de teclado reales de QEMU |
+| 6. Juego | Prototipo jugable QEMU implementado | Vuelo con un punto, colisiones, reinicio, recorte y límites comprobados |
 | 7. Primera prueba del juego en PC | Congelar paquete y huellas; copiarlo solo tras revisar su resultado QEMU | Foto/vídeo real y registro de la versión, controles y resultado |
 
 El teclado simulado no sustituye al controlador real: un teclado USB puede

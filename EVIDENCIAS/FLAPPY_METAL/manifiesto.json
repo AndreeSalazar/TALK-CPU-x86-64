@@ -1,6 +1,6 @@
 {
   "RecordedDate": "2026-10-18",
-  "Scope": "Static CPU-rendered scene in QEMU; not a playable or physically tested game",
+  "Scope": "Static scene and playable QEMU prototype; no physical game installation",
   "Files": [
     {
       "File": "01-scene.png",
@@ -8,9 +8,84 @@
       "Bytes": 5572
     },
     {
+      "File": "02-game-ready.png",
+      "SHA256": "D213D1BFB5740EF60C1349C9A343E87D277DA2A61E12B843693EC985CB82A89B",
+      "Bytes": 6746
+    },
+    {
+      "File": "03-game-over.png",
+      "SHA256": "8413615A9E0A241475FD5C4489AEF9D69F71B89BE246E5A6DCB256BF0AD51E23",
+      "Bytes": 6666
+    },
+    {
+      "File": "04-game-flight.png",
+      "SHA256": "B594059D92F00448002CDAB45FC132112357D8747AA0068B3F0E9E8319AD9427",
+      "Bytes": 6579
+    },
+    {
+      "File": "05-game-stopped.png",
+      "SHA256": "40EE9D928CE025E31C1A88F064222E5BB37509E6FB9A53A89A37F6E084A897AE",
+      "Bytes": 6621
+    },
+    {
+      "File": "branch-test-results.json",
+      "SHA256": "C085ADCE9157E5687AD1F3248E130B550CD5164EBFE6FF8B19221B8556851B54",
+      "Bytes": 184
+    },
+    {
+      "File": "game-suite-results.json",
+      "SHA256": "099FDB4E895D8AF393C342C8FF0E64AF5952691D9BBDF4E37FB4DA125641A31D",
+      "Bytes": 243
+    },
+    {
+      "File": "game-test-ceiling.json",
+      "SHA256": "907DC6CE0FBF28D540280229C9EEA709AB1E8E10A4C1A3DC740FEE3321CE9445",
+      "Bytes": 530
+    },
+    {
+      "File": "game-test-clip.json",
+      "SHA256": "FDDEBA147D84B786E4DE9EDB21B95F359336F436A34919E2C74E655D5BCF2162",
+      "Bytes": 528
+    },
+    {
+      "File": "game-test-keyboardfault.json",
+      "SHA256": "1619341E1889476BC35BAD1467409CF0EF59695C206C8EDEDA4EFA0813213C00",
+      "Bytes": 534
+    },
+    {
+      "File": "game-test-pipe.json",
+      "SHA256": "52901C52C665C49A78B2D51B5DDECF46062AB0D34C9A4935786828BFA88292A9",
+      "Bytes": 528
+    },
+    {
+      "File": "game-test-results.json",
+      "SHA256": "3A2EFB7EF81F8091D5A5E64F1AA8E5CA8AB026768EAB3559FA27BE58C7225A8E",
+      "Bytes": 2694
+    },
+    {
+      "File": "game-test-scorecap.json",
+      "SHA256": "A3CA3E89087B13E01D6D5E12981BD2233DC77896A512E9409A20F06606E36297",
+      "Bytes": 533
+    },
+    {
+      "File": "game-test-timerfault.json",
+      "SHA256": "574AF36E570601BDBBF7889965C58009AFD0118B3A18DEB4D65D241A3029E331",
+      "Bytes": 533
+    },
+    {
+      "File": "game-test-wrap.json",
+      "SHA256": "1E865604A48CCCC5369BA37DB701D3E60FD1A3EFEFCC16B58B8B5A9BCADB3271",
+      "Bytes": 528
+    },
+    {
+      "File": "game.json",
+      "SHA256": "BE8E747B566DFADF04C8DDAE6C820E91050336F6DF463A09C8C24F24BFE4BD9E",
+      "Bytes": 319
+    },
+    {
       "File": "LEEME.md",
-      "SHA256": "E03C9F9EC25A6C0CE4C5655B3D7342B01DC84BE23D074C0CA7AC256B1B183A2A",
-      "Bytes": 2455
+      "SHA256": "F79D3B9A732A6238A1AED2C333691A3A39732344DF29881F20B21CE3E743B7B6",
+      "Bytes": 4986
     },
     {
       "File": "regression-layout.json",

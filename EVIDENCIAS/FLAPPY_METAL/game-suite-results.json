@@ -1,0 +1,10 @@
+{
+  "Passed": 19,
+  "Total": 19,
+  "Interactive": 7,
+  "IsolatedFixtures": 7,
+  "Static": 3,
+  "BranchOperands": 2,
+  "PacketSHA256": "d9463428d7f9d1c0dd378cca48f92632c09e78268e408af005de5abd0994d15f",
+  "PhysicalInstallationChanged": false
+}

@@ -1,0 +1,7 @@
+{
+  "Passed": 2,
+  "Total": 2,
+  "BranchOperands": 86,
+  "CorruptedStartupBranchRejected": true,
+  "PacketSHA256": "d9463428d7f9d1c0dd378cca48f92632c09e78268e408af005de5abd0994d15f"
+}

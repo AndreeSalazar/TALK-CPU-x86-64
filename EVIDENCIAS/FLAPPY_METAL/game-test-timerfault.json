@@ -1,0 +1,27 @@
+{
+  "Case": "timerfault",
+  "Passed": true,
+  "State": {
+    "Mode": 3,
+    "Frames": 0,
+    "Held": 0,
+    "Y": 37632,
+    "Velocity": 0,
+    "Pipe1": 324,
+    "Pipe2": 544,
+    "Score": 0,
+    "Restarts": 0,
+    "Flaps": 0,
+    "Cause": 0,
+    "TimerFault": 1,
+    "KeyboardFault": 0,
+    "Pause": 0,
+    "LastScan": 250,
+    "ScanCount": 1,
+    "LogicTicks": 0
+  },
+  "PixelsCompared": 1024000,
+  "PacketSHA256": "57d8dff214811550a7c02698547423ae36a63f2d7f2e2c959ae35cce077dbdd4",
+  "PhysicalTest": false,
+  "TestFixture": true
+}

@@ -1,0 +1,117 @@
+{
+  "Passed": 7,
+  "Total": 7,
+  "Cases": [
+    {
+      "Case": "ready-render-and-code",
+      "Passed": true
+    },
+    {
+      "Case": "pit-pacing",
+      "Passed": true,
+      "ObservedTicksPerHostSecond": 58.5,
+      "Measurement": "QEMU/host timing, broad regression bound, not a hardware benchmark"
+    },
+    {
+      "Case": "space-edge-and-gravity",
+      "Passed": true
+    },
+    {
+      "Case": "collision-and-game-over",
+      "Passed": true,
+      "Cause": 1
+    },
+    {
+      "Case": "enter-restart",
+      "Passed": true
+    },
+    {
+      "Case": "moving-pipes-score-and-flight-render",
+      "Passed": true,
+      "Score": 1
+    },
+    {
+      "Case": "escape-defined-halt",
+      "Passed": true
+    }
+  ],
+  "Snapshots": [
+    {
+      "Name": "02-game-ready",
+      "State": {
+        "Mode": 0,
+        "Frames": 5,
+        "Held": 0,
+        "Y": 37632,
+        "Velocity": 0,
+        "Pipe1": 324,
+        "Pipe2": 544,
+        "Score": 0,
+        "Restarts": 0,
+        "Flaps": 0,
+        "Cause": 0,
+        "TimerFault": 0,
+        "KeyboardFault": 0,
+        "Pause": 2,
+        "LastScan": 216,
+        "ScanCount": 3,
+        "LogicTicks": 0
+      },
+      "PixelsCompared": 1024000,
+      "FramebufferSHA256": "7cc1d3d5e348778abe092c8198bcd6091872cac6cc8d1ee18b8528399d1594d6"
+    },
+    {
+      "Name": "03-game-over",
+      "State": {
+        "Mode": 2,
+        "Frames": 94,
+        "Held": 0,
+        "Y": 71680,
+        "Velocity": 1536,
+        "Pipe1": 208,
+        "Pipe2": 428,
+        "Score": 0,
+        "Restarts": 0,
+        "Flaps": 1,
+        "Cause": 1,
+        "TimerFault": 0,
+        "KeyboardFault": 0,
+        "Pause": 2,
+        "LastScan": 216,
+        "ScanCount": 9,
+        "LogicTicks": 59
+      },
+      "PixelsCompared": 1024000,
+      "FramebufferSHA256": "f3097b9c95ed9014dff1338b8eb06e114fc0c22385836f3ab26f096d713127fe"
+    },
+    {
+      "Name": "04-game-flight",
+      "State": {
+        "Mode": 1,
+        "Frames": 235,
+        "Held": 0,
+        "Y": 30656,
+        "Velocity": 192,
+        "Pipe1": 68,
+        "Pipe2": 288,
+        "Score": 1,
+        "Restarts": 1,
+        "Flaps": 5,
+        "Cause": 0,
+        "TimerFault": 0,
+        "KeyboardFault": 0,
+        "Pause": 2,
+        "LastScan": 216,
+        "ScanCount": 23,
+        "LogicTicks": 187
+      },
+      "PixelsCompared": 1024000,
+      "FramebufferSHA256": "12158c2e4ffb57653ad68497b3f8f135adf9f30465ff75948f66e90bbf63cbda"
+    }
+  ],
+  "PacketSHA256": "d9463428d7f9d1c0dd378cca48f92632c09e78268e408af005de5abd0994d15f",
+  "BodyBytes": 4064,
+  "BootServicesExited": true,
+  "PhysicalTest": false,
+  "Target": "QEMU pc / qemu64 / TCG / PIT + PS2 polling"
+}

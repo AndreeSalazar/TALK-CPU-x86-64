@@ -1,0 +1,27 @@
+{
+  "Case": "clip",
+  "Passed": true,
+  "State": {
+    "Mode": 1,
+    "Frames": 0,
+    "Held": 0,
+    "Y": 37696,
+    "Velocity": 64,
+    "Pipe1": -24,
+    "Pipe2": 542,
+    "Score": 0,
+    "Restarts": 0,
+    "Flaps": 0,
+    "Cause": 0,
+    "TimerFault": 0,
+    "KeyboardFault": 0,
+    "Pause": 2,
+    "LastScan": 250,
+    "ScanCount": 1,
+    "LogicTicks": 1
+  },
+  "PixelsCompared": 1024000,
+  "PacketSHA256": "bdcac6433962c2400f079b84f5ffe2a44399d4c5f25d480de51801c9adeb20af",
+  "PhysicalTest": false,
+  "TestFixture": true
+}

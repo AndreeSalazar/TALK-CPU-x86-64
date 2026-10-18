@@ -1,0 +1,27 @@
+{
+  "Case": "scorecap",
+  "Passed": true,
+  "State": {
+    "Mode": 1,
+    "Frames": 0,
+    "Held": 0,
+    "Y": 37696,
+    "Velocity": 64,
+    "Pipe1": 72,
+    "Pipe2": 542,
+    "Score": 999,
+    "Restarts": 0,
+    "Flaps": 0,
+    "Cause": 0,
+    "TimerFault": 0,
+    "KeyboardFault": 0,
+    "Pause": 2,
+    "LastScan": 250,
+    "ScanCount": 1,
+    "LogicTicks": 1
+  },
+  "PixelsCompared": 1024000,
+  "PacketSHA256": "be4012ff58d299d224d8720e409dea08d7b95d25d7390377a002bab776189b33",
+  "PhysicalTest": false,
+  "TestFixture": true
+}
