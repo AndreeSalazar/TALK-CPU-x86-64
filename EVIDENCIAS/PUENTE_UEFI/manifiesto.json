@@ -1,0 +1,50 @@
+{
+  "Origen": "QEMU/OVMF e inspeccion offline; no prueba fisica",
+  "Archivos": [
+    {
+      "Archivo": "01-metal64-tras-uefi.png",
+      "SHA256": "BDD7B94846B0E3C2E18EA369B653A4C325DB02E32C17F94774862EED8C6B3E5F",
+      "Bytes": 4224
+    },
+    {
+      "Archivo": "02-paquete-rechazado.png",
+      "SHA256": "8178E572A7F651D947F14621169FDB9E5EC02E17FDCDC02DABB7112E839C0D57",
+      "Bytes": 16078
+    },
+    {
+      "Archivo": "03-salida-acotada.png",
+      "SHA256": "9CA1FA46D195D7E8469CC7FDF92361BDDD85EC8C6D5D5FE2D41AC63C689F4A45",
+      "Bytes": 16300
+    },
+    {
+      "Archivo": "inspeccion-eco.json",
+      "SHA256": "2A45A135482142AE3AE4623AA5842FC7D71857A33C9CF6429952E60F6009F378",
+      "Bytes": 692
+    },
+    {
+      "Archivo": "inspeccion-hola.json",
+      "SHA256": "80E70941EE37B92C9A012454C841C59CF13440E94DD4646C6BD5BE442130ECD4",
+      "Bytes": 693
+    },
+    {
+      "Archivo": "inspeccion-puente.json",
+      "SHA256": "C198C29F593EEF94CE47F0742AA0A5AA5E98E19BD05F1C6A02C3350630D8E93C",
+      "Bytes": 718
+    },
+    {
+      "Archivo": "LEEME.md",
+      "SHA256": "E642E6D28746C740930832FA1AF28608853AFCCC83B71B542B159916114D3FA8",
+      "Bytes": 2101
+    },
+    {
+      "Archivo": "pruebas-inspeccion.json",
+      "SHA256": "A9E5F656A614BBB7721D7DA311F2FCFCF688AC6E2FFB8A9E00C4B3F7BB31AD61",
+      "Bytes": 445
+    },
+    {
+      "Archivo": "pruebas.json",
+      "SHA256": "C9DF8B4B5D0C2826D1F35F3C595D800DCFC0E77DB00957513B9955369E714860",
+      "Bytes": 1559
+    }
+  ]
+}

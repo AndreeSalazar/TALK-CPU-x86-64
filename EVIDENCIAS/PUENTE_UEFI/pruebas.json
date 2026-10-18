@@ -1,0 +1,59 @@
+{
+  "Passed": 7,
+  "Total": 7,
+  "Cases": [
+    {
+      "Case": "normal",
+      "Passed": true,
+      "BootServicesExited": true,
+      "PayloadReturned": true,
+      "Ring": 0,
+      "OwnFramebufferTextVerified": true,
+      "Context": "0xDE38000",
+      "PayloadSHA256": "2bd77f970bced7c0c18d3a646b532443d2e1bf71fe4dc96ee3dff5b751e669ef"
+    },
+    {
+      "Case": "firma",
+      "Passed": true,
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "Reason": "RED [METAL] paquete FAGRAW64 invalido\r\n"
+    },
+    {
+      "Case": "suma",
+      "Passed": true,
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "Reason": "RED [METAL] paquete FAGRAW64 invalido\r\n"
+    },
+    {
+      "Case": "ausente",
+      "Passed": true,
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "Reason": "RED [METAL] no se pudo leer METAL/INICIO.X86\r\n"
+    },
+    {
+      "Case": "excesivo",
+      "Passed": true,
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "Reason": "RED [METAL] paquete FAGRAW64 invalido\r\n"
+    },
+    {
+      "Case": "entrada",
+      "Passed": true,
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "Reason": "RED [METAL] paquete FAGRAW64 invalido\r\n"
+    },
+    {
+      "Case": "salida",
+      "Passed": true,
+      "FaultInjection": "MapKey cero en copia de prueba",
+      "BootServicesExited": false,
+      "PayloadReturned": false,
+      "BoundedRetries": 3
+    }
+  ]
+}

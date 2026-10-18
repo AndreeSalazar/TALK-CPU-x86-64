@@ -1,5 +1,15 @@
 # Orquestador del Metal
 
+## Ruta física actual
+
+El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
+y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../Puente_Metal/LEEME.md)
+está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
+pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+desde RESET descrita más abajo se conserva como vía separada y su requisito de
+no usar .efi ya no rige para esta primera prueba.
+
+
 Firmware propio para x86-64, escrito con instrucciones en `.hex` y probado
 desde RESET en QEMU. El nombre para leer es **Orquestador del Metal**;
 `Orquestador_Metal` es la forma de su carpeta, sin espacios ni ambigüedades.
@@ -59,7 +69,7 @@ Los nombres de archivos técnicos no se traducen sin necesidad: hacerlo no añad
 protección y rompería referencias que ya se verifican.
 
 Las fuentes UEFI anteriores de `src/` son referencias históricas. El camino
-actual es firmware propio desde RESET; no se añadirá una entrada `.efi`.
+de la ROM QEMU es firmware propio desde RESET; la primera prueba física usa ahora el puente .efi descrito arriba.
 
 ## Estado comprobado y siguiente paso
 

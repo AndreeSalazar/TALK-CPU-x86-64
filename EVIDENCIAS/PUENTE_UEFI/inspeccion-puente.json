@@ -1,0 +1,26 @@
+{
+  "Source": "build\\Puente_Metal\\EFI\\BOOT\\BOOTX64.EFI",
+  "SHA256": "4287ad788cb7a75a74922f7f73e69363560c84501b9a73ba271d357f5f71469f",
+  "FileBytes": 12288,
+  "Machine": "x86-64",
+  "Format": "PE32+",
+  "Subsystem": 10,
+  "EntryRVA": 4096,
+  "EntryFileOffset": 512,
+  "ImageBytes": 16384,
+  "Sections": [
+    {
+      "Name": ".text",
+      "RVA": 4096,
+      "VirtualBytes": 11776,
+      "FileOffset": 512,
+      "FileBytes": 11776,
+      "Flags": "0x60000020",
+      "SHA256": "f88244e2a07746222d96e5a4e81dab256df1a4461b296d0753e57dbd512987a7",
+      "ExtractedFile": "section-00.bin"
+    }
+  ],
+  "NonEmptyDirectories": [],
+  "ExtractedCodeIsStandalone": false,
+  "Executed": false
+}

@@ -1,0 +1,26 @@
+{
+  "Source": "build\\original-hola.efi",
+  "SHA256": "40a9c221b1762bf585f39386e641e8ca9f080a31b01948cc1aee1fa991821ecc",
+  "FileBytes": 1024,
+  "Machine": "x86-64",
+  "Format": "PE32+",
+  "Subsystem": 10,
+  "EntryRVA": 4096,
+  "EntryFileOffset": 512,
+  "ImageBytes": 8192,
+  "Sections": [
+    {
+      "Name": ".text",
+      "RVA": 4096,
+      "VirtualBytes": 512,
+      "FileOffset": 512,
+      "FileBytes": 512,
+      "Flags": "0x60000020",
+      "SHA256": "6ff97795126d605e7c182e54013df4e79615563f10d6d8e914078863adc1c639",
+      "ExtractedFile": "section-00.bin"
+    }
+  ],
+  "NonEmptyDirectories": [],
+  "ExtractedCodeIsStandalone": false,
+  "Executed": false
+}

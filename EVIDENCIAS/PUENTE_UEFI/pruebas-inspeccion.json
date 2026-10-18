@@ -1,0 +1,26 @@
+{
+  "Passed": 5,
+  "Total": 5,
+  "Cases": [
+    {
+      "Name": "PE fuera de limites",
+      "Passed": true
+    },
+    {
+      "Name": "Arquitectura incompatible",
+      "Passed": true
+    },
+    {
+      "Name": "Seccion fuera de archivo",
+      "Passed": true
+    },
+    {
+      "Name": "Entrada fuera de secciones",
+      "Passed": true
+    },
+    {
+      "Name": "Archivo truncado",
+      "Passed": true
+    }
+  ]
+}

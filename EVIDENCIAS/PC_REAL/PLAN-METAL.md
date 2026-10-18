@@ -1,5 +1,15 @@
 # Llegar al metal: contrato de la siguiente entrega
 
+## Actualización: primera prueba mediante puente
+
+El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
+y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../../Puente_Metal/LEEME.md)
+está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
+pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+desde RESET descrita más abajo se conserva como vía separada y su requisito de
+no usar .efi ya no rige para esta primera prueba.
+
+
 Decisión confirmada: firmware propio desde RESET, sin cargador .efi.
 El objetivo físico único es MS-7C52 + Ryzen 5 5600X; QEMU es el banco de pruebas.
 El [perfil acordado](../../PERFIL-FISICO.md) define el cierre. La estrategia actual

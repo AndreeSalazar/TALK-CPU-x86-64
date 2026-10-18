@@ -23,14 +23,14 @@ sí requiere otro transporte; no se promete soporte USB en la primera integraci�
 El SSD de referencia no queda autorizado para formateo, borrado ni escritura de
 prueba por aparecer en esta tabla.
 
-## Estrategia elegida
+## Estrategia de firmware desde RESET (investigación conservada)
 
 Conservar los componentes AMD necesarios e investigar qué entorno de inicio
 requieren. Los datos y código conservados siguen siendo de sus fabricantes;
 las instrucciones propias permanecen escritas a mano en .hex. Los scripts Python
 y PowerShell son herramientas del anfitrión para analizar y construir archivos.
 
-No se usará una aplicación .efi en USB como entrada del proyecto. Conservar
+En esta vía de investigación desde RESET no se usa una aplicación .efi de entrada. Conservar
 componentes AMD puede exigir conservar o proporcionar fases internas PI/UEFI y
 partes de AMI. Por eso no se afirma que la futura imagen carezca de todo código
 UEFI. La integración aún no está implementada ni se ha demostrado su viabilidad
@@ -41,7 +41,19 @@ El propósito es aprender cómo arranca este PC y conseguir que nuestro código
 controle su ejecución después del inicio de plataforma, con una entrada desde
 el firmware del equipo y sin depender de una aplicación .efi del disco.
 
-## Qué significa terminar
+## Vía actual aceptada: puente .efi → código propio
+
+Para la primera prueba real el usuario autorizó una entrada .efi mínima. El puente
+usa el firmware instalado para reservar memoria, leer el paquete y obtener GOP;
+sale de los servicios de arranque y ejecuta el cuerpo propio con servicios de
+pantalla propios. Conserva el hardware ya inicializado y no depende de completar
+el port MSI desde RESET. No se afirma que elimine runtime, SMM o el PSP.
+
+El prototipo ya funciona en QEMU/OVMF y pasó siete casos. La primera entrega es
+el saludo y el retorno a HLT; teclado/eco y el monitor completo después de salir
+siguen pendientes. [Guía y límites](Puente_Metal/LEEME.md).
+
+## Qué significa terminar la adaptación desde RESET
 
 La entrega física se cerrará cuando este equipo arranque de forma repetible con
 una imagen adaptada, alcance el código propio de 64 bits, muestre texto en su
@@ -63,6 +75,7 @@ ni promesas de arranque en cualquier SSD o USB.
 
 | Parte | Estado | Evidencia |
 |---|---|---|
+| Puente .efi hacia código propio | Implementado; siete casos QEMU/OVMF; prueba física pendiente | [Puente](Puente_Metal/LEEME.md) |
 | Firmware propio QEMU | Terminado para su plataforma | [Cierre v1](Orquestador_Metal/CIERRE-v1.md) |
 | Fotografías e identificación de este PC | Recibidas; chip candidato localizado | [Observaciones](EVIDENCIAS/PC_REAL/OBSERVACIONES-FOTOS.md) |
 | Inventario MSI y trazado AMD/PEI | Implementados; 5 + 11 comprobaciones aprobadas | [Trazado](EVIDENCIAS/PC_REAL/analisis-msi/TRAZADO-Y-ENTREGA.md) |
@@ -79,5 +92,5 @@ ni promesas de arranque en cualquier SSD o USB.
 3. Comprobar la imagen candidata y preparar el original y su recuperación;
    realizar después la prueba física y registrar sus evidencias.
 
-La documentación y el alcance quedan definidos. El port físico sigue abierto;
+La documentación y el alcance quedan definidos. La vía actual de primera prueba es el puente; el port desde RESET sigue abierto como investigación separada;
 un análisis aprobado no lo convierte en una imagen lista para grabar.

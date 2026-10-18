@@ -1,5 +1,15 @@
 # Orquestador del Metal
 
+## Ruta física actual
+
+El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
+y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../Puente_Metal/LEEME.md)
+está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
+pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+desde RESET descrita más abajo se conserva como vía separada y su requisito de
+no usar .efi ya no rige para esta primera prueba.
+
+
 Esta es la carpeta técnica `Orquestador_Metal`. La secuencia de arranque
 de 16, 32 y 64 bits conserva el nombre «Faggin scaling».
 El objetivo físico único es MSI A320M-A PRO MAX (MS-7C52) con Ryzen 5 5600X.

@@ -9,19 +9,38 @@ Se investigará la integración conservando componentes AMD necesarios. No se
 pretende construir un UEFI universal ni mantener soporte para otras placas.
 El alcance y los criterios para terminar están en [PERFIL-FISICO](PERFIL-FISICO.md).
 
+## Ruta actual: .efi mínimo y después código propio
+
+El usuario aceptó esta vía para la primera prueba real. El .efi carga
+METAL/INICIO.X86 desde FAT32, obtiene GOP y el mapa de memoria, llama a
+ExitBootServices y ejecuta el cuerpo propio en 64 bits. La prueba inicial dibuja
+el saludo directamente en el framebuffer y se detiene. No ofrece teclado ni eco
+tras salir de UEFI; tampoco reemplaza el firmware de la placa.
+
+```powershell
+.\iniciar-puente.ps1
+.\iniciar-puente.ps1 -Comprobar
+```
+
+Las siete comprobaciones QEMU/OVMF pasaron. El [puente y su contrato](Puente_Metal/LEEME.md),
+las [capturas](EVIDENCIAS/PUENTE_UEFI/LEEME.md) y los archivos en build/Puente_Metal
+permiten revisar el resultado. La prueba física y la instalación en un medio
+concreto siguen pendientes. La investigación MSI desde RESET se conserva como
+una vía separada; no es requisito para probar este saludo.
+
 ## Estado real
 
 | Parte | Estado |
 |---|---|
 | Firmware desde RESET en QEMU | v1 terminada y probada: consola, pantalla, teclado, memoria, saludo/eco y carga FAT32 |
 | Análisis del firmware oficial MSI 2.C | Inventario y trazado AMD/PEI implementados; 16 comprobaciones aprobadas |
-| Firmware adaptado al PC físico | Pendiente: aún no hay imagen modificada para grabar |
+| Entrada .efi → código propio | Prototipo implementado y siete casos QEMU/OVMF aprobados; prueba física pendiente |
+| Firmware MSI propio desde RESET | Investigación separada: aún no hay imagen modificada para grabar |
 
 La ROM de QEMU sustituye el firmware de la VM; no carga SeaBIOS, OVMF ni una
-aplicación `.efi`. Para el equipo real se mantiene la decisión de no usar una
-entrada `.efi` en USB. Conservar componentes AMD puede requerir conservar o
-proporcionar fases internas PI/UEFI y partes de AMI: todavía no se ha completado
-esa integración. «Propio» no convierte los componentes conservados en código nuestro.
+aplicación `.efi`. Para el equipo real se aceptó ahora el puente .efi mínimo. La otra vía, integrar
+componentes AMD en firmware propio desde RESET, puede requerir conservar o
+proporcionar fases internas PI/UEFI y partes de AMI; no está completada. «Propio» no convierte los componentes conservados en código nuestro.
 
 ## Ejecutar lo que ya funciona en QEMU
 

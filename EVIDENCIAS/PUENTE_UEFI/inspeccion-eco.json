@@ -1,0 +1,26 @@
+{
+  "Source": "build\\original-eco.efi",
+  "SHA256": "9de6ef78bf1f4ca81c381701327753f8b671f27fd1cd378e6b574e7fb013a45c",
+  "FileBytes": 1024,
+  "Machine": "x86-64",
+  "Format": "PE32+",
+  "Subsystem": 10,
+  "EntryRVA": 4096,
+  "EntryFileOffset": 512,
+  "ImageBytes": 8192,
+  "Sections": [
+    {
+      "Name": ".text",
+      "RVA": 4096,
+      "VirtualBytes": 512,
+      "FileOffset": 512,
+      "FileBytes": 512,
+      "Flags": "0x60000020",
+      "SHA256": "debb03de4c0fd090b0b748ff5ed691e70a245580ee68a9606afb9df0afb5d4a1",
+      "ExtractedFile": "section-00.bin"
+    }
+  ],
+  "NonEmptyDirectories": [],
+  "ExtractedCodeIsStandalone": false,
+  "Executed": false
+}

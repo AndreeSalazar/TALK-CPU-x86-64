@@ -1,6 +1,16 @@
 # Arranque propio desde RESET
 
-Decisión del proyecto: conservar el firmware propio, sin una entrada `.efi`.
+## Decisión actual de la primera prueba física
+
+El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
+y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../../Puente_Metal/LEEME.md)
+está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
+pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+desde RESET descrita más abajo se conserva como vía separada y su requisito de
+no usar .efi ya no rige para esta primera prueba.
+
+
+Vía de investigación desde RESET: conservar el firmware propio, sin una entrada `.efi`; la primera prueba física actual usa el puente autorizado arriba.
 Destino físico único: MS-7C52 con Ryzen 5 5600X, según el
 [perfil acordado](../../PERFIL-FISICO.md). Se investiga conservar componentes AMD
 y el entorno de inicio que requieran; no implementar UEFI para cualquier placa.

@@ -40,3 +40,9 @@ para investigar la integración conservando componentes AMD. Es análisis de un
 archivo oficial, no una lectura del chip físico ni una modificación instalada.
 
 El destino físico único y el criterio para terminar están en [PERFIL-FISICO](../PERFIL-FISICO.md). QEMU es el banco de pruebas para ese proyecto.
+
+## Puente UEFI → código propio: vía actual de la primera prueba
+
+El usuario aceptó la entrada .efi mínima. Ya hay [capturas e informe de siete casos](PUENTE_UEFI/LEEME.md)
+QEMU/OVMF: salida de servicios de arranque, saludo propio en framebuffer y rechazos.
+La ejecución física aún no se ha observado; estas capturas siguen siendo virtuales.

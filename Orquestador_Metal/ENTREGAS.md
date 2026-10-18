@@ -1,5 +1,15 @@
 # Entregas: QEMU terminado, un único perfil físico en desarrollo
 
+## Nueva entrega: puente UEFI hacia código propio
+
+El usuario aceptó una entrada .efi mínima para cargar el programa propio desde FAT32
+y abandonar los servicios de arranque antes de ejecutarlo. El [puente](../Puente_Metal/LEEME.md)
+está implementado y probado en QEMU/OVMF (siete casos); la prueba física sigue
+pendiente. No hay teclado/eco tras salir de UEFI en este prototipo. La investigación
+desde RESET descrita más abajo se conserva como vía separada y su requisito de
+no usar .efi ya no rige para esta primera prueba.
+
+
 Destino acordado: MSI A320M-A PRO MAX (MS-7C52) + Ryzen 5 5600X.
 El [perfil físico](../PERFIL-FISICO.md) es la referencia de alcance y cierre.
 No hay un objetivo de UEFI completo ni compatibilidad con otras placas.
