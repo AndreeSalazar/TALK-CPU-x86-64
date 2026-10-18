@@ -73,10 +73,11 @@ no incorpora su codigo: usamos su arquitectura como referencia.
    y pilas IST para eventos criticos. Cinco clases de fallo comprobadas
    mediante nueve casos, incluidos limites de memoria y un cruce de pila.
    Faltan cobertura temprana de 16/32 bits y recuperacion de errores.
-4. **Recursos de plataforma:** describir memoria disponible y reservar ROM,
-   tablas, pilas y buffers. Falta implementar; ahora las direcciones son fijas.
-5. **Servicios propios:** definir funciones de memoria, diagnostico y acceso
-   a dispositivos, con una tabla versionada e interfaces documentadas.
+4. **Recursos de plataforma:** reservas fijas, presupuesto ROM y guardianes
+   implementados. Falta descubrir dinamicamente la memoria disponible.
+5. **Servicios propios:** asignador lineal limitado a 512 KiB, con ABI y
+   tabla versionada propios, y ocho autopruebas ejecutadas en 64 bits.
+   El diagnostico tambien es propio. Faltan servicios de dispositivos.
 6. **Controladores:** descubrir y controlar dispositivos concretos de QEMU,
    sin delegar las operaciones en firmware UEFI.
 7. **Ejecucion de otros binarios, si se necesita:** definir un formato propio,
@@ -86,6 +87,9 @@ Regla transversal ya implementada: `guardians/` asigna ventanas, reservas,
 presupuestos y semaforos. Las paginas de guarda, NX y escritura protegida
 se aplican por hardware virtual desde la activacion de paginacion. Las
 comprobaciones estructurales detienen la construccion si hay cruces.
+
+Primera compactacion manual comprobada: ver `COMPACTACION.md`. Se mantienen
+los .hex, con 71 bytes explicitos menos y las mismas comprobaciones aprobadas.
 
 Estos pasos construyen firmware; no requieren desarrollar un sistema operativo.
 Una implementacion que quiera llamarse compatible con UEFI tendra que satisfacer

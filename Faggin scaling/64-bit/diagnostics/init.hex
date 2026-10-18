@@ -9,21 +9,22 @@ BC 00 00 09 00                 ; MOV ESP,90000
 BF 00 70 00 00                 ; MOV EDI,7000
 B9 1A 00 00 00                 ; MOV ECX,26 dwords: 104 bytes de TSS
 F3 AB                          ; REP STOSD
-C7 04 25 04 70 00 00 00 00 09 00  ; DWORD [TSS+04]=90000: RSP0
-C7 04 25 24 70 00 00 00 80 08 00  ; DWORD [TSS+24]=88000: IST1, DF
-C7 04 25 2C 70 00 00 00 60 08 00  ; DWORD [TSS+2C]=86000: IST2, NMI
-C7 04 25 34 70 00 00 00 40 08 00  ; DWORD [TSS+34]=84000: IST3, MC
-66 C7 04 25 66 70 00 00 68 00     ; WORD [TSS+66]=68: sin mapa de I/O
+; REP STOSD dejo RDI=7068: usar desplazamientos de 8 bits evita repetir base.
+C7 47 9C 00 00 09 00           ; DWORD [RDI-64]=90000: RSP0
+C7 47 BC 00 80 08 00           ; DWORD [RDI-44]=88000: IST1
+C7 47 C4 00 60 08 00           ; DWORD [RDI-3C]=86000: IST2
+C7 47 CC 00 40 08 00           ; DWORD [RDI-34]=84000: IST3
+66 C7 47 FE 68 00              ; WORD [RDI-2]=68: sin mapa de I/O
 BE 00 01 0F 00                 ; MOV ESI,F0100: GDT en ROM
 BF 00 60 00 00                 ; MOV EDI,6000: copiar GDT a RAM
-B9 0C 00 00 00                 ; MOV ECX,12 dwords
+B1 0C                          ; MOV CL,12; RCX ya es cero tras REP STOSD
 F3 A5                          ; REP MOVSD
 B8 00 1F 0F 00                 ; MOV EAX,F1F00: puntero GDTR
 0F 01 10                       ; LGDT [RAX]: LTR puede marcar busy en RAM
 66 B8 20 00                    ; MOV AX,20: selector TSS64
 0F 00 D8                       ; LTR AX
 BF 00 80 00 00                 ; MOV EDI,8000: IDT de 256 puertas
-B9 00 01 00 00                 ; MOV ECX,256
+B5 01                          ; MOV CH,1: RCX=256 tras REP MOVSD, que dejo cero
 48 B8 00 14 18 00 00 8E 0F 00  ; RAX = puerta para stub por defecto F1400
 ; Bucle de 17 bytes: entrada de 16 bytes, offset alto 32 y reservado = 0.
 48 89 07                       ; MOV [RDI],RAX
@@ -32,7 +33,7 @@ B9 00 01 00 00                 ; MOV ECX,256
 E2 EF                          ; LOOP al comienzo de la puerta
 BF 00 80 00 00                 ; MOV EDI,8000
 BA 00 12 00 00                 ; MOV EDX,1200: offsets bajos de stubs F1200+
-B9 20 00 00 00                 ; MOV ECX,32: excepciones arquitecturales
+B1 20                          ; MOV CL,32: LOOP anterior dejo RCX=0
 66 89 17                       ; MOV [RDI],DX
 66 83 C2 10                    ; ADD DX,16: un stub por vector
 48 83 C7 10                    ; ADD RDI,16

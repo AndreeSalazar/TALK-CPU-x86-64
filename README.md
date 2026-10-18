@@ -120,6 +120,10 @@ sin alterar el estado. Una tabla propia versionada en ROM describe el ABI.
 Ocho autopruebas se ejecutan antes del destino final de cada perfil de 64 bits.
 El mensaje GREEN [Memory] confirma que pasaron y el estado quedo limpio.
 
+Se conservan los .hex manuales. La primera compactacion comprobada redujo
+los bytes explicitos del perfil normal de 2319 a 2248, sin cambiar el ABI
+ni quitar guardianes. Los detalles estan en Faggin scaling/COMPACTACION.md.
+
 ## Experimentos anteriores
 
 - src/hola.hex y src/eco.hex: aplicaciones UEFI; necesitan firmware UEFI.

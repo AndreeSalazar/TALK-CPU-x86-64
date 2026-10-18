@@ -23,4 +23,4 @@ AC                             ; 0435 LODSB desde RSI
 EE                             ; 043A OUT DX,AL
 EB F8                          ; 043B JMP 0435
 =043D
-; El constructor elige halt.hex o stress/transition.hex como continuacion.
+; services/transition.hex entrega a las autopruebas antes del destino final.

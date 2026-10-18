@@ -1,41 +1,39 @@
-; ABI propia: RCX=bytes. CF=0,RAX=bloque,EDX=0 al aceptar.
-; CF=1,RAX=0,EDX=motivo al rechazar. No cambia cursor ante errores.
-; Arena [100000,180000), alineacion 16; estado QWORD en 9000.
-; Destruye RAX,RDX,R8,R9. Conserva RCX,RBX,RBP,R12-R15,RSI,RDI.
+; ABI propia: RCX=bytes; CF=0,RAX=bloque,EDX=0 o CF=1,RAX=0,EDX=motivo.
+; Arena [100000,180000), alineacion 16; cursor QWORD en 9000.
+; Forma compacta: EDX se pone a cero una vez; errores usan DL y saltos cortos.
+; Destruye RAX,RDX,R8,R9; conserva los otros registros generales.
 @2400
 =2400
+31 D2                          ; XOR EDX,EDX: estado limpio para todos los caminos
 48 89 C8                       ; MOV RAX,RCX
 48 85 C0                       ; TEST RAX,RAX
-0F 84 F4 00 00 00              ; JZ 2500: size=0
+74 48                          ; JZ 2452: size cero
 48 83 C0 0F                    ; ADD RAX,15
-0F 82 0A 01 00 00              ; JC 2520: overflow al redondear
+72 46                          ; JC 2456: overflow
 48 83 E0 F0                    ; AND RAX,-16
 4C 8B 04 25 00 90 00 00        ; MOV R8,[9000]
 49 81 F8 00 00 10 00           ; CMP R8,100000
-0F 82 11 01 00 00              ; JB 2540: cursor anterior al inicio
+72 39                          ; JB 245E: cursor invalido
 49 81 F8 00 00 18 00           ; CMP R8,180000
-0F 87 04 01 00 00              ; JA 2540: cursor posterior al limite
+77 30                          ; JA 245E
 41 F6 C0 0F                    ; TEST R8B,15
-0F 85 FA 00 00 00              ; JNZ 2540: cursor desalineado
+75 2A                          ; JNZ 245E
 4D 89 C1                       ; MOV R9,R8
 49 01 C1                       ; ADD R9,RAX
-0F 82 CE 00 00 00              ; JC 2520: overflow al sumar direccion
+72 1A                          ; JC 2456
 49 81 F9 00 00 18 00           ; CMP R9,180000
-0F 87 D1 00 00 00              ; JA 2530: espacio insuficiente
+77 15                          ; JA 245A: sin espacio
 4C 89 0C 25 00 90 00 00        ; MOV [9000],R9: unica escritura, tras validar
-4C 89 C0                       ; MOV RAX,R8: comienzo del bloque
-31 D2                          ; XOR EDX,EDX
-F8 C3                          ; CLC; RET
-=246E
-@2500
-BA 01 00 00 00 EB 59           ; error 1: size cero; JMP 2560
-@2520
-BA 02 00 00 00 EB 39           ; error 2: overflow
-@2530
-BA 03 00 00 00 EB 29           ; error 3: sin espacio
-@2540
-BA 04 00 00 00 EB 19           ; error 4: cursor invalido
-@2560
-=2560
+4C 89 C0                       ; MOV RAX,R8
+F8 C3                          ; CLC; RET, EDX sigue cero
+=2452
+B2 01 EB 0A                    ; error 1: size cero; JMP 2460
+=2456
+B2 02 EB 06                    ; error 2: overflow
+=245A
+B2 03 EB 02                    ; error 3: sin espacio
+=245E
+B2 04                          ; error 4: cursor invalido
+=2460
 31 C0 F9 C3                    ; XOR EAX,EAX; STC; RET
-=2564
+=2464
