@@ -47,9 +47,9 @@ formatting, partition conversion or chip flashing is performed.
    select Windows Boot Manager to return to Windows.
 
 Space and Enter do not control this picture. A frozen picture is the expected
-result; it does not prove real-PC game timing or USB input. Actual compatibility
-of this graphics packet still needs the physical photo. Installing and testing
-in QEMU is not a substitute for that observation.
+result; it does not prove real-PC game timing or USB input. The user has now supplied a physical photo showing this static scene on the
+target PC; see the [physical record](../../EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
+The photograph does not verify interactive input, timing or long-term stability.
 
 The next prerequisite for real interactive gameplay is a USB host/HID path, or
 a supported physical PS/2 keyboard plus verified clock/controller behavior.

@@ -1,7 +1,12 @@
 {
   "RecordedDate": "2026-10-18",
-  "Scope": "Separate static preview installed; physical execution not yet observed",
+  "Scope": "Static preview installed; physical scene photograph supplied by user; interactive hardware gameplay unverified",
   "Files": [
+    {
+      "File": "01-escena-pc-real.png",
+      "SHA256": "72C83D53308956CAB15C34CA46A7A6CB279B6F31C9FB6D9AFDE523E6D0CA2927",
+      "Bytes": 682445
+    },
     {
       "File": "baseline.json",
       "SHA256": "234E3BF349C4A1FFAF4B68E00DD69ACF153D7FA1C1330F9BAFDA1267FC4C24E7",
@@ -24,8 +29,13 @@
     },
     {
       "File": "LEEME.md",
-      "SHA256": "E8208CD6BD6984DD620A58E1AB088F644F77EF5C5101015A419427D46B46192D",
-      "Bytes": 2949
+      "SHA256": "DBF198ED0BE9350490676E0637F3CFAD8C6BD82D61B18E2E45B981612316A061",
+      "Bytes": 4847
+    },
+    {
+      "File": "observacion-fisica.json",
+      "SHA256": "54FB4139605BACC7021467D111A6B34136DD7144424A1F79FEB0BE388F9B72E1",
+      "Bytes": 577
     },
     {
       "File": "paquete.json",

@@ -1,7 +1,8 @@
 # Flappy Metal — playable QEMU prototype
 
 **Physical status:** a separate static graphics probe is installed on A: BMO as
-**Flappy Metal (prueba visual)**. USB-only keyboard availability was confirmed;
+**Flappy Metal (prueba visual)**. A user-supplied physical photo confirms the static
+scene on the target PC. USB-only keyboard availability was confirmed;
 the interactive real-PC game is not installed. See [PC-PREVIEW.md](PC-PREVIEW.md)
 and the [installation record](../../EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
 

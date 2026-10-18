@@ -11,7 +11,7 @@ El alcance y los criterios para terminar están en [PERFIL-FISICO](docs/PERFIL-F
 
 El [plan del orquestador y primer juego](docs/PLAN-ORQUESTADOR.md) ordena el siguiente
 trabajo: contratos, CASM numérico, dibujo, tiempo, entrada y juego tipo Flappy Bird.
-Es un plan, no un juego ya implementado. La limpieza conservadora se previsualiza
+El juego QEMU ya está implementado; el plan conserva las etapas siguientes. La limpieza conservadora se previsualiza
 con `./clean-workspace.ps1` y se aplica con `-Apply`.
 
 ## Flappy Metal: prototipo jugable en QEMU
@@ -39,7 +39,7 @@ El SSD real conserva el saludo instalado y el teclado USB real sigue pendiente.
 
 Para el PC se instaló una entrada separada **Flappy Metal (prueba visual)** en
 A: BMO: dibujo estático, sin teclado ni movimiento. El saludo anterior se conserva.
-Falta observarla físicamente; [instrucciones y registro](EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
+El usuario confirmó el dibujo con una foto del PC real; [evidencia, instrucciones y registro](EVIDENCIAS/PC_REAL/FLAPPY_VISUAL/LEEME.md).
 
 La raíz se ha reducido a entradas de uso y este README. Las utilidades y pruebas
 están agrupadas en [tools](tools/README.md), el perfil y plan en `docs/`. Se

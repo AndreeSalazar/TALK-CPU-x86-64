@@ -1,0 +1,13 @@
+{
+  "Date": "2026-10-18",
+  "Source": "Original photograph supplied by user in this chat",
+  "Photo": "01-escena-pc-real.png",
+  "SHA256": "72C83D53308956CAB15C34CA46A7A6CB279B6F31C9FB6D9AFDE523E6D0CA2927",
+  "UserReport": "Scene visible on physical PC; no movement",
+  "Observed": "Static bird, pipes, clouds and ground visible with dark border",
+  "ExpectedBehavior": "Static preview draws once and halts intentionally",
+  "InteractiveGameVerified": false,
+  "USBInputVerified": false,
+  "PhysicalCPUTraceAvailable": false,
+  "HistoricalInstallationRecordsPreserved": true
+}
