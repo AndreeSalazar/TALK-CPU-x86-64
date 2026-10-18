@@ -1,39 +1,55 @@
-; ABI propia: RCX=bytes; CF=0,RAX=bloque,EDX=0 o CF=1,RAX=0,EDX=motivo.
-; Arena [100000,180000), alineacion 16; cursor QWORD en 9000.
-; Forma compacta: EDX se pone a cero una vez; errores usan DL y saltos cortos.
-; Destruye RAX,RDX,R8,R9; conserva los otros registros generales.
+; ABI v2: RCX=bytes; CF=0,RAX=bloque,EDX=0 o CF=1,RAX=0,EDX=motivo.
+; Estado: cursor=9000, complemento=9008, bloqueo persistente=9010.
+; Corrupcion de cursor (4) o complemento (6) deja el motivo en el bloqueo.
+; Con bloqueo, toda llamada devuelve 5 hasta reinicializacion privada.
 @2400
 =2400
-31 D2                          ; XOR EDX,EDX: estado limpio para todos los caminos
-48 89 C8                       ; MOV RAX,RCX
-48 85 C0                       ; TEST RAX,RAX
-74 48                          ; JZ 2452: size cero
-48 83 C0 0F                    ; ADD RAX,15
-72 46                          ; JC 2456: overflow
-48 83 E0 F0                    ; AND RAX,-16
-4C 8B 04 25 00 90 00 00        ; MOV R8,[9000]
-49 81 F8 00 00 10 00           ; CMP R8,100000
-72 39                          ; JB 245E: cursor invalido
-49 81 F8 00 00 18 00           ; CMP R8,180000
-77 30                          ; JA 245E
-41 F6 C0 0F                    ; TEST R8B,15
-75 2A                          ; JNZ 245E
-4D 89 C1                       ; MOV R9,R8
-49 01 C1                       ; ADD R9,RAX
-72 1A                          ; JC 2456
-49 81 F9 00 00 18 00           ; CMP R9,180000
-77 15                          ; JA 245A: sin espacio
-4C 89 0C 25 00 90 00 00        ; MOV [9000],R9: unica escritura, tras validar
-4C 89 C0                       ; MOV RAX,R8
-F8 C3                          ; CLC; RET, EDX sigue cero
-=2452
-B2 01 EB 0A                    ; error 1: size cero; JMP 2460
-=2456
-B2 02 EB 06                    ; error 2: overflow
-=245A
-B2 03 EB 02                    ; error 3: sin espacio
-=245E
-B2 04                          ; error 4: cursor invalido
-=2460
-31 C0 F9 C3                    ; XOR EAX,EAX; STC; RET
-=2464
+31 D2
+48 83 3C 25 10 90 00 00 00     ; bloqueo previo?
+0F 85 3F 01 00 00              ; JNE 2550
+4C 8B 04 25 00 90 00 00        ; cursor
+49 81 F8 00 00 10 00
+0F 82 1A 01 00 00              ; JB 2540
+49 81 F8 00 00 18 00
+0F 87 0D 01 00 00              ; JA 2540
+41 F6 C0 0F
+0F 85 03 01 00 00              ; JNZ 2540
+4C 8B 0C 25 08 90 00 00        ; complemento
+4D 31 C1                       ; XOR R9,R8
+49 83 F9 FF                    ; debe ser FFFFFFFFFFFFFFFF
+0F 85 0E 01 00 00              ; JNE 2560
+48 89 C8
+48 85 C0
+0F 84 A2 00 00 00              ; JZ 2500
+48 83 C0 0F
+0F 82 B8 00 00 00              ; JC 2520
+48 83 E0 F0
+4D 89 C1
+49 01 C1
+0F 82 A8 00 00 00              ; JC 2520
+49 81 F9 00 00 18 00
+0F 87 AB 00 00 00              ; JA 2530
+4C 89 0C 25 00 90 00 00        ; commit cursor tras todas las comprobaciones
+49 F7 D1
+4C 89 0C 25 08 90 00 00        ; commit complemento
+4C 89 C0
+F8 C3
+=249D
+@2500
+B2 01 EB 7C                    ; error 1: cero
+@2520
+B2 02 EB 5C                    ; error 2: overflow
+@2530
+B2 03 EB 4C                    ; error 3: espacio insuficiente
+@2540
+48 C7 04 25 10 90 00 00 04 00 00 00 ; bloquear con motivo 4
+B2 04 EB 30
+=2550
+B2 05 EB 2C                    ; error 5: bloqueo previo, conservar motivo
+@2560
+48 C7 04 25 10 90 00 00 06 00 00 00 ; bloquear con motivo 6
+B2 06 EB 10
+=2570
+@2580
+31 C0 F9 C3
+=2584

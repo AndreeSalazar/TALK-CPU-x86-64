@@ -1,4 +1,4 @@
-# Servicios de memoria propios, ABI version 1
+# Servicios de memoria propios, ABI version 2
 
 Este bloque implementa un servicio del firmware de 64 bits. No carga un OS,
 no llama a UEFI y no necesita archivos .efi. Todos los bytes estan en .hex.
@@ -18,11 +18,18 @@ Funcion en F2400, con pila valida y mapa de memoria del firmware instalado.
 | CF=1 | Rechazo: RAX=0 y EDX indica el motivo |
 | Alineacion | Se redondea hacia arriba a 16 bytes, comprobando overflow |
 | Arena | [100000,180000), 512 KiB; extremos en hexadecimal |
-| Estado | QWORD en RAM 9000, cursor de la siguiente asignacion |
+| Estado | Reserva de 32 bytes en RAM 9000: cursor, complemento y bandera |
 
 EDX=1: tamano cero. EDX=2: overflow aritmetico. EDX=3: espacio insuficiente.
-EDX=4: cursor fuera de limites o desalineado. Se modifica el cursor solo
-despues de comprobar la peticion completa; rechazar no consume espacio.
+EDX=4: cursor fuera de limites o desalineado. EDX=6: el cursor y su
+complemento no coinciden. Ambos son fallos criticos: escriben su motivo
+en la bandera persistente y rechazan sin cambiar cursor ni complemento.
+EDX=5 indica que ya habia un bloqueo y conserva el motivo original.
+Incluso pedir cero devuelve 5 si esta bloqueado.
+
+Los errores normales 1, 2 y 3 no cambian el estado ni consumen espacio.
+La ruta aceptada actualiza cursor y complemento despues de validar todo.
+La implementacion es de una sola CPU, sin asignaciones concurrentes.
 
 La funcion destruye RAX,RDX,R8,R9 y banderas. Conserva RCX,RBX,RBP,R12-R15,
 RSI y RDI. No pone a cero los bloques ni implementa free: es un asignador
@@ -37,7 +44,7 @@ Tabla de 48 bytes, little endian, con punteros de 64 bits:
 | Offset | Contenido |
 | --- | --- |
 | 00 | Firma ASCII FAGMEM64, 8 bytes |
-| 08 | Version: DWORD 1 |
+| 08 | Version: DWORD 2 |
 | 0C | Tamano: DWORD 48 |
 | 10 | Inicio de arena: QWORD 100000 |
 | 18 | Fin exclusivo: QWORD 180000 |
@@ -46,6 +53,13 @@ Tabla de 48 bytes, little endian, con punteros de 64 bits:
 
 Esta tabla es nuestra interfaz, no una EFI System Table. Sus limites deben
 mantenerse coherentes con allocate.hex, el mapa y las pruebas.
+
+Estado relativo a RAM 9000: cursor en +00, su complemento bit a bit en +08,
+causa del bloqueo en +10. Son tres QWORDs; los ocho bytes de +18 estan
+reservados y no se usan. El complemento detecta corrupciones individuales;
+no es una firma criptografica ni detecta dos campos alterados de forma coherente.
+El inicializador privado se usa al arrancar y despues de las autopruebas.
+No existe una funcion publica de desbloqueo en esta tabla de servicio.
 
 ## Autopruebas reales ejecutadas por la CPU
 
@@ -58,7 +72,12 @@ Cada registro de cases.hex comprueba puntero devuelto, error, carry y cursor:
 5. Pedir 512 KiB sin espacio suficiente: rechazo 3, cursor intacto.
 6. Pedir todo el espacio restante: acepta hasta el limite exacto 180000.
 7. Pedir 16 bytes con arena llena: rechazo 3, cursor intacto.
-8. Desalinear el cursor a proposito y pedir 16: rechazo 4, estado intacto.
+8. Desalinear el cursor a proposito y pedir 16: rechazo 4, cursor intacto y
+   bloqueo con motivo 4.
+9. Volver a pedir 16: rechazo 5, cursor y motivo original intactos.
+10. Reinicializar para una nueva prueba y corromper solo el complemento:
+    rechazo 6, cursor intacto y bloqueo con motivo 6.
+11. Pedir cero con ese bloqueo: rechazo 5, motivo 6 conservado.
 
 Al finalizar se restaura el cursor a 100000 y aparece:
 
@@ -67,6 +86,8 @@ GREEN [Memory] bounded allocator OK
 ```
 
 Una discrepancia imprime RED [Memory] allocator self-test FAIL y se detiene.
+Antes de ese resultado se exige GREEN [Memory] integrity latch OK: confirma
+que las corrupciones intencionales fueron detectadas y el bloqueo persistio.
 Todos los perfiles de 64 bits pasan por esta comprobacion, incluidos -Stress
 y -Exception. El lanzador exige el mensaje exacto y el HLT del destino.
 

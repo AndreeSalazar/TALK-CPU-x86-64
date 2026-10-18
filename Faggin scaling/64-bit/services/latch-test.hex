@@ -1,0 +1,42 @@
+; Entrada: autoprueba dejo cursor corrupto 100001 y latch=4.
+; Debe rechazar una nueva solicitud y conservar tanto cursor como motivo.
+@2B00
+=2B00
+48 83 3C 25 10 90 00 00 04
+0F 85 B1 F7 FF FF
+B9 10 00 00 00
+E8 E7 F8 FF FF
+0F 83 A1 F7 FF FF
+83 FA 05
+0F 85 98 F7 FF FF
+48 85 C0
+0F 85 8F F7 FF FF
+48 81 3C 25 00 90 00 00 01 00 10 00
+0F 85 7D F7 FF FF
+E8 B8 FE FF FF                 ; reinicializar para segundo caso
+48 C7 04 25 08 90 00 00 00 00 00 00 ; corromper solo complemento
+B9 10 00 00 00
+E8 A2 F8 FF FF
+0F 83 5C F7 FF FF
+83 FA 06
+0F 85 53 F7 FF FF
+48 85 C0
+0F 85 4A F7 FF FF
+48 81 3C 25 00 90 00 00 00 00 10 00
+0F 85 38 F7 FF FF
+48 83 3C 25 10 90 00 00 06
+0F 85 29 F7 FF FF
+31 C9                          ; incluso size=0 debe respetar el bloqueo
+E8 62 F8 FF FF
+0F 83 1C F7 FF FF
+83 FA 05
+0F 85 13 F7 FF FF
+48 85 C0
+0F 85 0A F7 FF FF
+48 83 3C 25 10 90 00 00 06     ; no borrar la causa original
+0F 85 FB F6 FF FF
+E8 36 FE FF FF                 ; restaurar estado valido
+BE 00 2C 0F 00
+E8 2C EB FF FF                 ; imprimir confirmacion de guardian
+C3
+=2BD5

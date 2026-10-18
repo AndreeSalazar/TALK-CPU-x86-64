@@ -1,0 +1,8 @@
+; Inicializador privado: solo arranque y autoprueba, no forma parte del ABI.
+@2A00
+=2A00
+48 C7 04 25 00 90 00 00 00 00 10 00  ; cursor=100000
+48 C7 04 25 08 90 00 00 FF FF EF FF  ; complemento=FFFFFFFFFFEFFFFF
+48 C7 04 25 10 90 00 00 00 00 00 00  ; sin bloqueo
+C3
+=2A25

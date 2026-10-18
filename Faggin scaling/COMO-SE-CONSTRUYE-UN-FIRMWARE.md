@@ -76,7 +76,8 @@ no incorpora su codigo: usamos su arquitectura como referencia.
 4. **Recursos de plataforma:** reservas fijas, presupuesto ROM y guardianes
    implementados. Falta descubrir dinamicamente la memoria disponible.
 5. **Servicios propios:** asignador lineal limitado a 512 KiB, con ABI y
-   tabla versionada propios, y ocho autopruebas ejecutadas en 64 bits.
+   tabla versionada propios, y once autopruebas ejecutadas en 64 bits.
+   El ABI v2 incorpora complemento de cursor y bloqueo persistente con motivo.
    El diagnostico tambien es propio. Faltan servicios de dispositivos.
 6. **Controladores:** descubrir y controlar dispositivos concretos de QEMU,
    sin delegar las operaciones en firmware UEFI.

@@ -2,7 +2,7 @@
 @2600
 =2600
 46 41 47 4D 45 4D 36 34        ; +00 firma ASCII FAGMEM64
-01 00 00 00                    ; +08 version 1
+02 00 00 00                    ; +08 version 2, estado de 32 bytes
 30 00 00 00                    ; +0C tamano 48
 00 00 10 00 00 00 00 00        ; +10 inicio de arena 100000
 00 00 18 00 00 00 00 00        ; +18 fin exclusivo 180000

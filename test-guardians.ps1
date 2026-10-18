@@ -12,7 +12,18 @@ $tests = @(
     @{Name='Fuente sin propietario';Allowed=$false;Guard='Ownership';Level='RED';Extra='README.md';Mutate=$null},
     @{Name='Reserva desalineada';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'TSS').Start=0x7001}},
     @{Name='Imagen incompatible';Allowed=$false;Guard='Profile';Level='RED';Mutate={param($layout) $layout.RomBytes=0x8000}},
-    @{Name='Margen reducido avisa sin bloquear';Allowed=$true;Guard='Margin';Level='YELLOW';Mutate={param($layout) $layout.Sources['16-bit\message.hex'].End=0xA0}}
+    @{Name='Margen reducido avisa sin bloquear';Allowed=$true;Guard='Margin';Level='YELLOW';Mutate={param($layout) $layout.Sources['16-bit\message.hex'].End=0xA0}},
+    @{Name='Esquema incompleto bloquea';Allowed=$false;Guard='Profile';Level='RED';Mutate={param($layout) $layout.Sources=$null}},
+    @{Name='Reserva critica ausente';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) $layout.Memory=@($layout.Memory | Where-Object Name -ne 'TSS')}},
+    @{Name='Reserva duplicada';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) $layout.Memory+= $layout.Memory[0].Clone()}},
+    @{Name='Alineacion no potencia de dos';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'GDT').Alignment=3}},
+    @{Name='Reserva movida rompe contrato';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'AllocatorState').End=0x9010}},
+    @{Name='Contrato de reset roto';Allowed=$false;Guard='Contract';Level='RED';CorruptReset=$true;Mutate=$null},
+    @{Name='Contrato mal formado bloquea';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Contracts | Where-Object Source -eq '16-bit\reset.hex').Bytes='XX'}},
+    @{Name='Politica de recursos recortada';Allowed=$false;Guard='Profile';Level='RED';Mutate={param($layout) $layout.RequiredMemory=@('ROM')}},
+    @{Name='Limite no numerico';Allowed=$false;Guard='Budget';Level='RED';Mutate={param($layout) $layout.Sources['16-bit\message.hex'].End='grande'}},
+    @{Name='Contrato obligatorio eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '16-bit\reset.hex')}},
+    @{Name='Contrato de reserva eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.MemoryContracts=@($layout.MemoryContracts | Where-Object Name -ne 'AllocatorState')}}
 )
 $results = @()
 foreach ($test in $tests) {
@@ -20,9 +31,26 @@ foreach ($test in $tests) {
     if ($test.Mutate) { & ($test.Mutate) $layout }
     $sources = $baselineSources
     if ($test.Extra) { $sources += $test.Extra }
-    $report = Test-FirmwareLayout -Layout $layout -Sources $sources -SourceRoot $sourceRoot
+    $caseRoot = $sourceRoot
+    if ($test.CorruptReset) {
+        # Alterar solo una copia de prueba en build; las fuentes reales quedan intactas.
+        $caseRoot = Join-Path $PSScriptRoot 'build\guardian-fixture'
+        foreach ($sourceName in $baselineSources) {
+            $fixturePath = Join-Path $caseRoot $sourceName
+            New-Item -ItemType Directory -Force (Split-Path $fixturePath -Parent) | Out-Null
+            Copy-Item -LiteralPath (Join-Path $sourceRoot $sourceName) -Destination $fixturePath -Force
+        }
+        $resetCopy = Join-Path $caseRoot '16-bit\reset.hex'
+        [IO.File]::WriteAllText($resetCopy, ([IO.File]::ReadAllText($resetCopy).Replace('EA 00 00 00 F0','EB 00 00 00 F0')))
+    }
+    $report = Test-FirmwareLayout -Layout $layout -Sources $sources -SourceRoot $caseRoot
+    if ($test.Name -eq 'Contrato de reset roto') {
+        New-Item -ItemType Directory -Force (Join-Path $PSScriptRoot 'build') | Out-Null
+        $report | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $PSScriptRoot 'build\guardian-example.json') -Encoding utf8
+    }
     $matching = @($report.Findings | Where-Object { $_.Guard -eq $test.Guard -and $_.Level -eq $test.Level })
-    $passed = $report.Allowed -eq $test.Allowed -and $matching.Count -gt 0
+    $unexplained = @($report.Findings | Where-Object { $_.Level -eq 'RED' -and (-not $_.Code -or -not $_.Why -or -not $_.Fix) })
+    $passed = $report.Allowed -eq $test.Allowed -and $matching.Count -gt 0 -and $unexplained.Count -eq 0
     $results += [pscustomobject]@{Name=$test.Name;Passed=$passed;Expected=$test.Level;Observed=$report.Status}
     if ($passed) { Write-Host "GREEN [GuardianTest] $($test.Name): regla comprobada ($($test.Level))." -ForegroundColor Green }
     else { Write-Host "RED [GuardianTest] $($test.Name): resultado inesperado." -ForegroundColor Red }

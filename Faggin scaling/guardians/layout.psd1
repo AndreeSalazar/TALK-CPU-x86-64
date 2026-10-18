@@ -1,9 +1,31 @@
 @{
+    SchemaVersion = 1
     RomBytes = 0x10000
     MappedBytes = 0x200000
     WarningPercent = 80
+    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','GuardMain','StackMain','ROM','WorkRAM')
+    MemoryContracts = @(
+        @{Name='PT';Start=0x4000;End=0x5000}
+        @{Name='TSS';Start=0x7000;End=0x7068}
+        @{Name='IDT';Start=0x8000;End=0x9000}
+        @{Name='AllocatorState';Start=0x9000;End=0x9020}
+        @{Name='GuardMain';Start=0x8E000;End=0x8F000}
+        @{Name='StackMain';Start=0x8F000;End=0x90000}
+        @{Name='ROM';Start=0xF0000;End=0x100000}
+    )
+    Contracts = @(
+        @{Source='16-bit\reset.hex';Offset=0xFFF0;Bytes='EA 00 00 00 F0';Why='La CPU debe saltar a nuestra entrada de reset.'}
+        @{Source='32-bit\to-64.hex';Offset=0x02DB;Bytes='0D 00 09 00 00';Why='LME y NXE deben activarse juntos.'}
+        @{Source='32-bit\to-64.hex';Offset=0x02E5;Bytes='0D 00 00 01 80';Why='La paginacion y CR0.WP protegen el codigo incluso en supervisor.'}
+        @{Source='64-bit\services\table.hex';Offset=0x2608;Bytes='02 00 00 00';Why='La version 2 requiere cursor, complemento y bloqueo.'}
+        @{Source='64-bit\services\table.hex';Offset=0x2620;Bytes='00 24 0F 00 00 00 00 00';Why='El ABI debe apuntar a allocate, no a datos o a otra instruccion.'}
+        @{Source='64-bit\services\allocate.hex';Offset=0x2478;Bytes='49 81 F9 00 00 18 00';Why='El extremo calculado debe compararse con el limite exclusivo de la arena.'}
+    )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\services\state-init.hex' = @{Start=0x2A00;End=0x2B00;Why='Inicializar cursor, espejo y bandera'}
+        '64-bit\services\latch-test.hex' = @{Start=0x2B00;End=0x2C00;Why='Probar bloqueo persistente por corrupcion'}
+        '64-bit\services\latch-message.hex' = @{Start=0x2C00;End=0x2D00;Why='Confirmacion del guardian de estado'}
         '64-bit\services\transition.hex' = @{Start=0x043D;End=0x0480;Why='Paso comun hacia los servicios'}
         '64-bit\services\self-test.hex' = @{Start=0x2000;End=0x22F0;Why='Autoprueba y salidas de servicios'}
         '64-bit\services\target-normal.hex' = @{Start=0x22F0;End=0x2300;Why='Destino exclusivo tras servicios'}
@@ -57,7 +79,7 @@
         @{Name='BootStack16';Start=0x6800;End=0x7000;Alignment=16;Why='Reserva temporal de pila real'}
         @{Name='TSS';Start=0x7000;End=0x7068;Alignment=16;Why='Punteros de pilas de excepciones'}
         @{Name='IDT';Start=0x8000;End=0x9000;Alignment=0x1000;Why='Puertas de excepcion'}
-        @{Name='AllocatorState';Start=0x9000;End=0x9010;Alignment=16;Why='Cursor reservado del servicio de memoria'}
+        @{Name='AllocatorState';Start=0x9000;End=0x9020;Alignment=16;Why='Cursor, complemento y bandera persistente'}
         @{Name='GuardMC';Start=0x82000;End=0x83000;Alignment=0x1000;Why='Limite inferior de IST3'}
         @{Name='StackMC';Start=0x83000;End=0x84000;Alignment=0x1000;Why='Pila IST3'}
         @{Name='GuardNMI';Start=0x84000;End=0x85000;Alignment=0x1000;Why='Limite inferior de IST2'}

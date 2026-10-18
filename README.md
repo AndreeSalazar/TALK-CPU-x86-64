@@ -29,6 +29,7 @@ Faggin scaling: 16 bits OK
 Faggin scaling: 32 bits OK
 Faggin scaling: 64 bits OK
 GREEN [CPU] guardians active
+GREEN [Memory] integrity latch OK
 GREEN [Memory] bounded allocator OK
 ```
 
@@ -85,7 +86,7 @@ Faggin scaling/64-bit/diagnostics/README.md.
 .\run-firmware.ps1 -Exception page
 ```
 
-La bateria completa exige catorce casos aprobados en QEMU y ocho reglas del
+La bateria completa exige catorce casos aprobados en QEMU y diecinueve reglas del
 constructor, y escribe build/test-results.json y build/guardian-test-results.json.
 Incluye nueve casos de CPU intencionales y una corrupcion de RAM: esos casos
 deben ser detectados por el firmware, no son fallos de tu computadora.
@@ -111,18 +112,24 @@ y datos no ejecutables. Puedes provocar un cruce real de pila dentro de la VM:
 
 Las reglas, sus motivos y limites estan en Faggin scaling/guardians/README.md.
 Los informes de cada construccion usan el sufijo -guardians.json.
+Los bloqueos incluyen codigo, propietario, motivo y correccion sugerida;
+los contratos criticos tambien muestran bytes esperados y encontrados.
+build/guardian-example.json contiene un ejemplo rojo de una copia de prueba.
 
 ## Servicio de memoria de 64 bits
 
 Faggin scaling/64-bit/services/ implementa asignacion lineal de una arena de
 512 KiB, alineacion a 16 bytes, limites, comprobacion de overflow y rechazo
-sin alterar el estado. Una tabla propia versionada en ROM describe el ABI.
-Ocho autopruebas se ejecutan antes del destino final de cada perfil de 64 bits.
+sin consumir espacio ante rechazos normales. El ABI version 2 conserva una
+bandera persistente si detecta corrupcion del cursor o su complemento.
+Once autopruebas se ejecutan antes del destino final de cada perfil de 64 bits.
 El mensaje GREEN [Memory] confirma que pasaron y el estado quedo limpio.
 
 Se conservan los .hex manuales. La primera compactacion comprobada redujo
 los bytes explicitos del perfil normal de 2319 a 2248, sin cambiar el ABI
 ni quitar guardianes. Los detalles estan en Faggin scaling/COMPACTACION.md.
+Esas cifras son historicas: la version 2 agrega nuevas protecciones y su
+tamano actual se consulta en build/faggin-64-map.json.
 
 ## Experimentos anteriores
 

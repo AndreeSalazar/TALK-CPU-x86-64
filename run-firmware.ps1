@@ -45,7 +45,7 @@ try {
         $debugLog = Join-Path $PSScriptRoot $debugLogRelative
         $expectedMessage = "Faggin scaling: 16 bits OK`r`n"
         if ($Stage -ne '16') { $expectedMessage += "Faggin scaling: 32 bits OK`r`n" }
-        if ($Stage -eq '64') { $expectedMessage += "Faggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`nGREEN [Memory] bounded allocator OK`r`n" }
+        if ($Stage -eq '64') { $expectedMessage += "Faggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`nGREEN [Memory] integrity latch OK`r`nGREEN [Memory] bounded allocator OK`r`n" }
         if ($Stress) {
             if ($InjectFault) { $expectedMessage += "`r`nRED [RAM] Faggin scaling: RAM FAIL`r`n" }
             else { $expectedMessage += ('.' * 32) + "`r`nGREEN [RAM] Faggin scaling: RAM 1 MiB x 32 OK`r`n" }

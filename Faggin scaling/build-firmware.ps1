@@ -49,7 +49,9 @@ if ($Stage -eq '64') {
     elseif ($Stress) { $parts += '64-bit\services\target-stress.hex' }
     else { $parts += '64-bit\services\target-normal.hex' }
     $parts += @('64-bit\services\allocate.hex','64-bit\services\table.hex',
-        '64-bit\services\messages.hex','64-bit\services\cases.hex')
+        '64-bit\services\messages.hex','64-bit\services\cases.hex',
+        '64-bit\services\state-init.hex','64-bit\services\latch-test.hex',
+        '64-bit\services\latch-message.hex')
 }
 $parts += '16-bit\reset.hex'
 
@@ -62,7 +64,13 @@ try {
     $guardianReport | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath "build\$buildName-guardians.json" -Encoding utf8
     foreach ($finding in $guardianReport.Findings) {
         $color = @{GREEN='Green';YELLOW='Yellow';RED='Red'}[$finding.Level]
-        Write-Host "$($finding.Level) [$($finding.Guard)] $($finding.Owner): $($finding.Detail)" -ForegroundColor $color
+        $location = $(if ($finding.Line -gt 0) {':'+$finding.Line} else {''})
+        Write-Host ('{0} [{1}] {2}{3}: {4}' -f $finding.Level,$finding.Code,$finding.Owner,$location,$finding.Detail) -ForegroundColor $color
+        if ($finding.Level -eq 'RED') {
+            Write-Host "  Motivo: $($finding.Why)" -ForegroundColor Red
+            if ($null -ne $finding.Expected) { Write-Host "  Esperado: $($finding.Expected); encontrado: $($finding.Actual)" -ForegroundColor Red }
+            Write-Host "  Correccion: $($finding.Fix)" -ForegroundColor Red
+        }
     }
     if (-not $guardianReport.Allowed) { throw "RED: construccion bloqueada por guardianes. Revisa build\$buildName-guardians.json." }
     $combinedHex = [Collections.Generic.List[string]]::new()

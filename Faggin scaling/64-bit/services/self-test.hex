@@ -2,7 +2,9 @@
 ; Cada caso contiene size, puntero esperado, error esperado, cursor esperado.
 @2000
 =2000
-48 C7 04 25 00 90 00 00 00 00 10 00  ; cursor=100000
+E8 FB 09 00 00                 ; CALL F2A00: cursor, complemento y bloqueo
+EB 05                          ; JMP 200C: conservar empalmes de pruebas
+@200C
 41 BC 00 28 0F 00              ; MOV R12D,F2800
 BB 07 00 00 00                 ; MOV EBX,7 casos secuenciales
 =2017
@@ -34,7 +36,9 @@ E8 86 03 00 00                 ; CALL F2400
 0F 85 2E 02 00 00
 48 81 3C 25 00 90 00 00 01 00 10 00  ; cursor debe seguir 100001
 0F 85 1C 02 00 00
-48 C7 04 25 00 90 00 00 00 00 10 00  ; restaurar cursor limpio
+E8 57 0A 00 00                 ; CALL F2B00: comprobar bloqueo y corrupcion espejo
+EB 05                          ; JMP 20B0
+@20B0
 BE 00 27 0F 00                 ; texto GREEN
 E8 46 F6 FF FF                 ; CALL F1700
 8B 04 25 F0 22 0F 00           ; MOV EAX,[F22F0]: destino del perfil
