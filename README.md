@@ -9,6 +9,11 @@ Se investigará la integración conservando componentes AMD necesarios. No se
 pretende construir un UEFI universal ni mantener soporte para otras placas.
 El alcance y los criterios para terminar están en [PERFIL-FISICO](PERFIL-FISICO.md).
 
+El [plan del orquestador y primer juego](PLAN-ORQUESTADOR.md) ordena el siguiente
+trabajo: contratos, CASM numérico, dibujo, tiempo, entrada y juego tipo Flappy Bird.
+Es un plan, no un juego ya implementado. La limpieza conservadora se previsualiza
+con `./clean-workspace.ps1` y se aplica con `-Apply`.
+
 ## Ruta actual: .efi mínimo y después código propio
 
 El usuario aceptó esta vía para la primera prueba real. El .efi carga
