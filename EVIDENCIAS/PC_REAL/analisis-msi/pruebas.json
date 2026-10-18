@@ -1,0 +1,11 @@
+{
+  "Passed": 5,
+  "Total": 5,
+  "Cases": [
+    "Tabla AMD con entrada alterada rechazada",
+    "Tabla AMD truncada rechazada",
+    "Numero excesivo de entradas rechazado",
+    "Checksum de volumen FV alterado rechazado",
+    "Paquete de entrada sin cambios"
+  ]
+}

@@ -32,3 +32,9 @@ Ya hay [tres fotografías físicas y sus observaciones](PC_REAL/OBSERVACIONES-FO
 El [plan para llegar al metal](PC_REAL/PLAN-METAL.md) distingue FAT32, GOP y la
 inicialización desde RESET. Incluye los criterios que faltan para considerar
 terminada una prueba física; las capturas QEMU permanecen separadas.
+
+## Análisis del firmware de fábrica
+
+Ya existe un [primer inventario del firmware MSI 2.C](PC_REAL/analisis-msi/LEEME.md),
+para investigar la integración conservando componentes AMD. Es análisis de un
+archivo oficial, no una lectura del chip físico ni una modificación instalada.
