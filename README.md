@@ -101,10 +101,17 @@ instalado. Es un primer arranque reportado, no una campaña de estabilidad repet
 
 ## Estado real
 
-**CASM, siguiente diseño:** lenguaje pequeño cercano a C, compilador previsto en C,
-guardianes semánticos y verificación de los bytes .hex emitidos. Ya hay una
-[propuesta concreta con ejemplo y dos controles](CASM/README.md); su compilador
-todavía no está implementado. El éxito físico anterior corresponde al .hex manual.
+**CASM 0.1 ya compila:** frontend y emisor escritos en C, con palabras clave y
+diagnósticos en inglés, guardianes semánticos y verificador separado de emisión
+HEX. El [compilador y su ejemplo](CASM/README.md) producen el mismo paquete de
+saludo de 64 bytes; 39 casos y su ejecución QEMU/OVMF están comprobados. El éxito
+físico anterior corresponde al .hex manual. El [registro de cobertura de C](CASM/LANGUAGE.md)
+define lo aceptado y lo pendiente: no se anuncia compatibilidad con todo C ni Rust.
+
+```powershell
+.\CASM\compile.ps1
+.\CASM\test.ps1 -Qemu
+```
 
 | Parte | Estado |
 |---|---|

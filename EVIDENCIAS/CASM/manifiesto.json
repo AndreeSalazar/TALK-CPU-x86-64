@@ -1,0 +1,41 @@
+{
+  "RecordedDate": "2026-10-18",
+  "Scope": "CASM host tests and QEMU/OVMF; no new physical boot",
+  "Files": [
+    {
+      "File": "hello.hex",
+      "SHA256": "DF382EA748C309B29ED765F48B422DBF11B03FBA8D768DA99890F46A783E4484",
+      "Bytes": 181
+    },
+    {
+      "File": "hello.ir.json",
+      "SHA256": "C0A0F5F4279C6BAB01BF29486D2A1F66CE76F73DD377A0DD9B3953532013FC88",
+      "Bytes": 263
+    },
+    {
+      "File": "hello.verified.json",
+      "SHA256": "2E6D1BB06DE151A0742A42A496BB0AAFDD21342E2756FDDD0BF0C05184F0461D",
+      "Bytes": 1044
+    },
+    {
+      "File": "host-tests.json",
+      "SHA256": "18EABDE65DE4EC404685541CAD8330CB0434441B287B4F13A26FC532540A0454",
+      "Bytes": 4947
+    },
+    {
+      "File": "LEEME.md",
+      "SHA256": "30077E0A14BAB60F8FB0B58001B3AD29BE02C16AA4FA07B9A6175BA97F9CC88A",
+      "Bytes": 2725
+    },
+    {
+      "File": "qemu-hello.png",
+      "SHA256": "BDD7B94846B0E3C2E18EA369B653A4C325DB02E32C17F94774862EED8C6B3E5F",
+      "Bytes": 4224
+    },
+    {
+      "File": "qemu-tests.json",
+      "SHA256": "6523B88BF314848044C554DF7BC7354550079129A32B94ED47C446A2618F8D87",
+      "Bytes": 368
+    }
+  ]
+}

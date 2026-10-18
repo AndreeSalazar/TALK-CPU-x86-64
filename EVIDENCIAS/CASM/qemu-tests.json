@@ -1,0 +1,16 @@
+{
+  "Passed": 1,
+  "Total": 1,
+  "Cases": [
+    {
+      "Case": "normal",
+      "Passed": true,
+      "BootServicesExited": true,
+      "PayloadReturned": true,
+      "Ring": 0,
+      "OwnFramebufferTextVerified": true,
+      "Context": "0xDE38000",
+      "PayloadSHA256": "2bd77f970bced7c0c18d3a646b532443d2e1bf71fe4dc96ee3dff5b751e669ef"
+    }
+  ]
+}

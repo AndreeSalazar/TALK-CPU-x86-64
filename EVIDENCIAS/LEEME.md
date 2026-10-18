@@ -1,5 +1,11 @@
 # Evidencias de Orquestador del Metal
 
+## CASM — primera base ejecutable
+
+[Informe CASM](CASM/LEEME.md): compilador escrito en C, verificador de emisión,
+39 casos aprobados y ejecución del paquete generado en QEMU/OVMF. Se conserva
+la distinción con las fotos del saludo manual en el PC real.
+
 ## QEMU — comprobado
 
 Las cuatro capturas originales están en [QEMU](QEMU/). Se trasladaron sin cambiar

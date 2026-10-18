@@ -1,9 +1,0 @@
-// Propuesta de sintaxis: el compilador CASM todavía no está implementado.
-target x86_64;
-abi metal64;
-
-program hola {
-    const saludo: ascii_z = "Hola mundo desde mi .hex!\r\n";
-    puts(saludo);
-    return;
-}
