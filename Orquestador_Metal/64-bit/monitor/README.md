@@ -12,9 +12,12 @@ misma salida; se acepta entrada por UART o PS/2, con prioridad a UART.
 | `a` | Reservar 256 bytes; mostrar direccion o codigo de rechazo |
 | `o` | Cargar el hola mundo propio desde ROM a RAM y ejecutarlo |
 | `e` | Cargar el eco propio; Escape retorna al monitor |
+| `d` | Buscar y ejecutar `METAL\INICIO.X86` en el disco FAT32 adjunto |
 | `q` | Informar parada y ejecutar HLT |
 
 Ctrl+C termina QEMU. `q` detiene la CPU virtual; QEMU sigue abierto.
+`./iniciar.ps1 -Disco` desde la raíz prepara y adjunta el volumen de prueba.
+Sin disco adjunto, `d` informa `RED [ATA] disk absent` y conserva el monitor.
 En el monitor CR/LF se ignoran. En el eco producen una linea nueva;
 BS/DEL borran visualmente. Una orden desconocida produce YELLOW y explica como pedir ayuda.
 

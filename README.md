@@ -13,6 +13,16 @@ Para abrir la pantalla y escribir con eco:
 Pulsa `o` para «Hola mundo», `e` para eco y Escape para volver al monitor.
 La guía de organización está en [LEEME](Orquestador_Metal/LEEME.md).
 
+Para ejecutar un programa desde FAT32:
+
+```powershell
+.\iniciar.ps1 -Disco
+```
+
+Pulsa `d`: nuestro firmware busca `METAL\INICIO.X86` en un disco virtual de
+64 MiB y lo carga. Véanse [soporte y límites del lector FAT32](Orquestador_Metal/64-bit/storage/README.md).
+La imagen se genera dentro de `build/`; no se modifica el disco personal.
+
 Firmware propio desde cero, escrito byte por byte, para QEMU x86-64.
 El desarrollo actual está organizado en `Orquestador_Metal/`:
 

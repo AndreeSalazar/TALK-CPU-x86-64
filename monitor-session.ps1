@@ -2,6 +2,8 @@ param(
     [string]$Qemu,
     [switch]$Check,
     [switch]$Headless,
+    [string]$DiskImage,
+    [string[]]$DiskExpected,
     [string]$RomPath='build/faggin-64-monitor.rom',
     [string]$LogName,
     [ValidateSet('','magic','size','entry','flags','checksum')]
@@ -15,8 +17,9 @@ $arguments=@('-machine','pc','-cpu','qemu64','-accel','tcg','-m','16M','-smp','1
     '-bios',$RomPath,'-nodefaults','-device','VGA,addr=2','-display',$display,'-monitor','none',
     '-serial','stdio','-chardev',"file,id=debug,path=$base-debug.log",
     '-device','isa-debugcon,iobase=0xe9,chardev=debug','-no-reboot')
+if($DiskImage){$arguments+=@('-drive',"file=$DiskImage,format=raw,if=none,id=metal_disk,snapshot=on",'-device','ide-hd,drive=metal_disk,bus=ide.0,unit=0')}
 if (-not $Check) {
-    Write-Host 'Orquestador del Metal: escribe en la ventana o en esta terminal. h ayuda, o hola, e eco, ESC vuelve, q detiene. Ctrl+C sale de QEMU.'
+    Write-Host 'Orquestador del Metal: h ayuda, o hola, e eco, d disco FAT32, ESC vuelve, q detiene. Ctrl+C sale de QEMU.'
     & $Qemu @arguments -name 'Orquestador del Metal'
     if ($LASTEXITCODE -ne 0) { throw "QEMU termino con codigo $LASTEXITCODE" }
     return
@@ -43,7 +46,7 @@ try {
     # Una orden cada vez: no depender del tamano del FIFO UART.
     $steps=@(
         @{Command='';Expected='Orquestador del Metal: listo (64 bits)'},
-        @{Command='h';Expected='h help | s status | a alloc256 | o hola | e eco | q halt'},
+        @{Command='h';Expected='h help | s status | a alloc256 | o hola | e eco | d disco | q halt'},
         @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
         @{Command='a';Expected='GREEN [alloc256] ptr=0000000000100000'},
         @{Command='a';Expected='GREEN [alloc256] ptr=0000000000100100'},
@@ -66,6 +69,16 @@ try {
         $steps=@(
             @{Command='';Expected='Orquestador del Metal: listo (64 bits)'},
             @{Command='o';Expected="RED [load] $Rejection"},
+            @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
+            @{Command='q';Expected='GREEN [halt] stopped'}
+        )
+    }
+    if($DiskExpected){
+        $steps=@(@{Command='';Expected='Orquestador del Metal: listo (64 bits)'})
+        for($i=0;$i -lt $DiskExpected.Count;$i++){
+            $steps+=@{Command=$(if($i -eq 0){'d'}else{''});Expected=$DiskExpected[$i]}
+        }
+        $steps+=@(
             @{Command='s';Expected='GREEN [64] cursor=0000000000100000 latch=0000000000000000'},
             @{Command='q';Expected='GREEN [halt] stopped'}
         )
@@ -106,7 +119,7 @@ try {
         if ($timer.Elapsed.TotalSeconds -gt 30) { throw 'No se confirmo HLT del monitor.' }
         Start-Sleep -Milliseconds 20
     } until ($trace -match '0x000f328b:\s+f4\s+hlt')
-    if (-not $Rejection -and $trace -notmatch '0x00080000:') { throw 'No se confirmo ejecucion del binario desde RAM.' }
+    if (-not $Rejection -and -not $DiskExpected -and $trace -notmatch '0x00080000:') { throw 'No se confirmo ejecucion del binario desde RAM.' }
     $debug=Get-Content "$PSScriptRoot/$base-debug.log" -Raw
     $expected="Faggin scaling: 16 bits OK`r`nFaggin scaling: 32 bits OK`r`nFaggin scaling: 64 bits OK`r`nGREEN [CPU] guardians active`r`nGREEN [Memory] integrity latch OK`r`nGREEN [Memory] bounded allocator OK`r`n"
     if ($debug -cne $expected) { throw 'El monitor no completo todas las autopruebas previas.' }

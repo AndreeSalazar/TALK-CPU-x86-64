@@ -11,12 +11,14 @@ UEFI completa o arrancar en cualquier placa no forma parte de esta primera versi
    comprobacion de tamano, punto de entrada, flags y checksum antes de ejecutar.
    `o` ejecuta hola mundo; `e` permite escribir con eco y Escape retorna al monitor.
    Se prueban ocho rechazos y la continuidad del monitor tras cada uno.
-3. **Entrada externa y compactacion: pendiente.** Recibir un paquete por un medio
-   elegido, medir su longitud real y rechazar transferencias truncadas. Despues,
-   reducir instrucciones conservando los `.hex` y repetir los contratos funcionales.
+3. **Entrada externa FAT32: implementada en QEMU.** `iniciar.ps1 -Disco` y `d`
+   leen `METAL/INICIO.X86` por ATA PIO. Se validan BPB, cadenas, dos copias de
+   FAT, longitud y paquete; hay 14 pruebas de carga y rechazo.
+4. **Ampliación y compactación: pendiente.** Soportar más geometrías y particiones,
+   después reducir instrucciones conservando los `.hex` y los contratos funcionales.
 
-Los `.x86` actuales se exportan y se incluyen en la ROM al construirla. El
-firmware todavia no busca archivos en USB/disco ni recibe paquetes por la consola.
+Los ejemplos `o` y `e` se exportan y se incluyen en la ROM. `d` lee un paquete
+externo desde el disco IDE virtual FAT32; aún no lee USB ni recibe por consola.
 La prueba de integridad es una suma de bytes; detecta las alteraciones probadas,
 no autentica programas ni detecta modificaciones que conserven la suma.
 

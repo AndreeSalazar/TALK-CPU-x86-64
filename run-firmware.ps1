@@ -7,12 +7,14 @@ param(
     [switch]$InjectFault,
     [switch]$Monitor,
     [switch]$Headless,
+    [switch]$Disk,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
     [string]$Exception = 'None'
 )
 
 $ErrorActionPreference = "Stop"
 if ($Headless -and -not $Monitor) { throw '-Headless requiere -Monitor.' }
+if ($Disk -and -not $Monitor) { throw '-Disk requiere -Monitor.' }
 if ($Stress -and $Stage -ne '64') { throw '-Stress requiere -Stage 64.' }
 if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
@@ -43,7 +45,16 @@ try {
     if ((Get-Item $romPath).Length -ne 65536) {
         throw "La ROM debe medir exactamente 65536 bytes."
     }
-    if ($Monitor) { & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless; return }
+    if ($Monitor) {
+        $diskOptions=@{}
+        if($Disk){
+            & "$PSScriptRoot/crear-disco.ps1"
+            $diskOptions.DiskImage='build/disco-fat32.img'
+            if($Check){$diskOptions.DiskExpected=@('GREEN [FAT32] METAL/INICIO.X86','Hola desde mi disco FAT32!')}
+        }
+        & "$PSScriptRoot\monitor-session.ps1" -Qemu $qemuCommand.Source -Check:$Check -Headless:$Headless @diskOptions
+        return
+    }
     if ($Check) {
         $debugLogRelative = "build/$buildName-debug.log"
         $traceLogRelative = "build/$buildName-instructions.log"

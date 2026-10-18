@@ -61,8 +61,10 @@ necesitara un contrato adicional; no debe escribir sobre su propio codigo.
 Estos son programas propios privilegiados, sin aislamiento frente a codigo
 que deliberadamente cambie las tablas del firmware. La suma verifica integridad
 basica; no es autenticacion. La extension `.x86` es una convencion del proyecto.
-Los paquetes actuales estan incluidos en la ROM: no hay aun lectura de archivos
-externos ni deteccion de transferencias truncadas.
+Los ejemplos `o` y `e` están incluidos en la ROM. La orden `d` carga un paquete
+externo desde FAT32 con el lector de [storage](../storage/README.md). Antes de
+llamar a este cargador, exige la longitud completa del archivo y verifica sus
+cadenas. No se reciben paquetes por UART.
 
 ## Comprobacion
 

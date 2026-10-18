@@ -1,8 +1,9 @@
 # Arranque propio desde RESET
 
 Decisión del proyecto: conservar el firmware propio, sin una entrada `.efi`.
-Esta carpeta documenta el contrato para el siguiente desarrollo. No contiene
-todavía un controlador de disco ni un mecanismo de búsqueda de programas.
+Esta carpeta documenta el contrato de arranque. Ya existe lectura propia de
+disco IDE y búsqueda en FAT32 dentro de QEMU, con el alcance descrito en
+[storage](../64-bit/storage/README.md).
 
 ## Dos responsabilidades distintas
 
@@ -14,8 +15,8 @@ La ROM de QEMU no está preparada para grabarse en la placa MSI.
 
 **Buscar un programa.** Una vez que Orquestador del Metal controla la máquina,
 puede inicializar almacenamiento, reconocer un formato propio, escoger un
-programa, validarlo y ejecutarlo. Esa búsqueda todavía no está implementada;
-actualmente `o` y `e` seleccionan paquetes incluidos en la ROM.
+programa, validarlo y ejecutarlo. `d` busca `METAL\INICIO.X86` en el volumen
+FAT32 adjunto. `o` y `e` seleccionan paquetes incluidos en la ROM.
 
 Cambiar la extensión de un archivo, el nombre de la carpeta o una etiqueta del
 disco no hace que el firmware de fábrica comprenda el formato FAGRAW64.
@@ -32,17 +33,17 @@ Como referencia, UEFI define una ruta x64 de medios extraíbles:
 se implementa ni se sustituye por renombrar nuestro archivo `.x86`.
 [Especificación UEFI, gestor de arranque](https://uefi.org/specs/UEFI/2.11/03_Boot_Manager.html#removable-media-boot-behavior).
 
-## Próxima entrega comprobable en QEMU
+## Entrega comprobada en QEMU
 
-1. Elegir un único dispositivo de almacenamiento emulado y escribir su
-   controlador con tiempos de espera acotados. Declarar el soporte exacto.
-2. Definir dónde se encuentra el catálogo propio y cómo expresa posiciones,
-   longitudes y orden de selección, sin depender de nombres que nadie interpreta.
-3. Leer y validar un paquete FAGRAW64 externo antes de transferir el control.
-   La longitud realmente leída debe coincidir con la anunciada.
-4. Probar medio ausente, lectura fallida, catálogo inválido, transferencia
-   truncada, límites e integridad; cada rechazo debe explicar el motivo y
-   conservar el monitor operativo.
+El transporte es ATA PIO con esperas acotadas. La selección es una ruta fija
+8.3 de FAT32, sin catálogo adicional: `METAL\INICIO.X86`. Se comprueban longitud,
+geometría, cadenas y dos copias de FAT antes del cargador FAGRAW64. Hay pruebas
+de ausencia, fragmentación, daños y recuperación del monitor.
+
+La próxima ampliación deberá elegir una de estas entregas: particiones MBR/GPT,
+más tamaños de clúster o política de selección entre varios programas. No se
+implementará detección automática al encender hasta que sus fallos permitan
+volver al monitor con un motivo claro. Actualmente la búsqueda se pide con `d`.
 
 El transporte externo no cambia el privilegio de los programas actuales. La
 suma de bytes comprueba integridad básica; no aporta autenticación. El salto

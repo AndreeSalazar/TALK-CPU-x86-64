@@ -18,6 +18,7 @@ Desde la raíz del repositorio:
 | Consultar el estado de memoria | `s` |
 | Reservar 256 bytes | `a` |
 | Ejecutar «Hola mundo» | `o` |
+| Cargar `METAL\INICIO.X86` del disco FAT32 adjunto | `d` |
 | Escribir con eco | `e` |
 | Regresar del eco | Escape |
 | Detener la CPU virtual | `q` |
@@ -42,6 +43,7 @@ un `LEEME.txt`. El paquete es para QEMU; no es una imagen de disco instalable.
 | `64-bit/monitor/` | Órdenes y consola |
 | `64-bit/programs/` | Cargador, «Hola mundo» y eco propios |
 | `64-bit/screen/` | Vídeo VGA, teclado PS/2 y letras |
+| `64-bit/storage/` | ATA PIO y lector FAT32 propios |
 | `guardians/` | Límites, reservas y motivos de rechazo |
 | `arranque/` | Contrato y siguiente etapa del arranque propio |
 | `build-firmware.ps1` | Une los bytes y produce la ROM |
@@ -62,7 +64,8 @@ incluidos en la ROM. QEMU ejecuta esa ROM como firmware de su máquina virtual.
 Todavía no es una imagen adaptada a la placa MSI A320M-A PRO MAX y no se
 instala copiándola a una carpeta del disco.
 
-El siguiente paso dentro de QEMU es que **nuestro firmware** encuentre programas
-en almacenamiento externo, aplicando reglas de selección y validación propias.
-Se puede tomar esa organización de UEFI sin implementar sus servicios ni usar
-su formato de ejecutable. El alcance está en [Arranque propio](arranque/LEEME.md).
+`./iniciar.ps1 -Disco` crea y adjunta un volumen FAT32 de prueba. Al pulsar `d`,
+**nuestro firmware** encuentra y valida `METAL\INICIO.X86` en almacenamiento
+externo a la ROM. Es un lector de alcance acotado; no descubre particiones ni
+se instala en la placa física. Véanse [FAT32](64-bit/storage/README.md) y
+[Arranque propio](arranque/LEEME.md).

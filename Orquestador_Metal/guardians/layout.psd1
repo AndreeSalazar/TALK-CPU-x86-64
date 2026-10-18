@@ -3,8 +3,11 @@
     RomBytes = 0x10000
     MappedBytes = 0x200000
     WarningPercent = 80
-    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
+    RequiredMemory = @('PML4','PDPT','PD','PT','GDT','TSS','IDT','AllocatorState','ConsoleState','DiskState','SectorBuffer','DiskPacket','ProgramPage','GuardMain','StackMain','ROM','WorkRAM')
     MemoryContracts = @(
+        @{Name='DiskState';Start=0x9040;End=0x9060}
+        @{Name='SectorBuffer';Start=0xA000;End=0xA200}
+        @{Name='DiskPacket';Start=0xB000;End=0xC000}
         @{Name='ConsoleState';Start=0x9020;End=0x9030}
         @{Name='ProgramPage';Start=0x80000;End=0x81000}
         @{Name='PT';Start=0x4000;End=0x5000}
@@ -16,6 +19,8 @@
         @{Name='ROM';Start=0xF0000;End=0x100000}
     )
     Contracts = @(
+        @{Source='64-bit\storage\ata.hex';Offset=0x8103;Bytes='3B 04 25 40 90 00 00';Why='Ninguna lectura puede superar la capacidad identificada del disco.'}
+        @{Source='64-bit\storage\fat32.hex';Offset=0x8D00;Bytes='83 F8 02';Why='Los clusters 0 y 1 estan reservados y no son datos.'}
         @{Source='64-bit\screen\video.hex';Offset=0x620F;Bytes='81 FF D0 07 00 00';Why='El cursor debe comprobarse contra las 2000 celdas antes de escribir VGA.'}
         @{Source='64-bit\programs\loader.hex';Offset=0x3CB7;Bytes='C7 04 25 00 44 00 00 01 00 08 00';Why='Quitar escritura antes de permitir ejecutar la pagina del programa.'}
         @{Source='64-bit\programs\loader.hex';Offset=0x3CE6;Bytes='C7 04 25 04 44 00 00 00 00 00 80';Why='Restaurar NX antes de devolver escritura al regresar del programa.'}
@@ -28,6 +33,9 @@
     )
     # Ventanas [Start,End): ningun archivo puede crecer en el carril siguiente.
     Sources = @{
+        '64-bit\storage\ata.hex' = @{Start=0x8000;End=0x8400;Why='IDE/ATA PIO de solo lectura y esperas acotadas'}
+        '64-bit\storage\fat32.hex' = @{Start=0x8400;End=0x9200;Why='Montaje FAT32, busqueda y cadenas con limites'}
+        '64-bit\storage\messages.hex' = @{Start=0x9200;End=0x9A00;Why='Nombres 8.3 y motivos de rechazo de disco'}
         '64-bit\screen\video.hex' = @{Start=0x6000;End=0x6600;Why='Inicializacion de VGA y salida con limites'}
         '64-bit\screen\keyboard.hex' = @{Start=0x6600;End=0x6E00;Why='Entrada UART/PS2, inicializacion acotada y decodificacion'}
         '64-bit\screen\registers.hex' = @{Start=0x6E00;End=0x6F00;Why='Datos de registros VGA separados del codigo'}
@@ -88,6 +96,9 @@
         '64-bit\diagnostics\tests\stack.hex' = @{Start=0x1800;End=0x1A00;Why='Cruce real de pila hacia guarda'}
     }
     Memory = @(
+        @{Name='DiskState';Start=0x9040;End=0x9060;Alignment=16;Why='Capacidad, geometria FAT32 y longitud del archivo'}
+        @{Name='SectorBuffer';Start=0xA000;End=0xA200;Alignment=512;Why='Un sector para IDENTIFY, FAT y directorios'}
+        @{Name='DiskPacket';Start=0xB000;End=0xC000;Alignment=4096;Why='Paquete externo completo antes de ejecutarlo'}
         @{Name='ConsoleState';Start=0x9020;End=0x9030;Alignment=16;Why='Cursor VGA y estado del teclado sin cruzar el asignador'}
         @{Name='ProgramPage';Start=0x80000;End=0x81000;Alignment=0x1000;Why='Pagina dedicada: RW/NX durante copia, RX durante ejecucion'}
         @{Name='NullGuard';Start=0;End=0x1000;Alignment=0x1000;Why='Atrapar punteros nulos'}

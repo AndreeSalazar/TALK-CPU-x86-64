@@ -27,7 +27,11 @@ $tests = @(
     @{Name='Pagina de programas movida';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'ProgramPage').Start=0x7F000}},
     @{Name='Contrato de permisos eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\programs\loader.hex')}},
     @{Name='Estado de consola cruza asignador';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'ConsoleState').Start=0x9010}},
-    @{Name='Limite de cursor eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\screen\video.hex')}}
+    @{Name='Limite de cursor eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\screen\video.hex')}},
+    @{Name='Paquete de disco cruza sector';Allowed=$false;Guard='Reservation';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'DiskPacket').Start=0xA000}},
+    @{Name='Sector de disco recortado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) ($layout.Memory | Where-Object Name -eq 'SectorBuffer').End=0xA100}},
+    @{Name='Limite ATA eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\ata.hex')}},
+    @{Name='Contrato de cluster eliminado';Allowed=$false;Guard='Contract';Level='RED';Mutate={param($layout) $layout.Contracts=@($layout.Contracts | Where-Object Source -ne '64-bit\storage\fat32.hex')}}
 )
 $results = @()
 foreach ($test in $tests) {

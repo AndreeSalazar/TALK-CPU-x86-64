@@ -1,0 +1,11 @@
+; Paquete FAGRAW64 independiente. Instrucciones escritas a mano; no forma parte de la ROM.
+=000
+46 41 47 52 41 57 36 34
+29 00 00 00
+00 00 00 00
+e2 0b 00 00
+00 00 00 00
+=018
+48 8d 35 05 00 00 00 41 ff 57 10 c3
+; Texto relativo al codigo, sin dependencias UEFI.
+48 6f 6c 61 20 64 65 73 64 65 20 6d 69 20 64 69 73 63 6f 20 46 41 54 33 32 21 0d 0a 00

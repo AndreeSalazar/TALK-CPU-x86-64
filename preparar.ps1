@@ -37,7 +37,8 @@ Desde la raiz del proyecto: ./iniciar.ps1
 
 Este paquete no es un instalador ni una imagen de disco. No contiene una entrada
 .efi ni inicializa la placa MSI. Copiarlo a un disco no hace que la placa lo cargue.
-El descubrimiento propio de programas externos sigue pendiente de implementar.
+Incluye el lector FAT32 propio. Para crear y adjuntar el disco virtual de prueba:
+./iniciar.ps1 -Disco . Dentro del monitor, pulsa d. La imagen no va en este paquete.
 '@ | Set-Content "$destination/LEEME.txt" -Encoding utf8
     Write-Host "Paquete preparado: $destination"
     Write-Host 'ROM y programas copiados con huellas SHA-256 verificadas.'
