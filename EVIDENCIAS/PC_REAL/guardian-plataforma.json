@@ -1,0 +1,9 @@
+{
+  "Fecha": "2026-10-18T04:58:35.0035029-05:00",
+  "PhysicalTarget": "MS-7C52",
+  "PhysicalBuildRejected": true,
+  "Rejection": "RED [FG-PLATFORM] MS-7C52: no hay inicializacion Ryzen/DDR4 ni controladores de placa implementados. Esta ROM solo corresponde a QEMU pc. Identificar chip flash y recuperacion; desarrollar y probar el port antes de generar una imagen fisica.",
+  "BuildFilesUnchangedOnRejection": true,
+  "QEMUBytesUnchanged": true,
+  "SHA256": "E9194FF6AF0C713FFBED26DD7DCEAC20F02E953C674612827507254C72A4BBE8"
+}

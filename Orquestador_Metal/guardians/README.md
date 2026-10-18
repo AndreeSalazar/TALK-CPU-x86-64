@@ -176,3 +176,11 @@ sustituyen esa revision.
 
 Referencia: [AMD64 Architecture Programmer's Manual, volumen 2](https://www.amd.com/content/dam/amd/en/documents/processor-tech-docs/programmer-references/24593.pdf),
 paginacion, NX, CR0.WP y excepciones de pagina.
+
+## Plataforma de destino
+
+El constructor admite `-Platform QEMU` por defecto y lo registra en el mapa.
+Pedir `-Platform MS-7C52` bloquea antes de crear archivos con `RED [FG-PLATFORM]`:
+no están implementados el inicio Ryzen/DDR4 ni los controladores físicos.
+Cambiar ese parámetro no convierte las fuentes QEMU en un port de la placa.
+Véase [el plan físico](../../EVIDENCIAS/PC_REAL/PLAN-METAL.md).

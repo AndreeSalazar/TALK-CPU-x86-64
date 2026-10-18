@@ -28,3 +28,7 @@ incluye números de serie ni demuestra ejecución del firmware propio en la plac
 La guía [IDENTIFICACION-Y-RECUPERACION](PC_REAL/IDENTIFICACION-Y-RECUPERACION.md)
 explica el siguiente paso aceptado: identificar el chip flash y preparar recuperación.
 No hay todavía fotografías físicas ni evidencia de arranque desde RESET en Ryzen.
+
+El [plan para llegar al metal](PC_REAL/PLAN-METAL.md) distingue FAT32, GOP y la
+inicialización desde RESET. Incluye los criterios que faltan para considerar
+terminada una prueba física; las capturas QEMU permanecen separadas.

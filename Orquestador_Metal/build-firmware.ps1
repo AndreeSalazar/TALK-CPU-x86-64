@@ -8,10 +8,15 @@ param(
     [switch]$Monitor,
     [switch]$AutoBoot,
     [ValidateSet('None','divide','invalid','page','general','double','write','execute','guard','stack')]
-    [string]$Exception = 'None'
+    [string]$Exception = 'None',
+    [ValidateSet('QEMU','MS-7C52')]
+    [string]$Platform = 'QEMU'
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Platform -ne 'QEMU') {
+    throw 'RED [FG-PLATFORM] MS-7C52: no hay inicializacion Ryzen/DDR4 ni controladores de placa implementados. Esta ROM solo corresponde a QEMU pc. Identificar chip flash y recuperacion; desarrollar y probar el port antes de generar una imagen fisica.'
+}
 if ($Stress -and $Stage -ne '64') { throw '-Stress requiere -Stage 64.' }
 if ($InjectFault -and -not $Stress) { throw '-InjectFault requiere -Stress.' }
 if ($Exception -ne 'None' -and ($Stage -ne '64' -or $Stress)) {
@@ -117,7 +122,7 @@ try {
     $romBytes = (Get-Item "build\$buildName.rom").Length
     $totalAuthored = [int]($sourceSizes | Measure-Object AuthoredBytes -Sum).Sum
     [ordered]@{
-        Name=$buildName; Stage=$Stage; Stress=[bool]$Stress; InjectFault=[bool]$InjectFault
+        Name=$buildName; Platform=$Platform; Stage=$Stage; Stress=[bool]$Stress; InjectFault=[bool]$InjectFault
         AutoBoot=[bool]$AutoBoot; Monitor=[bool]$Monitor; Exception=$Exception; RomBytes=$romBytes; AuthoredBytes=$totalAuthored
         GuardianStatus=$guardianReport.Status
         PaddingBytes=($romBytes - $totalAuthored)
