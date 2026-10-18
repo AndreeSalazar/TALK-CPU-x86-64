@@ -9,6 +9,18 @@ No se ha instalado este juego en el SSD real.
 
 [Resumen: 19/19 comprobaciones aprobadas](game-suite-results.json).
 
+### Corrección del lanzador con ventana
+
+La [captura aportada por el usuario](06-launcher-error-user.png) mostró un error
+de opciones antes de arrancar: QEMU interpretaba las comas del título como
+separadores de subopciones. Se sustituyeron por guiones. Las pruebas anteriores
+no incluían ese título; el cliente QMP ahora lo lee del lanzador real.
+
+La [prueba GTK](gui-smoke-results.json) abrió una ventana con el título corregido,
+alcanzó el estado inicial del juego y cerró solo su proceso de prueba.
+[Captura del resultado](07-launcher-fixed.png). No hubo cambios de código máquina
+ni nueva instalación física.
+
 ![Juego en vuelo con un punto](04-game-flight.png)
 
 El [informe de juego](game-test-results.json) registra siete comprobaciones:

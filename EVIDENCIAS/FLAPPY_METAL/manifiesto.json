@@ -28,6 +28,16 @@
       "Bytes": 6621
     },
     {
+      "File": "06-launcher-error-user.png",
+      "SHA256": "89D4384753064613696E2887D069BD45E7F8969B961AAC7EE99CA7A5BA284DBC",
+      "Bytes": 46501
+    },
+    {
+      "File": "07-launcher-fixed.png",
+      "SHA256": "D213D1BFB5740EF60C1349C9A343E87D277DA2A61E12B843693EC985CB82A89B",
+      "Bytes": 6746
+    },
+    {
       "File": "branch-test-results.json",
       "SHA256": "C085ADCE9157E5687AD1F3248E130B550CD5164EBFE6FF8B19221B8556851B54",
       "Bytes": 184
@@ -83,9 +93,14 @@
       "Bytes": 319
     },
     {
+      "File": "gui-smoke-results.json",
+      "SHA256": "D34A880F0A4DF2869D0E0DE1ACDD36F98B1C0C596632D136202E04A11A9E0984",
+      "Bytes": 127
+    },
+    {
       "File": "LEEME.md",
-      "SHA256": "F79D3B9A732A6238A1AED2C333691A3A39732344DF29881F20B21CE3E743B7B6",
-      "Bytes": 4986
+      "SHA256": "A5D2E9CFA0073AAF009BCFD23DC9705A7C16AB63F3F8929E08899228C434FC23",
+      "Bytes": 5614
     },
     {
       "File": "regression-layout.json",

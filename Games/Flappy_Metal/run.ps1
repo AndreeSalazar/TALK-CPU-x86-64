@@ -46,10 +46,10 @@ try {
     }else{
         $share=Join-Path (Split-Path $Qemu) 'share'
         Copy-Item (Join-Path $share 'edk2-i386-vars.fd') 'build/Flappy_Metal/live-vars.fd' -Force
-        & $Qemu -name 'Flappy Metal - SPACE flap, ENTER restart, ESC stop' -machine pc -cpu qemu64 -accel tcg -m 256M -smp 1 `
+        & $Qemu -name 'Flappy Metal - SPACE flap - ENTER restart - ESC stop' -machine pc -cpu qemu64 -accel tcg -m 256M -smp 1 `
             -drive "if=pflash,format=raw,unit=0,readonly=on,file=$share/edk2-x86_64-code.fd" `
             -drive 'if=pflash,format=raw,unit=1,file=build/Flappy_Metal/live-vars.fd' `
             -drive 'file=build/puente-normal.img,format=raw,if=ide,snapshot=on' -vga std -display gtk -serial none -monitor none -no-reboot
-        if($LASTEXITCODE -ne 0){throw 'QEMU scene process failed.'}
+        if($LASTEXITCODE -ne 0){throw 'QEMU game process failed.'}
     }
 }finally{Pop-Location}
